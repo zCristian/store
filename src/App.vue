@@ -27,10 +27,10 @@
 <style>
 #app {
   width: 100%;
-  font-family:  Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", sans-serif;
   text-align: center;
   text-align: center;
-  font-family: Roboto;
+ 
  
 }
 a{

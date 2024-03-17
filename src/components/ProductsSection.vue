@@ -1,8 +1,8 @@
 
 <template>
-
+    <div class="news"><h2>Novidades</h2></div>
     <div class="content">
-        <BaseCard class="teste" v-for="product in products" :key="product.id" :productName="product.productName"/>
+        <BaseCard class="teste" v-for="product in products" :key="product.id" :product="product"/>
     
     </div>
 </template>
@@ -22,16 +22,24 @@ console.log(props.product)
 </script>
 
 <style scoped>
-.content{
-    margin: 20px 40px 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+.news{
+    display: flex;
+    justify-content: center;
+    
+    flex-basis: 100%;
+
 }
-.teste{
-  flex-basis: 23%;
-  height: 320px;
-  margin: 20px;
+h2{
+    color: #7F57F1;
+    margin-top: 0px;
+    font-size: 25px;
+}
+.content{
+
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
 }
 
 
