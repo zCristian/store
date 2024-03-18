@@ -49,7 +49,7 @@
         
         flex-wrap: wrap;
         padding: 5px 5px 5px 5px;
-        margin:25px;
+        margin:22px;
         flex-basis: 20%;
         
        
@@ -58,6 +58,8 @@
         margin-bottom: 2px;
     }
     .thumbnail{
+        display: flex;
+        justify-content: center;
         flex-basis: 100%;
     }
     img{

@@ -1,8 +1,11 @@
 <template>
 
-    <button class="buybtn">Comprar Agora<i class="fa-solid fa-bag-shopping"></i></button>
+    <button class="buybtn">Comprar Agora<ShoppingBag class="shoppingbag"/></button>
 </template>
 
+<script setup>
+    import { ShoppingBag} from 'lucide-vue-next';
+</script>
 <style>
     .buybtn{
         
@@ -14,9 +17,12 @@
         width: 100%;
         font-size: 16px;
         font-family: "Montserrat", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    i{
-        margin-left: 10px;
+    .shoppingbag{
         font-size: 20px;
+        margin-left: 10px;
     }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-      <div class="banner"><img src="../assets/banner.svg" class="bannersvg"></div>
+      <div class="homebanner"><img src="../assets/homebanner.svg" class="homesvg"></div>
+      <div class="fretebanner"><img src="../assets/fretebanner.svg" class="fretesvg"></div>
       <div class="maincontent">
         <ProductsSection :products="products"/>
   
@@ -36,9 +37,12 @@ import ProductsSection from '@/components/ProductsSection.vue';
   .maincontent{
     display: flex;
     flex-wrap: wrap;
-    margin: 15px 16% 15px 16%;
+    margin: 15px 12% 15px 12%;
   }
-  .bannersvg{
+  .fretesvg{
+    width: 100%;
+  }
+  .homesvg{
     width: 100%;
   }
 </style>
