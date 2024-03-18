@@ -32,12 +32,13 @@ console.log(props.product)
 h2{
     color: #7F57F1;
     margin-top: 0px;
-    font-size: 25px;
+    font-size: 30px;
+    margin-top: 55px;
 }
 .content{
 
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-around;
   flex-wrap: wrap;
 
 }

@@ -2,30 +2,27 @@
   <div class="home">
       <div class="homebanner"><img src="../assets/homebanner.svg" class="homesvg"></div>
       <div class="fretebanner"><img src="../assets/fretebanner.svg" class="fretesvg"></div>
+      <h2>Compre por Faixa de Preço</h2>
       <div class="pricerange">
-        <h2>Compre por Faixa de Preço</h2>
-        <PriceRangeBtn/>
-        <PriceRangeBtn/>
-        <PriceRangeBtn/>
-        <PriceRangeBtn/>
+        <PriceRangeBtn v-for="i in 4" :key="i" :pricerange="+pricerange[i-1]"/>
+        
       </div>
       
       <div class="maincontent">
         <ProductsSection :products="products"/>
   
       </div>
+      <NewsForm/>
   </div>
   
 </template>
 
 <script setup>
 import ProductsSection from '@/components/ProductsSection.vue';
-import PriceRangeBtn from '@/components/PriceRangeBtn.vue'
+import PriceRangeBtn from '@/components/PriceRangeBtn.vue';
+import NewsForm from '../components/NewsForm.vue';
     
-    
-
     //const products= ref([]);
-
     const products=[
       {"id":1,"title":"iPhone 9","description":"An apple mobile which is nothing like apple","price":549,"discountPercentage":12.96,"rating":4.69,"stock":94,"brand":"Apple","category":"smartphones","thumbnail":"https://cdn.dummyjson.com/product-images/1/thumbnail.jpg","images":["https://cdn.dummyjson.com/product-images/1/1.jpg","https://cdn.dummyjson.com/product-images/1/2.jpg","https://cdn.dummyjson.com/product-images/1/3.jpg","https://cdn.dummyjson.com/product-images/1/4.jpg","https://cdn.dummyjson.com/product-images/1/thumbnail.jpg"]},
       {"id":2,"title":"iPhone X","description":"SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...","price":899,"discountPercentage":17.94,"rating":4.44,"stock":34,"brand":"Apple","category":"smartphones","thumbnail":"https://cdn.dummyjson.com/product-images/2/thumbnail.jpg","images":["https://cdn.dummyjson.com/product-images/2/1.jpg","https://cdn.dummyjson.com/product-images/2/2.jpg","https://cdn.dummyjson.com/product-images/2/3.jpg","https://cdn.dummyjson.com/product-images/2/thumbnail.jpg"]},
@@ -38,7 +35,9 @@ import PriceRangeBtn from '@/components/PriceRangeBtn.vue'
       {"id":9,"title":"Infinix INBOOK","description":"Infinix Inbook X1 Ci3 10th 8GB 256GB 14 Win10 Grey – 1 Year Warranty","price":1099,"discountPercentage":11.83,"rating":4.54,"stock":96,"brand":"Infinix","category":"laptops","thumbnail":"https://cdn.dummyjson.com/product-images/9/thumbnail.jpg","images":["https://cdn.dummyjson.com/product-images/9/1.jpg","https://cdn.dummyjson.com/product-images/9/2.png","https://cdn.dummyjson.com/product-images/9/3.png","https://cdn.dummyjson.com/product-images/9/4.jpg","https://cdn.dummyjson.com/product-images/9/thumbnail.jpg"]},
       {"id":10,"title":"HP Pavilion 15-DK1056WM","description":"HP Pavilion 15-DK1056WM Gaming Laptop 10th Gen Core i5, 8GB, 256GB SSD, GTX 1650 4GB, Windows 10","price":1099,"discountPercentage":6.18,"rating":4.43,"stock":89,"brand":"HP Pavilion","category":"laptops","thumbnail":"https://cdn.dummyjson.com/product-images/10/thumbnail.jpeg","images":["https://cdn.dummyjson.com/product-images/10/1.jpg","https://cdn.dummyjson.com/product-images/10/2.jpg","https://cdn.dummyjson.com/product-images/10/3.jpg","https://cdn.dummyjson.com/product-images/10/thumbnail.jpeg"]},
       {"id":11,"title":"perfume Oil","description":"Mega Discount, Impression of Acqua Di Gio by GiorgioArmani concentrated attar perfume Oil","price":13,"discountPercentage":8.4,"rating":4.26,"stock":65,"brand":"Impression of Acqua Di Gio","category":"fragrances","thumbnail":"https://cdn.dummyjson.com/product-images/11/thumbnail.jpg","images":["https://cdn.dummyjson.com/product-images/11/1.jpg","https://cdn.dummyjson.com/product-images/11/2.jpg","https://cdn.dummyjson.com/product-images/11/3.jpg","https://cdn.dummyjson.com/product-images/11/thumbnail.jpg"]}
-      ]
+      ];
+      const pricerange = [999,1999,2999,3000];
+
 </script>
 
 <style scoped>
@@ -56,10 +55,14 @@ import PriceRangeBtn from '@/components/PriceRangeBtn.vue'
   .pricerange{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    height: 120px;
+    margin: 0px 13% 0px 13%;
   }
   h2{
+    margin-top: 55px;
     text-align: center;
     color: #7F57F1;
+    font-size: 30px;
   }
 </style>

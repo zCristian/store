@@ -1,17 +1,12 @@
 <template>
   <nav class="navbar">
-    <div class="tabsdiv">
-      
+    <div class="logodiv">
       <router-link to="/"><img img="pagelogo" src="../src/assets/logo.svg" alt="logo"></router-link> 
+      </div>
       <div class="searchdiv">
           <input type="text" class="searchbar">
           <button class="searchbtn"><Search/>Buscar</button>
-
       </div>
-      
-      <!--<router-link to="/categories">Categorias</router-link>
-      <router-link to="/sales">Ofertas</router-link>-->
-    </div>
     <div class="icondiv">
       <router-link to="/user" class="userlink"><User/><p>{{ userName }}</p></router-link>
       <router-link to="/fav" class="cartlink"><Heart/><p>Favoritos</p></router-link>
@@ -66,20 +61,17 @@ a{
   margin: 15px 0px 0px 0px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
   align-items:inherit;
   color:none;
   background-color: white;
 }
 
-.tabsdiv{
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-bottom: 15px;
+.logodiv{
+  margin: 0px 0px 15px 0px;
   font-weight: bold;
-  flex-basis: 65%;
+  flex-basis: 10%;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
 }
@@ -95,17 +87,18 @@ p{
   justify-content: space-around;
   align-items: center;
   height: 30px;
-  flex-basis: 20%;
+  flex-basis: 15%;
   font-size: 15px;
 }
 .searchdiv{
-  width: 75%;
+  flex-basis: 40%;
+  margin-bottom: 15px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 .searchbar{
-  width: 77%;
+  flex-basis: 75%;
   border-radius: 20px 0px 0px 20px;
   padding: 5px 15px 5px 15px;
   border: 0.5px solid #E6E6E6;
@@ -113,7 +106,7 @@ p{
   font-size: 18px;
 }
 .searchbtn{
-  width: 20%;
+  width: 120px;
   padding: 6px 20px 6px 10px;
   border-radius: 0px 20px 20px 0px;
   display: flex;
@@ -175,5 +168,10 @@ nav a.router-link-exact-active {
   color: #7F57F1;
 }
 
-
+span:hover{
+  font-size: 18px;
+}
+.offers:hover{
+  font-size: 18px;
+}
 </style>
