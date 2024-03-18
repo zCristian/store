@@ -1,5 +1,8 @@
 <template>
     <div class="card">
+        <div class="bookmarkdiv">
+            <BookMarkButton/>
+        </div>
         <div class="thumbnail"><img src="../assets/img/iphone.jpg" ></div>
         <div class="cardcontent">
             <span class = "category">{{ product.category }}</span>
@@ -22,14 +25,16 @@
 </template>
 <script setup>  
     import BuyButton from '../components/BuyButton.vue'
-    
+    import BookMarkButton from '../components/BookMarkButton.vue'
     import { defineProps} from 'vue';
+
     const props = defineProps({
         product:{
             type:Object,
             required:true
         }
     });
+    
     console.log(props);
     //console.log(product.thumbnail)
 </script>
@@ -39,15 +44,18 @@
         background: #ffff;
         box-shadow:  10px 10px 20px #cacaca,
              -10px -10px 20px #f2f2f2;
-        height: 500px;
+        height: 515px;
         display: flex;
         
         flex-wrap: wrap;
-        padding: 10px 5px 5px 5px;
+        padding: 5px 5px 5px 5px;
         margin:25px;
         flex-basis: 20%;
         
        
+    }
+    .bookmarkdiv{
+        margin-bottom: 2px;
     }
     .thumbnail{
         flex-basis: 100%;
@@ -68,7 +76,8 @@
     }
     .title{
         flex-basis: 100%;
-        margin-top: 15px;
+        margin-top: 5px;
+        margin-bottom: 10px;
     }
     
     .btnsection{
@@ -76,7 +85,7 @@
         align-self: flex-end;
         justify-content: center;
         height: 48px;
-        margin: 10px;
+        margin: 5px;
         flex-basis: 100%;
     }
     .category{

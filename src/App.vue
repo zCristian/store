@@ -1,7 +1,9 @@
 <template>
   <nav class="navbar">
     <div class="tabsdiv">
-      <router-link to="/">Home</router-link> 
+      
+      <router-link to="/"><img img="pagelogo" src="../src/assets/logo.svg" alt="logo"></router-link> 
+      <input type="text" class="searchbar">
       <router-link to="/categories">Categorias</router-link>
       <router-link to="/sales">Ofertas</router-link>
     </div>
@@ -11,7 +13,7 @@
     </div>
     
   </nav>
-  <div class="horizontalline"></div>
+
   <router-view></router-view>
   
 </template>
@@ -19,7 +21,7 @@
 
 <script setup>
   import {ref} from 'vue';
-  const userName = ref('Victor');
+  const userName = ref('Cristian');
 </script>
 
 
@@ -35,6 +37,8 @@
 }
 a{
   text-decoration: none;
+  color: #7F57F1;
+  
 }
 .navbar {
   padding: 15px 30px 15px 30px;
@@ -42,17 +46,19 @@ a{
   grid-column-end:7 ;
   font-size: 25px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items:center;
+  color:none;
+  background-color: white;
 }
 
 .tabsdiv{
   font-weight: bold;
-  color: #2c3e50;
-  flex-basis: 50%;
+  flex-basis: 60%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .icondiv{
@@ -61,11 +67,18 @@ a{
   align-items: center;
   flex-basis: 15%;
 }
-.horizontalline{
-  width: 55%;
-  border-top: 2px solid black;
-}
 
+.searchbar{
+  width: 40%;
+  border-radius: 20px 0px 0px 20px;
+  padding: 5px 15px 5px 15px;
+  border: 0.5px solid #E6E6E6;
+  height: 25px;
+}
+.searchbar:focus{
+  outline: #7F57F1;
+  border: 2px solid #7F57F1;
+}
 .userlink{
   display: flex;
   flex-wrap: wrap;
@@ -79,6 +92,6 @@ a{
   
 }
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #7F57F1;
 }
 </style>
