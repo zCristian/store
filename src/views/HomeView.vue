@@ -2,6 +2,14 @@
   <div class="home">
       <div class="homebanner"><img src="../assets/homebanner.svg" class="homesvg"></div>
       <div class="fretebanner"><img src="../assets/fretebanner.svg" class="fretesvg"></div>
+      <div class="pricerange">
+        <h2>Compre por Faixa de Preço</h2>
+        <PriceRangeBtn/>
+        <PriceRangeBtn/>
+        <PriceRangeBtn/>
+        <PriceRangeBtn/>
+      </div>
+      
       <div class="maincontent">
         <ProductsSection :products="products"/>
   
@@ -12,7 +20,7 @@
 
 <script setup>
 import ProductsSection from '@/components/ProductsSection.vue';
-
+import PriceRangeBtn from '@/components/PriceRangeBtn.vue'
     
     
 
@@ -33,7 +41,7 @@ import ProductsSection from '@/components/ProductsSection.vue';
       ]
 </script>
 
-<style>
+<style scoped>
   .maincontent{
     display: flex;
     flex-wrap: wrap;
@@ -44,5 +52,14 @@ import ProductsSection from '@/components/ProductsSection.vue';
   }
   .homesvg{
     width: 100%;
+  }
+  .pricerange{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  h2{
+    text-align: center;
+    color: #7F57F1;
   }
 </style>
