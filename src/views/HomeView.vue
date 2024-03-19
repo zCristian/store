@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      <div class="homebanner"><img src="../assets/homebanner.svg" class="homesvg"></div>
+      <BaseCarousel/>
       <div class="fretebanner"><img src="../assets/fretebanner.svg" class="fretesvg"></div>
       <h2>Compre por Faixa de Preço</h2>
       <div class="pricerange">
@@ -20,6 +20,7 @@
 import ProductsSection from '@/components/ProductsSection.vue';
 import PriceRangeBtn from '@/components/PriceRangeBtn.vue';
 import AboutUs from '@/components/AboutUs.vue';
+import BaseCarousel from '@/components/BaseCarousel.vue';
 
     
     //const products= ref([]);
@@ -43,8 +44,15 @@ import AboutUs from '@/components/AboutUs.vue';
     flex-wrap: wrap;
     justify-content: center;
   }
-  .homebanner{
-    height: 426.2px;
+  .slider,.homesvg{
+    height: 415px;
+    width: 100%;
+    background-color: #E6DDFC;
+  }
+ 
+  .fretebanner,.fretesvg{
+    background-color: #F3F3F3;
+    width: 100%;
   }
   .maincontent{
     display: flex;
