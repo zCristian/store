@@ -25,6 +25,7 @@
 <style scoped>
 .container{
     margin-top: 55px;
+    width: 100%;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;

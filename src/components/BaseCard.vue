@@ -50,7 +50,7 @@
         flex-wrap: wrap;
         padding: 5px 5px 5px 5px;
         margin:22px;
-        flex-basis: 20%;
+        width: 255px;
         
        
     }

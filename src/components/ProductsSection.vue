@@ -36,9 +36,10 @@ h2{
     margin-top: 55px;
 }
 .content{
-
+  width: 1320px;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
+  gap: 24px;
   flex-wrap: wrap;
 
 }

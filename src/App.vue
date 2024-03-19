@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="logodiv">
-      <router-link to="/"><img img="pagelogo" src="../src/assets/logo.svg" alt="logo"></router-link> 
+      <router-link to="/"><img src="../src/assets/logo.svg" alt="logo"></router-link> 
       </div>
       <div class="searchdiv">
           <input type="text" class="searchbar">
@@ -26,11 +26,12 @@
   </nav>
 
   <router-view></router-view>
-  
+  <PageFooter/>
 </template>
 
 
 <script setup>
+  import PageFooter from '../src/components/PageFooter.vue'
   import { ShoppingBag,Heart,User,BadgePercent} from 'lucide-vue-next';
   import {ref} from 'vue';
   import { Search } from 'lucide-vue-next';
@@ -58,7 +59,7 @@ a{
   
 }
 .navbar {
-  margin: 15px 0px 0px 0px;
+  margin: 30px 0px 0px 0px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
