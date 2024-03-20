@@ -1,190 +1,68 @@
-  <template>
-<div class="content">
-    <button class="left-arrow"><CircleChevronLeft class="larrowicon"/></button>
-        <div class="slider">
-            <div class="slides">
+<template>
+    <slot :currentSlide="currentSlide"></slot>
 
-                
-                
-            
-                <div class="slide first">
-                    <img src="../assets/homebanner.svg" class="homesvg">
-                </div>
-                <div class="slide">
-                    <img src="../assets/homebanner.svg" class="homesvg">
-                </div> 
-                <div class="slide">
-                    <img src="../assets/homebanner.svg" class="homesvg">
-                </div>
-                <div class="slide">
-                    <img src="../assets/homebanner.svg" class="homesvg">
-                </div>
-
-                <div class="navigation-auto">
-                    <div class="auto-btn1"></div>
-                    <div class="auto-btn2"></div>
-                    <div class="auto-btn3"></div>
-                    <div class="auto-btn4"></div>
-                </div>
-
-            
-            </div>
-
-
-            <div class="manual-navigation">
-                <label for="radio1" class="manual-btn"></label>
-                <label for="radio2" class="manual-btn"></label>
-                <label for="radio3" class="manual-btn"></label>
-                <label for="radio4" class="manual-btn"></label>
-            </div>
+    <div class="navigate">
+        <div class="moveslide left"></div>
+            <CircleChevronLeft @click="prevSlide" class="icon"/>
+        <div class="moveslide right">
+            <CircleChevronRight @click="nextSlide" class="icon"/>
         </div>
-    <button class="right-arrow"><CircleChevronRight class="rarrowicon"/></button> 
-</div>
+    </div>
 </template>
 
 <script setup>
-import { CircleChevronRight, CircleChevronLeft } from 'lucide-vue-next';
-//import {onMounted,ref} from 'vue'
-/*onMounted(()=>{
-    let count =ref(1);
-    document.getElementById("radio1").checked = true;
+import { CircleChevronLeft, CircleChevronRight } from 'lucide-vue-next';
+import {ref,onMounted} from 'vue';
+const currentSlide = ref(1);
+const getSlideCount = ref(null);
 
-    setInterval(() => {
-        nextImage();
-    }, 5000);
-    
-    const nextImage = () =>{
-        count.value ++;
-        if(count.value>4){
-            count.value =1;
-        }
-        document.getElementById("radio" + count.value).checked = true;
-       
+
+const nextSlide = () =>{
+    if(currentSlide.value === getSlideCount.value){
+            currentSlide.value = 1;
+            return;
     }
-})
-*/
+    currentSlide.value+=1;
+}
 
+const prevSlide = ()=>{
+    if(currentSlide.value === 1){
+        currentSlide.value =1;
+        return;
+    }
+    currentSlide.value-=1;
+}
+onMounted(()=>{
+    getSlideCount.value = document.querySelectorAll('.slide').length;
+    console.log(getSlideCount.value);
+})
 </script>
 
 <style scoped>
-.content{
-    display: flex;
+.navigate{
+    padding: 0 16px;
+    height: 100%;
     width: 100%;
-    background-color: #E6DDFC;
-    justify-content: space-around;
-    height: 410px;
-
-}
-.slider{
-    flex-basis: 97%;
-    margin:0 auto;
-    width:  1770px;
-    height: 410px;
-    overflow: hidden; 
-    background-color: #E6DDFC;
-}
-.homesvg{
-    height: 410px;
-    background-color: #E6DDFC;
-  }
-
-.slides{
-    width: 400%;
-    height: 410px;
+    position: absolute;
     display: flex;
-}
-.left-arrow,.right-arrow{
-    display: flex;
+    justify-content: center;
     align-items: center;
-    margin: 0px;
-    color: #7f57f1;
-    border: none;
-    background-color: #E6DDFC;
-    flex-basis: 3%;
-    width: 32px;
-    cursor: pointer;
+    .moveslide{
+        display: flex;
+        flex:1;
+    }
+    .right{
+        justify-content: flex-end;
+    }
+    .icon{
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        color: #7F57F1;
+    }
 }
-.larrowicon,.rarrowicon{
-    height: 30px;
-    width: 30px;
-}
-.larrowicon:hover{
-    height: 32px;
-    width: 32px;
-}
-.rarrowicon:hover{
-    height: 32px;
-    width: 32px;
-}
-.slides input{
-    display: none;
-}
-
-.slide{
-    width: 25%;
-    position: relative;
-    transition: 2s;
-}
-
-
-.manual-navigation{
-    position: absolute;
-    width: 1770px;
-    margin-top: -40px;
-    display: flex;
-    justify-content: center;
-}
-
-.manual-btn{
-    border: 3px solid #7f57f1;
-    padding: 6px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 1s;
-}
-
-.manual-btn:not(:last-child){
-    margin-right: 80px;
-}
-
-
-#radio1:checked ~ .first{
-    margin-left: 0;
-}
-
-#radio2:checked ~ .first{
-    margin-left: -25%;
-}
-
-#radio3:checked ~ .first{
-    margin-left: -50%;
-}
-
-#radio4:checked ~ .first{
-    margin-left: -75%;
-}
-
-.navigation-auto div{
-    border:3px solid #7f57f1;
-    padding: 6px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 1s;
-}
-
-.navigation-auto{
-    position: absolute;
-    width: 1770px;
-    margin-top: 370px;
-    display: flex;
-    justify-content: center;
-}
-
-.navigation-auto div:not(:last-child){
-    margin-right: 80px;
-}
-
-
 
 
 </style>
