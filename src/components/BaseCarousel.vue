@@ -1,47 +1,51 @@
   <template>
-    <div class="slider">
-        <div class="slides">
+<div class="content">
+    <button class="left-arrow"><CircleChevronLeft class="larrowicon"/></button>
+        <div class="slider">
+            <div class="slides">
 
-            <input type="radio" name="radio-btn" id="radio1">
-            <input type="radio" name="radio-btn" id="radio2">
-            <input type="radio" name="radio-btn" id="radio3">
-            <input type="radio" name="radio-btn" id="radio4">
+                
+                
             
+                <div class="slide first">
+                    <img src="../assets/homebanner.svg" class="homesvg">
+                </div>
+                <div class="slide">
+                    <img src="../assets/homebanner.svg" class="homesvg">
+                </div> 
+                <div class="slide">
+                    <img src="../assets/homebanner.svg" class="homesvg">
+                </div>
+                <div class="slide">
+                    <img src="../assets/homebanner.svg" class="homesvg">
+                </div>
 
-            <div class="slide first">
-                <img src="../assets/homebanner.svg" class="homesvg">
-            </div>
-            <div class="slide">
-                <img src="../assets/homebanner.svg" class="homesvg">
-            </div> 
-            <div class="slide">
-                <img src="../assets/homebanner.svg" class="homesvg">
-            </div>
-            <div class="slide">
-                <img src="../assets/homebanner.svg" class="homesvg">
+                <div class="navigation-auto">
+                    <div class="auto-btn1"></div>
+                    <div class="auto-btn2"></div>
+                    <div class="auto-btn3"></div>
+                    <div class="auto-btn4"></div>
+                </div>
+
+            
             </div>
 
-            <div class="navigation-auto">
-                <div class="auto-btn1"></div>
-                <div class="auto-btn2"></div>
-                <div class="auto-btn3"></div>
-                <div class="auto-btn4"></div>
+
+            <div class="manual-navigation">
+                <label for="radio1" class="manual-btn"></label>
+                <label for="radio2" class="manual-btn"></label>
+                <label for="radio3" class="manual-btn"></label>
+                <label for="radio4" class="manual-btn"></label>
             </div>
         </div>
-
-
-        <div class="manual-navigation">
-            <label for="radio1" class="manual-btn"></label>
-            <label for="radio2" class="manual-btn"></label>
-            <label for="radio3" class="manual-btn"></label>
-            <label for="radio4" class="manual-btn"></label>
-        </div>
-    </div>
+    <button class="right-arrow"><CircleChevronRight class="rarrowicon"/></button> 
+</div>
 </template>
 
 <script setup>
-import {onMounted,ref} from 'vue'
-onMounted(()=>{
+import { CircleChevronRight, CircleChevronLeft } from 'lucide-vue-next';
+//import {onMounted,ref} from 'vue'
+/*onMounted(()=>{
     let count =ref(1);
     document.getElementById("radio1").checked = true;
 
@@ -58,24 +62,60 @@ onMounted(()=>{
        
     }
 })
-
+*/
 
 </script>
 
 <style scoped>
-.slider{
-    margin:0 auto;
-    width:  1880px;
-    height: 415px;
-    overflow: hidden;
+.content{
+    display: flex;
+    width: 100%;
+    background-color: #E6DDFC;
+    justify-content: space-around;
+    height: 410px;
+
 }
+.slider{
+    flex-basis: 97%;
+    margin:0 auto;
+    width:  1770px;
+    height: 410px;
+    overflow: hidden; 
+    background-color: #E6DDFC;
+}
+.homesvg{
+    height: 410px;
+    background-color: #E6DDFC;
+  }
 
 .slides{
     width: 400%;
-    height: 415px;
+    height: 410px;
     display: flex;
 }
-
+.left-arrow,.right-arrow{
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    color: #7f57f1;
+    border: none;
+    background-color: #E6DDFC;
+    flex-basis: 3%;
+    width: 32px;
+    cursor: pointer;
+}
+.larrowicon,.rarrowicon{
+    height: 30px;
+    width: 30px;
+}
+.larrowicon:hover{
+    height: 32px;
+    width: 32px;
+}
+.rarrowicon:hover{
+    height: 32px;
+    width: 32px;
+}
 .slides input{
     display: none;
 }
@@ -85,14 +125,11 @@ onMounted(()=>{
     position: relative;
     transition: 2s;
 }
-.slide img{
-    width: 1880px;
-    height: 415px;
-}
+
 
 .manual-navigation{
     position: absolute;
-    width: 1880px;
+    width: 1770px;
     margin-top: -40px;
     display: flex;
     justify-content: center;
@@ -110,9 +147,7 @@ onMounted(()=>{
     margin-right: 80px;
 }
 
-.manual-btn:hover{
-    background-color: #7f57f1;
-}
+
 #radio1:checked ~ .first{
     margin-left: 0;
 }
@@ -139,8 +174,8 @@ onMounted(()=>{
 
 .navigation-auto{
     position: absolute;
-    width: 1880px;
-    margin-top: 375px;
+    width: 1770px;
+    margin-top: 370px;
     display: flex;
     justify-content: center;
 }
@@ -149,18 +184,7 @@ onMounted(()=>{
     margin-right: 80px;
 }
 
-#radio1:checked ~ .navigation-auto .auto-btn1{
-    background-color: #7f57f1;
-}
-#radio2:checked ~ .navigation-auto .auto-btn2{
-    background-color: #7f57f1;
-}
-#radio3:checked ~ .navigation-auto .auto-btn3{
-    background-color: #7f57f1;
-}
-#radio4:checked ~ .navigation-auto .auto-btn4{
-    background-color: #7f57f1;
-}
+
 
 
 </style>

@@ -44,11 +44,6 @@ import BaseCarousel from '@/components/BaseCarousel.vue';
     flex-wrap: wrap;
     justify-content: center;
   }
-  .slider,.homesvg{
-    height: 415px;
-    width: 100%;
-    background-color: #E6DDFC;
-  }
  
   .fretebanner,.fretesvg{
     background-color: #F3F3F3;
@@ -64,9 +59,7 @@ import BaseCarousel from '@/components/BaseCarousel.vue';
   .fretesvg{
     width: 100%;
   }
-  .homesvg{
-    width: 100%;
-  }
+
   .pricerange{
     display: flex;
     align-items: center;
