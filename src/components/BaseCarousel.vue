@@ -2,11 +2,16 @@
     <slot :currentSlide="currentSlide"></slot>
 
     <div class="navigate">
-        <div class="moveslide left"></div>
+        <div class="moveslide left">
             <CircleChevronLeft @click="prevSlide" class="icon"/>
+        </div>
         <div class="moveslide right">
             <CircleChevronRight @click="nextSlide" class="icon"/>
         </div>
+    </div>
+
+    <div class="bottnav">
+        <span v-for="(slide,index) in getSlideCount" :key="index"  @click="selectSlide(index)" :class="{selected: index+1==currentSlide}"></span>
     </div>
 </template>
 
@@ -17,6 +22,9 @@ const currentSlide = ref(1);
 const getSlideCount = ref(null);
 
 
+const selectSlide = (index)=>{
+    currentSlide.value = index + 1;
+}
 const nextSlide = () =>{
     if(currentSlide.value === getSlideCount.value){
             currentSlide.value = 1;
@@ -40,9 +48,8 @@ onMounted(()=>{
 
 <style scoped>
 .navigate{
-    padding: 0 16px;
-    height: 100%;
-    width: 100%;
+    height: 410px;
+    width: 1500px;
     position: absolute;
     display: flex;
     justify-content: center;
@@ -64,5 +71,26 @@ onMounted(()=>{
     }
 }
 
+.bottnav{
+    position: absolute;
+    top: 490px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 30px;
+}
 
+span{
+    display: flex;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+   
+}
+.selected{
+    background-color: #7F57F1;
+    border: 1px solid white;
+}
 </style>

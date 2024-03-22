@@ -2,8 +2,8 @@
   <div class="home">
       <BaseCarousel class="carousel" v-slot="{currentSlide}">
           <BaseSlide v-for="(slide,index) in carouselSlides" :key="index">
-            <div v-show ="currentSlide===index+1" class="slide-info">
-              <img :src="require(`../assets/${slide}.svg`)" alt="">
+            <div v-show="currentSlide==index+1" class="slide-info">
+              <img :src="require(`../assets/${slide}.svg`)" alt="banner" class="bannerimg">
             </div>
           </BaseSlide>
       </BaseCarousel>
@@ -30,7 +30,7 @@ import BaseCarousel from '@/components/BaseCarousel.vue';
 import BaseSlide from '@/components/BaseSlide.vue';
     
     //const products= ref([]);
-    const carouselSlides = ["bannerSlide","bannerSlide","bannerSlide","bannerSlide"];
+    const carouselSlides = ["bannerSlide","bimg2","bannerSlide","bimg2"];
     const products=[
       {"id":1,"title":"iPhone 9","description":"An apple mobile which is nothing like apple","price":549,"discountPercentage":12.96,"rating":4.69,"stock":94,"brand":"Apple","category":"smartphones","thumbnail":"https://cdn.dummyjson.com/product-images/1/thumbnail.jpg","images":["https://cdn.dummyjson.com/product-images/1/1.jpg","https://cdn.dummyjson.com/product-images/1/2.jpg","https://cdn.dummyjson.com/product-images/1/3.jpg","https://cdn.dummyjson.com/product-images/1/4.jpg","https://cdn.dummyjson.com/product-images/1/thumbnail.jpg"]},
       {"id":2,"title":"iPhone X","description":"SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...","price":899,"discountPercentage":17.94,"rating":4.44,"stock":34,"brand":"Apple","category":"smartphones","thumbnail":"https://cdn.dummyjson.com/product-images/2/thumbnail.jpg","images":["https://cdn.dummyjson.com/product-images/2/1.jpg","https://cdn.dummyjson.com/product-images/2/2.jpg","https://cdn.dummyjson.com/product-images/2/3.jpg","https://cdn.dummyjson.com/product-images/2/thumbnail.jpg"]},
@@ -53,21 +53,19 @@ import BaseSlide from '@/components/BaseSlide.vue';
   }
   .carousel{
     position: relative;
-    height: 430px;
-    
-    .slide-info{
-      position: absolute;
-      top: 0;
-      left: 0;
+    height: 400px;
+  
+  }
+  .bannerimg{
       width: 100%;
-      height: 430px;
-    }
-    img{
-      width: 100%;
-      height: 430px;
+      height: 410px;
       object-fit: cover;
     }
-  }
+  .slide-info{
+      position: absolute;
+      width: 100%;
+      height: 410px;
+    }
   .fretebanner,.fretesvg{
     background-color: #F3F3F3;
     width: 100%;
@@ -80,6 +78,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
     
   }
   .fretesvg{
+    margin-top: 410px;
     width: 100%;
   }
 
@@ -92,7 +91,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
     margin: 0px 13% 0px 13%;
   }
   h2{
-    margin-top: 55px;
+    margin-top: 50px;
     text-align: center;
     color: #7F57F1;
     font-size: 30px;

@@ -1,9 +1,9 @@
 <template>
 
     <div class="slide">
-        <transition name="slide">
+        <Transition name="slide">
             <slot/>
-        </transition>
+        </Transition>
     </div>
 </template>
 

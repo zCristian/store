@@ -32,7 +32,7 @@
     justify-content: flex-start;
     background-color: #7f57f1;
     color:white;
-    height: 150px;
+    height: 175px;
     
 }
 .text{
