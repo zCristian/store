@@ -58,13 +58,13 @@ import BaseSlide from '@/components/BaseSlide.vue';
   }
   .bannerimg{
       width: 100%;
-      height: 410px;
+      height: 430px;
       object-fit: cover;
     }
   .slide-info{
       position: absolute;
       width: 100%;
-      height: 410px;
+      height: 430px;
     }
   .fretebanner,.fretesvg{
     background-color: #F3F3F3;
@@ -78,7 +78,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
     
   }
   .fretesvg{
-    margin-top: 410px;
+    margin-top: 430px;
     width: 100%;
   }
 
