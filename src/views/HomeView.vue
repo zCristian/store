@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      <BaseCarousel class="carousel" v-slot="{currentSlide}">
+      <BaseCarousel :navigation="true" :pagination="true" class="carousel" v-slot="{currentSlide}">
           <BaseSlide v-for="(slide,index) in carouselSlides" :key="index">
             <div v-show="currentSlide==index+1" class="slide-info">
               <img :src="require(`../assets/${slide}.svg`)" alt="banner" class="bannerimg">
@@ -53,18 +53,18 @@ import BaseSlide from '@/components/BaseSlide.vue';
   }
   .carousel{
     position: relative;
-    height: 400px;
+    height: 450px;
   
   }
   .bannerimg{
       width: 100%;
-      height: 430px;
+      height: 450px;
       object-fit: cover;
     }
   .slide-info{
       position: absolute;
       width: 100%;
-      height: 430px;
+      height: 450px;
     }
   .fretebanner,.fretesvg{
     background-color: #F3F3F3;
@@ -78,7 +78,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
     
   }
   .fretesvg{
-    margin-top: 430px;
+    margin-top: 450px;
     width: 100%;
   }
 
