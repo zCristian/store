@@ -1,4 +1,7 @@
 <template>
+<div class="econdiv">
+    <img class="econimg" src="../assets/bannerlower.svg">
+</div>
 <div class="aboutusdiv">
     <div class="celimg">
         <img src="../assets/celulou.svg">
@@ -36,10 +39,15 @@
     import { Instagram,Linkedin, Facebook } from 'lucide-vue-next';
 </script>
 <style scoped>
+    .econimg{
+        width: 100%;
+        margin-top: 80px;
+    }
     .aboutusdiv{
         display: flex;
         justify-content: center;
-        margin-top: 55px;
+        margin-top: 60px;
+        width: 1220px;
         
     }
 

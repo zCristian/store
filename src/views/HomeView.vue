@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      <BaseCarousel :navigation="true" :pagination="true" class="carousel" v-slot="{currentSlide}">
+      <BaseCarousel :navigation="true" :pagination="true" :start-auto-play="false" class="carousel" v-slot="{currentSlide}">
           <BaseSlide v-for="(slide,index) in carouselSlides" :key="index">
             <div v-show="currentSlide==index+1" class="slide-info">
               <img :src="require(`../assets/${slide}.svg`)" alt="banner" class="bannerimg">
@@ -8,12 +8,15 @@
           </BaseSlide>
       </BaseCarousel>
       <div class="fretebanner"><img src="../assets/fretebanner.svg" class="fretesvg"></div>
-      <h2>Compre por Faixa de Preço</h2>
-      <div class="pricerange">
-        <PriceRangeBtn v-for="i in 4" :key="i" :pricerange="+pricerange[i-1]"/>
-        
-      </div>
       
+
+      <div class="pricerange">
+        <h2>Compre por Faixa de Preço</h2>
+        <PriceRangeBtn v-for="i in 4" :key="i" :pricerange="+pricerange[i-1]"/>
+      </div>
+      <div class="mosaic">
+        <img :class="'mosaicbanner'+i" v-for="i in 3" :key="i" :src="require(`../assets/mosaicbanner${i}.svg`)">
+      </div>
       <div class="maincontent">
         <ProductsSection :products="products"/>
       </div>
@@ -73,7 +76,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
   .maincontent{
     display: flex;
     flex-wrap: wrap;
-    margin: 15px 12% 15px 12%;
+    width: 1220px;
     justify-content: center;
     
   }
@@ -85,15 +88,28 @@ import BaseSlide from '@/components/BaseSlide.vue';
   .pricerange{
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     justify-content: space-between;
-    height: 120px;
-    width: 1320px;
-    margin: 0px 13% 0px 13%;
+    width: 1220px;
+    margin-top: 50px;
+    
+  }
+  .mosaic{
+    display: flex;
+    width: 1220px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 100px;
+
   }
   h2{
     margin-top: 50px;
     text-align: center;
     color: #7F57F1;
     font-size: 30px;
+    display: flex;
+    justify-content: center;
+    flex-basis: 100%;
   }
 </style>

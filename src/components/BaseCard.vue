@@ -49,7 +49,6 @@
         
         flex-wrap: wrap;
         padding: 5px 5px 5px 5px;
-        margin:22px;
         width: 255px;
         
        

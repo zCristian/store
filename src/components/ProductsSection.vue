@@ -2,8 +2,9 @@
 <template>
     <div class="news"><h2>Novidades</h2></div>
     <div class="content">
-        <BaseCard class="teste" v-for="product in products" :key="product.id" :product="product"/>
-    
+        
+        <BaseCard class="teste" v-for="(product) in products" :key="product.id" :product="product"/>
+        
     </div>
 </template>
 
@@ -11,6 +12,7 @@
 
 import BaseCard from './BaseCard.vue';
 import defineProps from 'vue'
+
 
 const props = defineProps({
     products:{
@@ -22,6 +24,9 @@ console.log(props.product)
 </script>
 
 <style scoped>
+.carousel{
+    width: 100%;
+}
 .news{
     display: flex;
     justify-content: center;
@@ -36,10 +41,10 @@ h2{
     margin-top: 55px;
 }
 .content{
-  width: 1320px;
+  width: 1220px;
   display: flex;
   justify-content: flex-start;
-  gap: 24px;
+  gap: 52px;
   flex-wrap: wrap;
 
 }

@@ -1,22 +1,24 @@
 <template>
     <div class="container">
-        <div class="text">
-            <h3>Fique por dentro!</h3>
-            <p>Inscreva-se na nossa newsletter e receba novidades, promoções exclusivas e muito mais</p>
-        </div>
-        <div class="form">
-            <div class="textform">
-                <label>Nome</label>
-                <input class="nameinput" type="text" placeholder="Insira seu nome">
+        <div class="content">
+            <div class="text">
+                <h3>Fique por dentro!</h3>
+                <p>Inscreva-se na nossa newsletter e receba novidades, promoções exclusivas e muito mais</p>
             </div>
-            <div class="textform">
-                <label>E-mail</label>
-                <input class="emailinput" type="text" placeholder="Insira seu e-mail">
-            </div>
-            <button>Enviar</button>
-            <div class="checkform">
-                <input class="checkinput" type="checkbox">
-                <span>Aceito compartilhar minhas informações com Celulou</span>
+            <div class="form">
+                <div class="textform">
+                    <label>Nome</label>
+                    <input class="nameinput" type="text" placeholder="Insira seu nome">
+                </div>
+                <div class="textform">
+                    <label>E-mail</label>
+                    <input class="emailinput" type="text" placeholder="Insira seu e-mail">
+                </div>
+                <button>Enviar</button>
+                <div class="checkform">
+                    <input class="checkinput" type="checkbox">
+                    <span>Aceito compartilhar minhas informações com Celulou</span>
+                </div>
             </div>
         </div>
     </div>
@@ -24,21 +26,26 @@
 
 <style scoped>
 .container{
-    margin-top: 55px;
+    margin-top: 50px;
     width: 100%;
+    background-color: #7f57f1;
+    color:white;
+    height: 230px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.content{
+    align-items: center;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-start;
-    background-color: #7f57f1;
-    color:white;
-    height: 175px;
-    
+    width: 1220px;
 }
 .text{
     flex-basis: 28%;
-    margin-left: 13%;
-    font-size: 18px;
+    font-size: 15px;
     height: 120px;
 }
 
@@ -48,7 +55,6 @@
     align-items: center;
     justify-content: space-between;
     width: 780px;
-    margin-right: 13%;
     height: 120px;
 }
 
