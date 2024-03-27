@@ -13,6 +13,9 @@
             <CircleChevronRight class="arrowicon" @click="moveCarouselRight"/>
         </div>
     </div>
+    <div class="prodpagination">
+        <span :class="['circle',{selected: i == selectedCircle}]" v-for="i in 3" :key="i" @click="selectPage(i)"></span>
+    </div>
 </template>
 
 <script setup >
@@ -21,7 +24,8 @@ import BaseCard from './BaseCard.vue';
 import { ref, onMounted} from 'vue'
 import { CircleChevronLeft, CircleChevronRight } from 'lucide-vue-next';
 
-const range = ref([1,5])
+const selectedCircle = ref(1);
+const range = ref([1,4])
 const maxRender = 8;
 const filteredProducts = ref([]);
 const products=[
@@ -38,18 +42,25 @@ const products=[
 ];
 
 
+const selectPage = (pos) =>{
+    selectedCircle.value = pos;
+    filterProducts([1+4*(pos-1),4+4*(pos-1)]); 
+    console.log(selectedCircle.value);
+}
 const filterProducts = (range) =>{
-     filteredProducts.value = products.filter((product) => product.id<range[1] && product.id>=range[0]);
+     filteredProducts.value = products.filter((product) => product.id<=range[1] && product.id>=range[0]);
 }
 
 const moveCarouselRight = () =>{
     if(range.value[0]>maxRender){
         range.value[0]=1;
-        range.value[1] = 5;
+        range.value[1] = 4;
+        selectedCircle.value =1;
     }else{
         for(let i=0; i<2; i++){
             range.value[i]+=4;
         }
+        selectedCircle.value +=1;
     }
     
    
@@ -57,13 +68,15 @@ const moveCarouselRight = () =>{
 }
 
 const moveCarouselLeft = () =>{
-    if(range.value[0]<4){
+    if(range.value[0]<3){
         range.value[0]= maxRender+1;
-        range.value[1] = maxRender+5;
+        range.value[1] = maxRender+4;
+        selectedCircle.value =3;
     }else{
         for(let i=0; i<2; i++){
          range.value[i]-=4;
         }
+        selectedCircle.value -=1;
     }
     
  
@@ -81,7 +94,6 @@ onMounted(() => {
 .news{
     display: flex;
     justify-content: center;
-    
     flex-basis: 100%;
 
 }
@@ -105,8 +117,8 @@ h2{
 .navigation{
     width: 1280px;
     position: relative;
-    bottom: 550px;
-    height: 550px;
+    bottom: 500px;
+    height: 500px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -117,5 +129,29 @@ h2{
     height: 30px;
     width: 30px;
     cursor: pointer;
+}
+
+.prodpagination{
+    display: flex;
+    position: relative;
+    height: 30px;
+    top: -520px;
+    justify-content: center;
+    align-items: end;
+    gap: 20px;
+    width: 1220px;
+    flex-shrink: 0;
+}
+
+.circle{
+    border-radius: 50%;
+    background-color: grey;
+    height: 12px;
+    width: 12px;
+}
+.selected{
+    background-color: black;
+    height: 13px;
+    width: 13px;
 }
 </style>

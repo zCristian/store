@@ -15,11 +15,7 @@
     </div>
     <div class="brandsdiv">
       <div class="brandspan">
-        <span>Apple</span>
-        <span>Xiaomi</span>
-        <span>Samsung</span>
-        <span>Motorola</span>
-        <span>Asus</span>
+        <span v-for="brand in brands" :key="brand">{{brand}}</span>
         <span class="offers"><BadgePercent/>Ofertas</span>
       </div>
     </div>
@@ -36,6 +32,7 @@
   import {ref} from 'vue';
   import { Search } from 'lucide-vue-next';
   const userName = ref('Cristian');
+  const brands = ['Apple', 'Xiaomi','Samsumg','Motorola','Asus'];
 </script>
 
 
@@ -119,6 +116,7 @@ p{
   font-size: 16px;
 }
 .brandsdiv{
+  width: 1220px;
   height: 34px;
   display: flex;
   align-items: center;

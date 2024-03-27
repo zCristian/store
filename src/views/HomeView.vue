@@ -7,7 +7,15 @@
             </div>
           </BaseSlide>
       </BaseCarousel>
-      <div class="fretebanner"><img src="../assets/fretebanner.svg" class="fretesvg"></div>
+      <div class="fretebanner">
+        <div v-for="i in 4 " :key="i" class="fretecomp">
+            <img src="../assets/fretesvg.svg">
+            <div class="fretetext">
+                <h3>Frete Grátis</h3>
+                <p>para compras acima de R$ 999,99</p>
+            </div>  
+        </div>
+      </div>
       
 
       <div class="pricerange">
@@ -35,7 +43,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
     //const products= ref([]);
     const carouselSlides = ["bannerSlide","bimg2","bannerSlide","bimg2"];
     
-      const pricerange = [999,1999,2999,3000];
+    const pricerange = [999,1999,2999,3000];
 
 </script>
 
@@ -60,9 +68,46 @@ import BaseSlide from '@/components/BaseSlide.vue';
       width: 100%;
       height: 450px;
     }
-  .fretebanner,.fretesvg{
+  .fretebanner{
     background-color: #F3F3F3;
     width: 100%;
+    height: 86px;
+    margin-top: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 134px;
+    
+  }
+  .fretecomp{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 204px;
+    height: 54px;
+   
+    img{
+      height: 54px;
+      width: 54px;
+      margin: 0px;
+    
+    }
+    
+  }
+  .fretetext{
+    display: flex;
+    flex-direction: column;
+
+    h3{
+      color: #7F57F1;
+      margin: 0px 0px 0px 10px;
+      font-size: 16px;
+      font-style: bold;
+    }
+    p{
+      margin: 0px 0px 0px 10px ;
+      font-size: 13px;
+    }
   }
   .maincontent{
     display: flex;
@@ -72,10 +117,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
     justify-content: center;
     
   }
-  .fretesvg{
-    margin-top: 450px;
-    width: 100%;
-  }
+  
 
   .pricerange{
     display: flex;
