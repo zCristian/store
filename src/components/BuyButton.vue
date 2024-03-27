@@ -1,6 +1,6 @@
 <template>
 
-    <button class="buybtn">Comprar Agora<ShoppingBag class="shoppingbag"/></button>
+    <button class="buybtn"><router-link to="/product#">Comprar Agora</router-link><ShoppingBag class="shoppingbag"/></button>
 </template>
 
 <script setup>

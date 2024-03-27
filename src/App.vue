@@ -15,7 +15,7 @@
     </div>
     <div class="brandsdiv">
       <div class="brandspan">
-        <span v-for="brand in brands" :key="brand">{{brand}}</span>
+        <router-link v-for="brand in brands" :key="brand" to="/products"><span >{{brand}}</span></router-link>
         <span class="offers"><BadgePercent/>Ofertas</span>
       </div>
     </div>
@@ -139,6 +139,7 @@ span{
   display: flex;
   align-items: center;
   flex-basis: 10%;
+  color: white;
 }
 .offers{
   display: flex;
