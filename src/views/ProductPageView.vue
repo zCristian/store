@@ -1,8 +1,11 @@
 <template>
 
-    <div class="productpage-content">
+    <div class="productpage-content" onload='location.href="#productpage"'>
         <div class="product-head">
-            <div class="img-col"></div>
+            <div class="img-col">
+                <div class="img-mini" v-for="i in 4" :key="i" >
+                </div>
+            </div>
             <div class="img-center"></div>
             <div class="product-description"></div>
         </div>
@@ -14,7 +17,12 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onBeforeMount } from 'vue';
+onBeforeMount(()=>{
+    window.scrollTo(top);
+})
+</script>
 
 <style scoped>
 
@@ -34,11 +42,18 @@
 
         .img-col{
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
+            gap: 10px;
             width: 100px;
             margin: 0px;
             height: 430px;
-            background-color: #D9D9D9;
+          
+            .img-mini{
+                width: 100%;
+                height: 100px;
+                background-color: #D9D9D9;
+                margin: 0px;
+            }
         }
         .img-center{
             margin: 0px;

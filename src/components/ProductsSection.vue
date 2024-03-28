@@ -117,8 +117,8 @@ h2{
 .navigation{
     width: 1280px;
     position: relative;
-    bottom: 500px;
-    height: 500px;
+    bottom: 275px;
+    height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -135,7 +135,7 @@ h2{
     display: flex;
     position: relative;
     height: 30px;
-    top: -520px;
+    top: -60px;
     justify-content: center;
     align-items: end;
     gap: 20px;
