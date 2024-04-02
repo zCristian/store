@@ -8,8 +8,8 @@
           <button class="searchbtn"><Search/>Buscar</button>
       </div>
     <div class="icondiv">
-      <router-link to="/user" class="userlink"><User/><p>{{ userName }}</p></router-link>
-      <router-link to="/fav" class="cartlink"><Heart/><p>Favoritos</p></router-link>
+      <router-link to="/user" class="userlink" @click="popCard()"><User/><p>{{ userName }}</p></router-link>
+      <router-link to="/fav" class="favlink"><Heart/><p>Favoritos</p></router-link>
       <router-link to="/cart" class="cartlink"><ShoppingBag/><p>Itens</p></router-link>
      
     </div>
@@ -22,17 +22,23 @@
   </nav>
 
   <router-view></router-view>
+  <SignupLoginCard class="login-card"/>
   <PageFooter/>
 </template>
 
 
 <script setup>
+  import SignupLoginCard from '../src/components/SignuoLoginCard.vue'
   import PageFooter from '../src/components/PageFooter.vue'
   import { ShoppingBag,Heart,User,BadgePercent} from 'lucide-vue-next';
   import {ref} from 'vue';
   import { Search } from 'lucide-vue-next';
-  const userName = ref('Cristian');
+  const userName = ref('Login');
   const brands = ['Apple', 'Xiaomi','Samsumg','Motorola','Asus'];
+
+  const popCard = ()=>{
+    
+  }
 </script>
 
 
@@ -73,20 +79,31 @@ a{
   justify-content: space-between;
   align-items: center;
 }
+
 p{
   margin-top: 1px;
   flex-basis: 100%;
   text-align: center;
 }
+
 .icondiv{
-  margin-bottom: 15px;
+  margin: 0px 0px 15px 30px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
   align-items: center;
-  height: 30px;
-  flex-basis: 15%;
+  height: 45px;
+  gap: 30px;
+  width: 220px;
   font-size: 15px;
+}
+.userlink{
+  width: 41px;
+}
+.favlink{
+  width: 66px;
+}
+.cartlink{
+  width: 48px;
 }
 .searchdiv{
   flex-basis: 40%;
@@ -173,5 +190,9 @@ span:hover{
 }
 .offers:hover{
   font-size: 18px;
+}
+
+.login-card{
+  display: none;
 }
 </style>
