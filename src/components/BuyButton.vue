@@ -6,7 +6,7 @@
 <script setup>
     import { ShoppingBag} from 'lucide-vue-next';
 </script>
-<style>
+<style scoped>
     .buybtn{
         
         background-color:#7F57F1 ;

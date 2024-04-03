@@ -28,7 +28,7 @@
 
 
 <script setup>
-  import SignupLoginCard from '../src/components/SignuoLoginCard.vue'
+  import SignupLoginCard from '../src/components/SignupLoginCard.vue'
   import PageFooter from '../src/components/PageFooter.vue'
   import { ShoppingBag,Heart,User,BadgePercent} from 'lucide-vue-next';
   import {ref} from 'vue';
@@ -193,6 +193,6 @@ span:hover{
 }
 
 .login-card{
-  display: none;
+  display: block;
 }
 </style>

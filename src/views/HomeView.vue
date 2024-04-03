@@ -125,7 +125,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
     flex-wrap: wrap;
     justify-content: space-between;
     width: 1220px;
-    margin-top: 50px;
+    
     
   }
   .mosaic{
@@ -138,7 +138,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
 
   }
   h2{
-    margin-top: 50px;
+    margin: 50px 0px 25px 0px;
     text-align: center;
     color: #7F57F1;
     font-size: 30px;

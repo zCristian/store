@@ -3,23 +3,29 @@
     
         <div class="register-card">
             <div class="close-div">
-                <CircleX class="close-btn"/>
+                <CircleX class="close-btn" @click="closeCard()" />
             </div>
             <div class="card-function">
-                <span @click=switchFunction(2)>Entre </span> ou<span @click="switchFunction(1) "> cadastre-se</span>
+                <span :class="{selected:loginSelected}" @click="switchFunction(0) ">Entre </span> ou<span  :class="{selected:!loginSelected}" @click="switchFunction(1)"> cadastre-se</span>
             </div>
             <hr class="head-hr">
             <div class="card-content">
                 <h2>Bem vindo a Celulou</h2>
-                <input class="email field" type="text" placeholder="E-mail">
-                <input class="password field" type="password" placeholder="Senha">
-                <BaseButton/>
+
+                <input  v-if="isSignUp == true" class="cpf field" type="text" placeholder="CPF">
+                <input  v-if="isSignUp == true" class="name field" type="text" placeholder="Nome">
+                <input  v-if="isSignUp == true" class="phone field" type="text" placeholder="Celular">
+                <input   class="email field" type="text" placeholder="E-mail">
+                <input   class="password field" type="password" placeholder="Senha">
+                
+                <BaseButton :btntext="btntext" />
             </div>
             <div class="separation">
                 <hr>ou<hr>
             </div>
             <div class="socials">
-                <button class="google-login">Entre com <img src="../assets/icon/googlesvg.svg"></button>
+                <h5>Entre com</h5>
+                <button class="google-login"> <img src="../assets/icon/googlesvg.svg"></button>
             </div>
         </div>
 </div>
@@ -27,17 +33,25 @@
 
 <script setup>
 import BaseButton from '../components/BaseButton.vue';
-import { CircleX } from 'lucide-vue-next'
+import {ref} from 'vue';
+import { CircleX } from 'lucide-vue-next';
+const isSignUp = ref(false);
+const loginSelected= ref(true);
+const btntext = ref("Entrar")
 let switchFunction = (index) =>{
-    if(index==1){
-        console.log("Signup");
+    if(index==0){
+        isSignUp.value = false;
+        loginSelected.value = true;
+        btntext.value = "Entrar";
     }else{
-        console.log("Login")
+        isSignUp.value = true;
+        loginSelected.value = false;
+        btntext.value = "Cadastrar";
     }
 }
 </script>
 
-<style>
+<style scoped>
 .registration{
     display: flex;
     justify-content: center;
@@ -47,7 +61,7 @@ let switchFunction = (index) =>{
     width: 350px;
     border: 1px solid black;
     border-radius: 20px;
-    padding: 10px 0px;
+    padding: 9px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,6 +108,7 @@ let switchFunction = (index) =>{
 }
 span{
     font-weight: bold;
+    cursor: pointer;
 
 }
 h2{ 
@@ -114,7 +129,7 @@ h2{
     hr{
         width: 150px;
         background-color: black;
-        height: 0.5px;
+        height: 0px;
         margin: 0px;
     }
 }
@@ -140,5 +155,11 @@ h2{
     height: 42px;
     justify-content: center;
     align-items: center;
+}
+.selected{
+    color: #7F57F1;
+}
+h5{
+    margin:5px;
 }
 </style>

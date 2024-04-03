@@ -10,7 +10,7 @@
 
 <script setup></script>
 
-<style >
+<style scoped >
 .slide-enter-active,
 .slide-leave-active {
     transition: 0.5s ;

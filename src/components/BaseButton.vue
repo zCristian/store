@@ -5,10 +5,17 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import { defineProps} from 'vue';
     const btnsrc = "/";
-    const btntext = ref("Entrar");
 
+    const props = defineProps({
+        btntext:{
+            type : Text,
+            required : true
+        },
+    });
+   
+    console.log(props.btntext);
 </script>
 
 <style scoped>

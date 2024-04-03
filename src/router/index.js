@@ -6,7 +6,7 @@ import CartView from '@/views/CartView.vue'
 import UserView from '@/views/UserView.vue'
 import ProductsView from '@/views/ProductsView.vue'
 import ProductPageView from '@/views/ProductPageView.vue'
-import SignupLoginView from '@/views/SignupLoginView.vue'
+
 const routes = [
   {
     path: '/',
