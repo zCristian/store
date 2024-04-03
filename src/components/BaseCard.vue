@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="bookmarkdiv">
-            <BookMarkButton/>
+            <BookMarkButton @click="productLiked()"/>
         </div>
         <div class="thumbnail"><img src="../assets/img/iphone.jpg" ></div>
         <div class="cardcontent">
@@ -26,7 +26,7 @@
 <script setup>  
     import BuyButton from '../components/BuyButton.vue'
     import BookMarkButton from '../components/BookMarkButton.vue'
-    import { defineProps} from 'vue';
+    import { defineProps, ref, defineEmits} from 'vue';
 
     const props = defineProps({
         product:{
@@ -36,7 +36,16 @@
     });
     
     console.log(props);
-    //console.log(product.thumbnail)
+    const savedProducts = ref([]);
+
+    const emit = defineEmits('productLiked');
+    const productLiked = () =>{
+        console.log("Prod Id", props.product.id);
+        savedProducts.value.push(props.product.id)
+        console.log(savedProducts.value);
+        emit('productLiked',savedProducts.value);
+    }
+
 </script>
 <style scoped>
     .card{

@@ -1,31 +1,32 @@
 <template>
-    <div class="registration">
-    
-        <div class="register-card">
-            <div class="close-div">
-                <CircleX class="close-btn" @click="closeCard()" />
-            </div>
-            <div class="card-function">
-                <span :class="{selected:loginSelected}" @click="switchFunction(0) ">Entre </span> ou<span  :class="{selected:!loginSelected}" @click="switchFunction(1)"> cadastre-se</span>
-            </div>
-            <hr class="head-hr">
-            <div class="card-content">
-                <h2>Bem vindo a Celulou</h2>
+    <div v-if="showCard==true">
+        <div class="card-container">
+            <div class="register-card">
+                <div class="card-function">
+                    <span :class="{selected:loginSelected}" @click="switchFunction(0) ">Entre </span> ou<span  :class="{selected:!loginSelected}" @click="switchFunction(1)"> cadastre-se</span>
+                </div>
+                <div class="close-div">
+                    <CircleX class="close-btn" @click="closeCard()" />
+                </div>
+                <hr class="head-hr">
+                <div class="card-content">
+                    <h2>Bem vindo a Celulou</h2>
 
-                <input  v-if="isSignUp == true" class="cpf field" type="text" placeholder="CPF">
-                <input  v-if="isSignUp == true" class="name field" type="text" placeholder="Nome">
-                <input  v-if="isSignUp == true" class="phone field" type="text" placeholder="Celular">
-                <input   class="email field" type="text" placeholder="E-mail">
-                <input   class="password field" type="password" placeholder="Senha">
-                
-                <BaseButton :btntext="btntext" />
-            </div>
-            <div class="separation">
-                <hr>ou<hr>
-            </div>
-            <div class="socials">
-                <h5>Entre com</h5>
-                <button class="google-login"> <img src="../assets/icon/googlesvg.svg"></button>
+                    <input  v-if="isSignUp == true" class="cpf field" type="text" placeholder="CPF">
+                    <input  v-if="isSignUp == true" class="name field" type="text" placeholder="Nome">
+                    <input  v-if="isSignUp == true" class="phone field" type="text" placeholder="Celular">
+                    <input   class="email field" type="text" placeholder="E-mail">
+                    <input   class="password field" type="password" placeholder="Senha">
+                    
+                    <BaseButton :btntext="btntext" @click="closeCard()" />
+                </div>
+                <div class="separation">
+                    <hr>ou<hr>
+                </div>
+                <div class="socials">
+                    <h5>Continue com</h5>
+                    <button class="google-login"> <img src="../assets/icon/googlesvg.svg"></button>
+                </div>
             </div>
         </div>
 </div>
@@ -33,11 +34,20 @@
 
 <script setup>
 import BaseButton from '../components/BaseButton.vue';
-import {ref} from 'vue';
+import {ref,defineProps,defineEmits} from 'vue';
 import { CircleX } from 'lucide-vue-next';
+const props = defineProps({
+    showCard :{
+        type : Boolean,
+        required :true
+    }
+});
+
 const isSignUp = ref(false);
 const loginSelected= ref(true);
 const btntext = ref("Entrar")
+
+console.log(props.showCard);
 let switchFunction = (index) =>{
     if(index==0){
         isSignUp.value = false;
@@ -49,36 +59,49 @@ let switchFunction = (index) =>{
         btntext.value = "Cadastrar";
     }
 }
+const emit = defineEmits('closeCard');
+
+let closeCard = () =>{
+    emit('closeCard');
+}
 </script>
 
 <style scoped>
-.registration{
+
+.card-container{ 
+    background-color: rgba(0,0,0,0.4);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
-    margin: 50px 0px;
 }
 .register-card{
+    position:absolute;
+    top: 150px;
     width: 350px;
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 9px 0px;
+    border-radius: 25px;
+    padding: 15px 3px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    background-color: white;
 }
 .close-div{
     display: flex;
     justify-content: flex-end;
-    width: 320px;
+    
 }
 .close-btn{
     color: #7F57F1;
     border: none;
+    cursor: pointer;
     
 }
 .card-function{
-    width: 320px;
+    width: 296px;
     display: flex;
     justify-content: flex-start;
     gap: 10px;
@@ -155,6 +178,9 @@ h2{
     height: 42px;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    background-color: #E6E6E6;
+    border: 2px solid #7F57F1;
 }
 .selected{
     color: #7F57F1;

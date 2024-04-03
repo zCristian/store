@@ -8,8 +8,8 @@
           <button class="searchbtn"><Search/>Buscar</button>
       </div>
     <div class="icondiv">
-      <router-link to="/user" class="userlink" @click="popCard()"><User/><p>{{ userName }}</p></router-link>
-      <router-link to="/fav" class="favlink"><Heart/><p>Favoritos</p></router-link>
+      <router-link id="userbtn" to="" class="userlink" @click="popCard()"><User/><p>{{ userName }}</p></router-link>
+      <router-link to="/favorites" class="favlink"><Heart/><p>Favoritos</p></router-link>
       <router-link to="/cart" class="cartlink"><ShoppingBag/><p>Itens</p></router-link>
      
     </div>
@@ -22,7 +22,7 @@
   </nav>
 
   <router-view></router-view>
-  <SignupLoginCard class="login-card"/>
+  <SignupLoginCard  :showCard="showCard" @closeCard="showCard = false"  class="login-card"/>
   <PageFooter/>
 </template>
 
@@ -35,23 +35,17 @@
   import { Search } from 'lucide-vue-next';
   const userName = ref('Login');
   const brands = ['Apple', 'Xiaomi','Samsumg','Motorola','Asus'];
-
+  const showCard = ref(false);
   const popCard = ()=>{
-    
+    showCard.value = true;
+    console.log(showCard.value);
   }
 </script>
 
 
 
 <style scoped>
-#app {
-  width: 100%;
-  font-family: "Montserrat", sans-serif;
-  text-align: center;
-  text-align: center;
- 
- 
-}
+
 a{
   display: flex;
   align-items: center;
@@ -193,6 +187,6 @@ span:hover{
 }
 
 .login-card{
-  display: block;
+  height: 100%;
 }
 </style>

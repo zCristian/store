@@ -3,7 +3,7 @@
     <div class="news"><h2>Novidades</h2></div>
 
     <div class="content">
-        <BaseCard class="teste" v-for="(product) in filteredProducts" :key="product.id" :product="product" />
+        <BaseCard class="teste" v-for="(product) in filteredProducts" :key="product.id" :product="product" @productLiked ="handleProductLiked()"/>
     </div>
     <div class="navigation">
         <div class="moveleft">
@@ -24,6 +24,7 @@ import BaseCard from './BaseCard.vue';
 import { ref, onMounted} from 'vue'
 import { CircleChevronLeft, CircleChevronRight } from 'lucide-vue-next';
 
+const savedProductsId = ref([]);
 const selectedCircle = ref(1);
 const range = ref([1,4])
 const maxRender = 8;
@@ -45,7 +46,7 @@ const products=[
 const selectPage = (pos) =>{
     selectedCircle.value = pos;
     filterProducts([1+4*(pos-1),4+4*(pos-1)]); 
-    console.log(selectedCircle.value);
+    
 }
 const filterProducts = (range) =>{
      filteredProducts.value = products.filter((product) => product.id<=range[1] && product.id>=range[0]);
@@ -87,6 +88,10 @@ const moveCarouselLeft = () =>{
 onMounted(() => {
     filterProducts(range.value);
 })
+
+const handleProductLiked = (savedProducts) =>{
+    savedProductsId.value = savedProducts;
+}
 </script>
 
 <style scoped>

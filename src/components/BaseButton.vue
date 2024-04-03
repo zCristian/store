@@ -30,7 +30,7 @@ import { defineProps} from 'vue';
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    
+    cursor: pointer;
  }
  a{
     text-decoration: none;
