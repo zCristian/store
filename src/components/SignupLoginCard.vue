@@ -11,21 +11,22 @@
                 <hr class="head-hr">
                 <div class="card-content">
                     <h2>Bem vindo a Celulou</h2>
-
-                    <input  v-if="isSignUp == true" class="cpf field" type="text" placeholder="CPF">
-                    <input  v-if="isSignUp == true" class="name field" type="text" placeholder="Nome">
-                    <input  v-if="isSignUp == true" class="phone field" type="text" placeholder="Celular">
-                    <input   class="email field" type="text" placeholder="E-mail">
-                    <input   class="password field" type="password" placeholder="Senha">
-                    
-                    <BaseButton :btntext="btntext" @click="closeCard()" />
+                        <form class="register-form" @submit.prevent="onSubmit" >
+                            <input  v-if="isSignUp == true" class="cpf field" type="text" placeholder="CPF" v-model="cpfCliente">
+                            <input  v-if="isSignUp == true" class="name field" type="text" placeholder="Nome" v-model="nomeCliente">
+                            <input  v-if="isSignUp == true" class="phone field" type="text" placeholder="Celular" v-model="celularCliente" >
+                            <input   class="email field" type="text" placeholder="E-mail" v-model="emailCliente">
+                            <input  v-if="false" class="password field" type="password" placeholder="Senha">
+                            
+                            <BaseButton :btntext="btntext" @click="onSubmit" @keyup.enter="onSubmit" />
+                        </form>
                 </div>
                 <div class="separation">
                     <hr>ou<hr>
                 </div>
                 <div class="socials">
                     <h5>Continue com</h5>
-                    <button class="google-login"> <img src="../assets/icon/googlesvg.svg"></button>
+                    <button class="google-login"> <img src="../assets/icon/googlesvg.svg" ></button>
                 </div>
             </div>
         </div>
@@ -36,12 +37,22 @@
 import BaseButton from '../components/BaseButton.vue';
 import {ref,defineProps,defineEmits} from 'vue';
 import { CircleX } from 'lucide-vue-next';
+import { useToast } from 'vue-toastification';
+
 const props = defineProps({
     showCard :{
         type : Boolean,
         required :true
     }
 });
+
+const toast = useToast();
+const response_msg = ref('');
+const axios = require('axios').default;
+const cpfCliente = ref('');
+const nomeCliente = ref('');
+const celularCliente = ref('');
+const emailCliente = ref('');
 
 const isSignUp = ref(false);
 const loginSelected= ref(true);
@@ -59,11 +70,45 @@ let switchFunction = (index) =>{
         btntext.value = "Cadastrar";
     }
 }
-const emit = defineEmits('closeCard');
-
+const emit = defineEmits('closeCard','succes_signup');
+let resetFields = () =>{
+    cpfCliente.value='';
+    emailCliente.value='';
+    nomeCliente.value='';
+    celularCliente.value='';
+}
 let closeCard = () =>{
     emit('closeCard');
 }
+
+const onSubmit =()=>{
+   const url_cliente = 'http://localhost:3000/cliente';
+   axios.post(url_cliente,{
+        nomeCliente :nomeCliente.value,
+        cpfCliente: cpfCliente.value,
+        celularCliente : celularCliente.value,
+        emailCliente : emailCliente.value
+    })
+    .then(function(response){
+        response_msg.value = response.data.message;
+        toast.success(response_msg.value);
+        emit('succes_signup');
+        switchFunction(0);
+        resetFields();
+        
+    })
+    .catch(function(error){
+        if(error.response){
+            response_msg.value = error.response.data.error;
+            console.log(error.response.data);
+            toast.error(response_msg.value);
+            emit('error_signup');
+        }
+    })
+   
+}
+
+
 </script>
 
 <style scoped>
@@ -81,8 +126,8 @@ let closeCard = () =>{
     position:absolute;
     top: 150px;
     width: 350px;
-    border-radius: 25px;
-    padding: 15px 3px;
+    border-radius: 20px;
+    padding: 20px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,8 +157,10 @@ let closeCard = () =>{
 }
 
 .card-content{
-    margin: 10px 0px;
     width: 320px;
+}
+.register-form{
+    margin: 10px 0px;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;

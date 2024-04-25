@@ -22,7 +22,7 @@
   </nav>
 
   <router-view></router-view>
-  <SignupLoginCard  :showCard="showCard" @closeCard="showCard = false"  class="login-card"/>
+  <SignupLoginCard  :showCard="showCard" @closeCard="showCard = false"  class="login-card" @succes_signup="handleSuccesSU()"/>
   <PageFooter/>
 </template>
 
@@ -33,12 +33,19 @@
   import { ShoppingBag,Heart,User,BadgePercent} from 'lucide-vue-next';
   import {ref} from 'vue';
   import { Search } from 'lucide-vue-next';
+  
+
+
   const userName = ref('Login');
   const brands = ['Apple', 'Xiaomi','Samsumg','Motorola','Asus'];
   const showCard = ref(false);
   const popCard = ()=>{
     showCard.value = true;
     console.log(showCard.value);
+  }
+
+  const handleSuccesSU  =()=>{
+    
   }
 </script>
 
@@ -187,6 +194,6 @@ span:hover{
 }
 
 .login-card{
-  height: 100%;
+  display: inline-block;
 }
 </style>

@@ -10,7 +10,7 @@ import { defineProps} from 'vue';
 
     const props = defineProps({
         btntext:{
-            type : Text,
+            type : String,
             required : true
         },
     });
