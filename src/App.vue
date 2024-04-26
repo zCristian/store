@@ -22,7 +22,7 @@
   </nav>
 
   <router-view></router-view>
-  <SignupLoginCard  :showCard="showCard" @closeCard="showCard = false"  class="login-card" @succes_signup="handleSuccesSU()"/>
+  <SignupLoginCard  :showCard="showCard" @closeCard="showCard = false"  class="login-card" @succes_signup="handleSuccesSU()" @succes_login="handleSuccesLogin(cliente)"/>
   <PageFooter/>
 </template>
 
@@ -46,6 +46,10 @@
 
   const handleSuccesSU  =()=>{
     
+  }
+
+  const handleSuccesLogin = (cliente) =>{
+      userName.value = cliente.nomeCliente;
   }
 </script>
 

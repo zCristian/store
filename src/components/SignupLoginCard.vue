@@ -11,14 +11,19 @@
                 <hr class="head-hr">
                 <div class="card-content">
                     <h2>Bem vindo a Celulou</h2>
-                        <form class="register-form" @submit.prevent="onSubmit" >
-                            <input  v-if="isSignUp == true" class="cpf field" type="text" placeholder="CPF" v-model="cpfCliente">
-                            <input  v-if="isSignUp == true" class="name field" type="text" placeholder="Nome" v-model="nomeCliente">
-                            <input  v-if="isSignUp == true" class="phone field" type="text" placeholder="Celular" v-model="celularCliente" >
+                        <form v-if="isSignUp" class="register-form cardform"  @submit.prevent="onSignUp()" >
+                            <input   class="cpf field" type="text" placeholder="CPF" v-model="cpfCliente">
+                            <input   class="name field" type="text" placeholder="Nome" v-model="nomeCliente">
+                            <input   class="phone field" type="text" placeholder="Celular" v-model="celularCliente" >
                             <input   class="email field" type="text" placeholder="E-mail" v-model="emailCliente">
                             <input  v-if="false" class="password field" type="password" placeholder="Senha">
                             
-                            <BaseButton :btntext="btntext" @click="onSubmit" @keyup.enter="onSubmit" />
+                            <BaseButton :btntext="btntext" @click="onSignUp()" @keyup.enter="onSignUp()" />
+                       
+                        </form>
+                        <form v-if="!isSignUp" class="login-form cardform" @submit.prevent="onLogin()">
+                            <input   class="email field" type="text" placeholder="E-mail" v-model="emailCliente">
+                            <BaseButton :btntext="btntext" @click="onLogin()" @keyup.enter="onLogin()" />
                         </form>
                 </div>
                 <div class="separation">
@@ -45,7 +50,14 @@ const props = defineProps({
         required :true
     }
 });
-
+const cliente = ref({
+    codigoCliente : '',    
+    cpfCliente : '',
+    nomeCliente :'',
+    celularCliente : '',
+    emailCliente : '',
+    createdAt :''
+});
 const toast = useToast();
 const response_msg = ref('');
 const axios = require('axios').default;
@@ -70,7 +82,7 @@ let switchFunction = (index) =>{
         btntext.value = "Cadastrar";
     }
 }
-const emit = defineEmits('closeCard','succes_signup');
+const emit = defineEmits('closeCard','succes_signup','error_signup','succes_login', 'error_login');
 let resetFields = () =>{
     cpfCliente.value='';
     emailCliente.value='';
@@ -81,7 +93,7 @@ let closeCard = () =>{
     emit('closeCard');
 }
 
-const onSubmit =()=>{
+const onSignUp =()=>{
    const url_cliente = 'http://localhost:3000/cliente';
    axios.post(url_cliente,{
         nomeCliente :nomeCliente.value,
@@ -92,22 +104,38 @@ const onSubmit =()=>{
     .then(function(response){
         response_msg.value = response.data.message;
         toast.success(response_msg.value);
-        emit('succes_signup');
+        emit('succes_login');
         switchFunction(0);
         resetFields();
         
     })
     .catch(function(error){
         if(error.response){
-            response_msg.value = error.response.data.error;
-            console.log(error.response.data);
+            response_msg.value = "Erro no Login";
             toast.error(response_msg.value);
-            emit('error_signup');
+            emit('error_login');
         }
     })
    
 }
 
+const onLogin = () =>{
+    const login_url = 'http://localhost:3000/cliente';
+    axios.post(login_url,{
+        email :emailCliente.value
+    })
+    .then(function(response){
+        cliente.value = response.result
+    })
+    .catch(function(error){
+        if(error.response){
+            response_msg.value = error.response.data.error;
+            console.log(error.response.data);
+            toast.error(response_msg.value);
+            emit('error_login');
+        }
+    })
+}
 
 </script>
 
@@ -159,7 +187,7 @@ const onSubmit =()=>{
 .card-content{
     width: 320px;
 }
-.register-form{
+.cardform{
     margin: 10px 0px;
     display: flex;
     justify-content: flex-start;
