@@ -34,8 +34,9 @@ const routes = [
     component: CartView
   },
   {
-    path: '/user',
+    path: '/user:codigoCliente',
     name: 'user',
+    props: true,
     component: UserView
   },
   {

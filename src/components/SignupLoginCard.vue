@@ -50,6 +50,7 @@ const props = defineProps({
         required :true
     }
 });
+console.log(props);
 const cliente = ref({
     codigoCliente : '',    
     cpfCliente : '',
@@ -70,7 +71,7 @@ const isSignUp = ref(false);
 const loginSelected= ref(true);
 const btntext = ref("Entrar")
 
-console.log(props.showCard);
+
 let switchFunction = (index) =>{
     if(index==0){
         isSignUp.value = false;
@@ -82,7 +83,8 @@ let switchFunction = (index) =>{
         btntext.value = "Cadastrar";
     }
 }
-const emit = defineEmits('closeCard','succes_signup','error_signup','succes_login', 'error_login');
+const emit = defineEmits(['closeCard','succes_signup','error_signup','succes_login','error_login']);
+
 let resetFields = () =>{
     cpfCliente.value='';
     emailCliente.value='';
@@ -111,26 +113,31 @@ const onSignUp =()=>{
     })
     .catch(function(error){
         if(error.response){
-            response_msg.value = "Erro no Login";
+            response_msg.value = error.response.data.error;
             toast.error(response_msg.value);
-            emit('error_login');
+            emit('error_signup');
+            
         }
     })
    
 }
 
 const onLogin = () =>{
-    const login_url = 'http://localhost:3000/cliente';
-    axios.post(login_url,{
+    const url_login = 'http://localhost:3000/login';
+    axios.post(url_login,{
         email :emailCliente.value
     })
     .then(function(response){
-        cliente.value = response.result
+        response_msg.value = "Bem Vindo";
+        toast.success(response_msg.value);
+        cliente.value = response.data.result;
+        resetFields();
+        closeCard();
+        emit('succes_login',cliente);
     })
     .catch(function(error){
         if(error.response){
-            response_msg.value = error.response.data.error;
-            console.log(error.response.data);
+            response_msg.value = "Erro no Login";
             toast.error(response_msg.value);
             emit('error_login');
         }

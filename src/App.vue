@@ -8,7 +8,8 @@
           <button class="searchbtn"><Search/>Buscar</button>
       </div>
     <div class="icondiv">
-      <router-link id="userbtn" to="" class="userlink" @click="popCard()"><User/><p>{{ userName }}</p></router-link>
+      <router-link v-if="isLoged==false" id="userbtn" to="" class="userlink" @click="popCard()"><User/><p>{{ userName }}</p></router-link>
+      <router-link v-if="isLoged" id="userbtn" :to="{name:'user', params: {codigoCliente:codigoCliente}}" class="userlink" ><User/><p>{{ userName }}</p></router-link>
       <router-link to="/favorites" class="favlink"><Heart/><p>Favoritos</p></router-link>
       <router-link to="/cart" class="cartlink"><ShoppingBag/><p>Itens</p></router-link>
      
@@ -22,7 +23,8 @@
   </nav>
 
   <router-view></router-view>
-  <SignupLoginCard  :showCard="showCard" @closeCard="showCard = false"  class="login-card" @succes_signup="handleSuccesSU()" @succes_login="handleSuccesLogin(cliente)"/>
+  <SignupLoginCard v-if="showCard"  :showCard="showCard" @closeCard="handleCloseCard"  class="login-card" 
+  @succes_signup="handleSuccesSU" @succes_login="handleSuccesLogin"/>
   <PageFooter/>
 </template>
 
@@ -34,22 +36,27 @@
   import {ref} from 'vue';
   import { Search } from 'lucide-vue-next';
   
+  const codigoCliente=ref('');
 
-
+  const isLoged = ref(false);
   const userName = ref('Login');
   const brands = ['Apple', 'Xiaomi','Samsumg','Motorola','Asus'];
   const showCard = ref(false);
   const popCard = ()=>{
     showCard.value = true;
-    console.log(showCard.value);
   }
-
-  const handleSuccesSU  =()=>{
+  const handleCloseCard =()=>{
+    showCard.value = false;
     
   }
-
+  const handleSuccesSU =()=>{
+    
+  }
   const handleSuccesLogin = (cliente) =>{
-      userName.value = cliente.nomeCliente;
+      userName.value = cliente.value.nomeCliente;
+      codigoCliente.value = cliente.value.codigoCliente;
+      isLoged.value = true;
+      localStorage.setItem('cliente', JSON.stringify(cliente.value));
   }
 </script>
 
