@@ -8,7 +8,7 @@
                 <input   class="name field" type="text" placeholder="Nome" v-model="cliente.nomeCliente" disabled>
                 <input   class="phone field" type="text" placeholder="Celular" v-model="cliente.celularCliente" disabled>
                 <input   class="email field" type="text" placeholder="E-mail" v-model="cliente.emailCliente" disabled>
-                <BaseButton :btntext="btntext" />
+                <ActionButton :btntext="btntext" />
             </form>
         </div>
         <div class="address container">
@@ -22,10 +22,14 @@
              <input   class="city field" type="text" placeholder="Cidade" v-model="cidade" >
              <input   class="state sm-field" type="text" placeholder="Estado" v-model="estado">
 
-             <BaseButton :btntext="AddresBtnTXT"/>
+             <ActionButton :btntext="AddresBtnTXT" @click="addAddress"/>
             </form>
             
         </div>
+        <div class="cards">
+            <AddressCard v-for="address in addresses" :key="address.id"/>
+        </div>
+        
     </div>
   
     
@@ -34,8 +38,11 @@
 
 <script setup>
 
-    import BaseButton from '@/components/BaseButton.vue';
+    import ActionButton from '@/components/ActionButton.vue';
+    import AddressCard from '@/components/AddressCard.vue';
     import {ref, defineProps} from 'vue';
+    import { useToast } from 'vue-toastification';
+    const toast = useToast();
     const axios = require('axios').default;
     const btntext = ref('Editar Informações');
     const AddresBtnTXT = ref('Adicionar Novo Endereço');
@@ -72,9 +79,53 @@
                 bairro.value = data.bairro;
                 cidade.value = data.localidade;
                 estado.value = data.uf;
+        
             });
         }
         
+    }
+    const addresses = ref([]);
+    const addAddress = () =>{
+        const url_address = 'http://localhost:3000/endereco';
+        const response_msg = ref('');
+        axios.post(url_address,{
+            cep :cep.value,
+            nomeRua : nomeRua.value,
+            numeroCasa :numeroCasa.value,
+            complemento: complemento.value,
+            bairro :bairro.value,
+            cidade : cidade.value,
+            estado : estado.value,
+            codigoCliente : props.codigoCliente
+        })
+        .then(function(response){
+            response_msg.value = response.data.message;
+            toast.success(response_msg.value);
+            createAddressCard(cep.value,nomeRua.value,numeroCasa.value,complemento.value,bairro.value,cidade.value,estado.value);
+        })
+        .catch(function(error){
+        if(error.response){
+            response_msg.value = error.response.data.error;
+            toast.error(response_msg.value);
+        }
+        })
+
+        const createAddressCard = (cep,nomeRua,numeroCasa,complemento,bairro,cidade,estado)=>{
+            addresses.value.push({
+                id:generateId(),
+                cep:cep,
+                nomeRua:nomeRua,
+                numeroCasa:numeroCasa,
+                complemento:complemento,
+                bairro:bairro,
+                cidade:cidade,
+                estado:estado
+            });
+            console.log(addresses);
+        }
+        const generateId=() =>{
+            return Math.floor(Math.random()*1000)
+        };
     }
 </script>
 
@@ -103,6 +154,9 @@
         justify-content: flex-start;
         width: 500px;
         gap: 15px;
+    }
+    .cards{
+        width: 400px;
     }
     .sm-field{
         width: 70px;
