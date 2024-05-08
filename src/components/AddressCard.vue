@@ -1,37 +1,79 @@
 <template>
     <div class="card">
-        <h4>CARD DE ENDEREÇO</h4>
+        <div class="title">
+            <h4>Endereço {{ props.address.id }}</h4>
+            <div class="btns">
+                <SquarePen class="edit-btn" />
+                <CircleX class="close-btn"/>
+            </div>           
+        </div> 
         <hr>
         <div class="head">
-            <p>Titulo</p>
+            <p>{{ props.address.cep }}</p>
         </div>
         <div class="main">
-            <p>Corpo</p>
+            <p>{{ props.address.nomeRua }} {{ props.address.numeroCasa }} - {{ props.address.estado }}</p>
         </div>
     </div>
 </template>
 
 <script setup>
+
+    import { CircleX,SquarePen } from 'lucide-vue-next';
+    import { defineProps } from 'vue';
+
+    const props = defineProps({
+        address:{
+                type: Array,
+                required: true
+        }
+    })
 </script>
 
 <style scoped>
 .card{
     background-color: #F1EFF8;
-    padding: 10px;
+    padding: 15px;
     display: flex;
     flex-wrap: wrap;
     width: 300px;
     margin: 10px;
     border-radius: 15px;
-    height: 150px;
+    height: 120px;
     h4{
         margin: 0px;
     }
+    p{
+        margin: 0px;
+    }
+}
+.title{
+    display: flex;
+    justify-content: space-between;
+    flex-basis: 100%;
+    color: #7F57F1;
+}
+.btns{
+    display: flex;
+    gap: 10px;
+}
+.edit-btn{
+    color: #7F57F1;
+    border: none;
+    cursor: pointer;
+   
+}
+.close-btn{
+    color: #7F57F1;
+    border: none;
+    cursor: pointer;
+    
 }
 hr{
     width: 300px;
     height: 0.1px;
     border: 0.1px solid black;
+    margin: 0px;
 }
 .head{
     width: 300px;

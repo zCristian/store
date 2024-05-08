@@ -27,7 +27,7 @@
             
         </div>
         <div class="cards">
-            <AddressCard v-for="address in addresses" :key="address.id"/>
+            <AddressCard v-for="address in addresses" :key="address.id" :address="address"/>
         </div>
         
     </div>
