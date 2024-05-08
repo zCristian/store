@@ -12,22 +12,23 @@
             </form>
         </div>
         <div class="address container">
-            <h2>Endereços</h2>
+            <h2>Cadastrar Endereço</h2>
             <form class="addressform">
              <input   class="zip field" type="text" placeholder="CEP" v-model="cep" @blur="checkCep">
              <input   class="street field" type="text" placeholder="Rua" v-model="nomeRua" >
              <input   class="number sm-field" type="text" placeholder="Numero" v-model="numeroCasa">
-             <input   class="complement field" type="text" placeholder="Complemento" v-model="complemento" >
+             <input   class="complement sm-field" type="text" placeholder="Complemento" v-model="complemento" >
              <input   class="neighborhood field" type="text" placeholder="Bairro" v-model="bairro" >
              <input   class="city field" type="text" placeholder="Cidade" v-model="cidade" >
              <input   class="state sm-field" type="text" placeholder="Estado" v-model="estado">
 
-             <ActionButton :btntext="AddresBtnTXT" @click="addAddress"/>
+             <ActionButton :btntext="AddresBtnTXT" @click="addAddress" @removeAddress="handleRemoveAddress()"/>
             </form>
             
         </div>
-        <div class="cards">
-            <AddressCard v-for="address in addresses" :key="address.id" :address="address"/>
+        <div class="card-container container">
+            <h2>Endereços Cadastrados</h2>
+            <AddressCard class="cards" v-for="address in addresses" :key="address.id" :address="address"/>
         </div>
         
     </div>
@@ -67,6 +68,18 @@
     .then(function(response){
         cliente.value = response.data.result;
         console.log(cliente.value);
+    });
+
+    const url_endereco = 'http://localhost:3000/enderecos/'+props.codigoCliente;
+    axios.get(url_endereco)
+    .then(function(response){
+        const retornos = response.data.result;
+        console.log(retornos);
+        for(let i=0;i<retornos.length;i++){
+            createAddressCard(retornos[i].cep, retornos[i].nomeRua,retornos[i].numeroCasa, retornos[i].complemento,
+            retornos[i].bairro,retornos[i].cidade,retornos[i].estado
+            );
+        }
     })
     
     const checkCep =()=>{
@@ -110,7 +123,8 @@
         }
         })
 
-        const createAddressCard = (cep,nomeRua,numeroCasa,complemento,bairro,cidade,estado)=>{
+    }
+    const createAddressCard = (cep,nomeRua,numeroCasa,complemento,bairro,cidade,estado)=>{
             addresses.value.push({
                 id:generateId(),
                 cep:cep,
@@ -122,11 +136,11 @@
                 estado:estado
             });
             console.log(addresses);
-        }
-        const generateId=() =>{
-            return Math.floor(Math.random()*1000)
-        };
     }
+    
+    const generateId=() =>{
+            return Math.floor(Math.random()*1000)
+    };
 </script>
 
 <style scoped>
@@ -152,14 +166,16 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
-        width: 500px;
+        width: 350px;
         gap: 15px;
     }
-    .cards{
-        width: 400px;
+    .card-container{
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
     }
     .sm-field{
-        width: 70px;
+        width: 128px;
         height: 39px;
         font-size: 16px;
         border: 2px solid #7F57F1;

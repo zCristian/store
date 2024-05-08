@@ -4,7 +4,7 @@
             <h4>Endereço {{ props.address.id }}</h4>
             <div class="btns">
                 <SquarePen class="edit-btn" />
-                <CircleX class="close-btn"/>
+                <CircleX class="close-btn" @click="removeAddress(props.address.id)"/>
             </div>           
         </div> 
         <hr>
@@ -13,6 +13,7 @@
         </div>
         <div class="main">
             <p>{{ props.address.nomeRua }} {{ props.address.numeroCasa }} - {{ props.address.estado }}</p>
+            <p>{{ props.address.complemento }}</p>      
         </div>
     </div>
 </template>
@@ -20,7 +21,7 @@
 <script setup>
 
     import { CircleX,SquarePen } from 'lucide-vue-next';
-    import { defineProps } from 'vue';
+    import { defineProps} from 'vue';
 
     const props = defineProps({
         address:{
@@ -28,6 +29,9 @@
                 required: true
         }
     })
+    const removeAddress = () =>{
+        
+    }
 </script>
 
 <style scoped>
@@ -37,7 +41,7 @@
     display: flex;
     flex-wrap: wrap;
     width: 300px;
-    margin: 10px;
+    margin: 0px;
     border-radius: 15px;
     height: 120px;
     h4{
@@ -71,8 +75,8 @@
 }
 hr{
     width: 300px;
-    height: 0.1px;
-    border: 0.1px solid black;
+    height: 0px;
+    border: 1px solid black;
     margin: 0px;
 }
 .head{
