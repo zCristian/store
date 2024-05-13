@@ -19,7 +19,7 @@
     <BaseModal :isModalOpen="isModalOpen" @close-modal="handleCloseModal()" @action-modal="handleEditAddress()">
             <template #header>
 
-                <h4>Editar Endereço</h4>
+                <h4>Alterar Endereço</h4>
             </template>
             <template #main>
                 <form class="addressform">

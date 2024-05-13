@@ -3,12 +3,16 @@
     </div>
     <div class="main">
         <div class="client container">
-        <h2>Usuário</h2>
+            <div class="clientform-head">
+                <h2>Usuário</h2>
+                <SquarePen class="edit-btn" @click="editUserSwitch()"/>
+            </div>
+        
             <form class="clientform">
-                <input   class="name field" type="text" placeholder="Nome" v-model="cliente.nomeCliente" disabled>
-                <input   class="phone field" type="text" placeholder="Celular" v-model="cliente.celularCliente" disabled>
-                <input   class="email field" type="text" placeholder="E-mail" v-model="cliente.emailCliente" disabled>
-                <ActionButton :btntext="btntext" @click="editUser()"/>
+                <input   class="name field" type="text" placeholder="Nome" v-model="cliente.nomeCliente" :disabled="!isEditUserOn">
+                <input   class="phone field" type="text" placeholder="Celular" v-model="cliente.celularCliente" :disabled="!isEditUserOn">
+                <input   class="email field" type="text" placeholder="E-mail" v-model="cliente.emailCliente" :disabled="!isEditUserOn">
+                <ActionButton v-if="isEditUserOn" :btntext="btntext" @click="editUser()"/>
             </form>
         </div>
         <div class="address container">
@@ -33,34 +37,20 @@
         </div>
         
     </div>
-    <BaseModal :isModalOpen="isModalOpen" @close-modal="handleCloseModal()">
-        <template #header>
-            <h4>Alterar Informações Pessoais</h4>
-        </template>
-        <template #main>
-            <div class="client container">
-                <form class="clientform">
-                    <input   class="name field" type="text" placeholder="Nome" v-model="cliente.nomeCliente" >
-                    <input   class="phone field" type="text" placeholder="Celular" v-model="cliente.celularCliente" >
-                    <input   class="email field" type="text" placeholder="E-mail" v-model="cliente.emailCliente" >
-                </form>
-            </div>
-        </template>
-    </BaseModal>
 
 </template>
 
 <script setup>
-    import BaseModal from '@/components/BaseModal.vue';
     import ActionButton from '@/components/ActionButton.vue';
     import AddressCard from '@/components/AddressCard.vue';
     import {ref, defineProps} from 'vue';
     import { useToast } from 'vue-toastification';
+    import { SquarePen } from 'lucide-vue-next';
     const toast = useToast();
     const axios = require('axios').default;
     const btntext = ref('Editar Informações');
     const AddresBtnTXT = ref('Adicionar Novo Endereço');
-    const isModalOpen = ref(false);
+    const isEditUserOn = ref(false);
     const props = defineProps({
         codigoCliente: {
             type : String,
@@ -167,13 +157,27 @@
         addresses.value.splice(codigoEndereco,1);
     }
 
-    const editUser = () =>{
-        isModalOpen.value = true;
+    const editUserSwitch= () =>{
+        isEditUserOn.value = !isEditUserOn.value;
     }
 
-    const handleCloseModal = ()=>{
-        isModalOpen.value = false;
+    const editUser = () =>{
+        const url_editaddress  = 'http://localhost:3000/cliente/'+cliente.value.codigoCliente;
+       axios.put(url_editaddress, {
+            nomeCliente : cliente.value.nomeCliente,
+            cpfCliente : cliente.value.cpfCliente,
+            celularCliente : cliente.value.celularCliente,
+            emailCliente : cliente.value.emailCliente
+       })
+       .then(function(response){
+            toast.success(response.data.message);
+            isEditUserOn.value = false;
+       })
+       .catch(function(error){
+            toast.error(error);
+       });
     }
+
 </script>
 
 <style scoped>
@@ -186,6 +190,17 @@
         display: flex;
         justify-content: space-around;
 
+    }
+    .clientform-head{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .edit-btn{
+            color: #7F57F1;
+            border: none;
+            cursor: pointer;
+   
+        }
     }
     .clientform{
         margin: 10px 0px;
