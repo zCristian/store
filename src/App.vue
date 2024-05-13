@@ -33,15 +33,41 @@
   import SignupLoginCard from '../src/components/SignupLoginCard.vue'
   import PageFooter from '../src/components/PageFooter.vue'
   import { ShoppingBag,Heart,User,BadgePercent} from 'lucide-vue-next';
-  import {ref} from 'vue';
+  import {ref, watch} from 'vue';
   import { Search } from 'lucide-vue-next';
   
-  const codigoCliente=ref('');
-
+  const cliente = ref({
+    codigoCliente:" ",
+    cpfCliente:" ",
+    nomeCliente:" ",
+    celularCliente:" ",
+    emailCliente:" ",
+    createdAt:" "
+  });
+  const codigoCliente = ref(" ");
   const isLoged = ref(false);
   const userName = ref('Login');
   const brands = ['Apple', 'Xiaomi','Samsumg','Motorola','Asus'];
   const showCard = ref(false);
+
+
+  const storageIsLoged = window.localStorage.getItem('isUserLoged');
+  const storageCliente = window.localStorage.getItem('cliente');
+
+
+  if(storageIsLoged){
+    cliente.value = JSON.parse(storageCliente );
+    isLoged.value = JSON.parse(storageIsLoged);
+    codigoCliente.value = cliente.value.codigoCliente;
+    userName.value = cliente.value.nomeCliente.split(" ")[0];
+    console.log("codido do cliente no storage",codigoCliente.value);
+    console.log("codigo do cliente no obj ", cliente.value.codigoCliente);
+  }
+  watch(isLoged, (val)=>{
+    window.localStorage.setItem('isUserLoged',JSON.stringify(val));
+    
+  });
+  
   const popCard = ()=>{
     showCard.value = true;
   }
@@ -53,11 +79,18 @@
     
   }
   const handleSuccesLogin = (cliente) =>{
-      userName.value = cliente.value.nomeCliente;
+
+      userName.value = cliente.value.nomeCliente.split(" ")[0];
+      window.localStorage.setItem('cliente',JSON.stringify(cliente.value));
       codigoCliente.value = cliente.value.codigoCliente;
+      console.log("codido do cliente no handleLogin",codigoCliente.value); 
       isLoged.value = true;
-      localStorage.setItem('cliente', JSON.stringify(cliente.value));
   }
+
+ /*const saveStorage = function(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+};*/
+
 </script>
 
 

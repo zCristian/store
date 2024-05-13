@@ -8,12 +8,13 @@
                 <input   class="name field" type="text" placeholder="Nome" v-model="cliente.nomeCliente" disabled>
                 <input   class="phone field" type="text" placeholder="Celular" v-model="cliente.celularCliente" disabled>
                 <input   class="email field" type="text" placeholder="E-mail" v-model="cliente.emailCliente" disabled>
-                <ActionButton :btntext="btntext" />
+                <ActionButton :btntext="btntext" @click="editUser()"/>
             </form>
         </div>
         <div class="address container">
             <h2>Cadastrar Endereço</h2>
             <form class="addressform">
+             <input   class="adress-name field" type="text" placeholder="Nome do Endereço" v-model="nomeEndereco">
              <input   class="zip field" type="text" placeholder="CEP" v-model="cep" @blur="checkCep">
              <input   class="street field" type="text" placeholder="Rua" v-model="nomeRua" >
              <input   class="number sm-field" type="text" placeholder="Numero" v-model="numeroCasa">
@@ -22,23 +23,35 @@
              <input   class="city field" type="text" placeholder="Cidade" v-model="cidade" >
              <input   class="state sm-field" type="text" placeholder="Estado" v-model="estado">
 
-             <ActionButton :btntext="AddresBtnTXT" @click="addAddress" @removeAddress="handleRemoveAddress()"/>
+             <ActionButton :btntext="AddresBtnTXT" @click="addAddress"/>
             </form>
             
         </div>
         <div class="card-container container">
             <h2>Endereços Cadastrados</h2>
-            <AddressCard class="cards" v-for="address in addresses" :key="address.id" :address="address"/>
+                <AddressCard  v-for="address in addresses" :key="address.codigoEndereco" :address="address" @remove-address="handleRemoveAddress"/>
         </div>
         
     </div>
-  
-    
-    <slot></slot>
+    <BaseModal :isModalOpen="isModalOpen" @close-modal="handleCloseModal()">
+        <template #header>
+            <h4>Alterar Informações Pessoais</h4>
+        </template>
+        <template #main>
+            <div class="client container">
+                <form class="clientform">
+                    <input   class="name field" type="text" placeholder="Nome" v-model="cliente.nomeCliente" >
+                    <input   class="phone field" type="text" placeholder="Celular" v-model="cliente.celularCliente" >
+                    <input   class="email field" type="text" placeholder="E-mail" v-model="cliente.emailCliente" >
+                </form>
+            </div>
+        </template>
+    </BaseModal>
+
 </template>
 
 <script setup>
-
+    import BaseModal from '@/components/BaseModal.vue';
     import ActionButton from '@/components/ActionButton.vue';
     import AddressCard from '@/components/AddressCard.vue';
     import {ref, defineProps} from 'vue';
@@ -47,6 +60,7 @@
     const axios = require('axios').default;
     const btntext = ref('Editar Informações');
     const AddresBtnTXT = ref('Adicionar Novo Endereço');
+    const isModalOpen = ref(false);
     const props = defineProps({
         codigoCliente: {
             type : String,
@@ -55,6 +69,7 @@
     });
     const cliente = ref({
     });
+    const nomeEndereco =  ref('');
     const cep = ref('');
     const nomeRua = ref('');
     const numeroCasa = ref('');
@@ -62,29 +77,35 @@
     const bairro = ref('');
     const cidade = ref('');
     const estado = ref('');
+    const codigoEndereco = ref('');
 
     const url_login = 'http://localhost:3000/cliente/'+props.codigoCliente;
     axios.get(url_login)
     .then(function(response){
         cliente.value = response.data.result;
-        console.log(cliente.value);
+        
     });
 
     const url_endereco = 'http://localhost:3000/enderecos/'+props.codigoCliente;
     axios.get(url_endereco)
     .then(function(response){
         const retornos = response.data.result;
-        console.log(retornos);
         for(let i=0;i<retornos.length;i++){
-            createAddressCard(retornos[i].cep, retornos[i].nomeRua,retornos[i].numeroCasa, retornos[i].complemento,
-            retornos[i].bairro,retornos[i].cidade,retornos[i].estado
+            createAddressCard(retornos[i].nomeEndereco,retornos[i].cep, retornos[i].nomeRua,retornos[i].numeroCasa, retornos[i].complemento,
+            retornos[i].bairro,retornos[i].cidade,retornos[i].estado,retornos[i].codigoEndereco
             );
         }
     })
+    .catch(function(error){
+        if(error.response){
+            
+            toast.error(error.response.data.error);
+        }
+    });
     
     const checkCep =()=>{
         cep.value = cep.value.replace(/\D/g, '');
-        console.log(cep.value);
+        
         if(cep.value!='' && cep.value.length == 8 ){
             fetch(`https://viacep.com.br/ws/${cep.value}/json/`).then(res =>res.json()).then(data=>{
                 nomeRua.value = data.logradouro;
@@ -102,6 +123,7 @@
         const url_address = 'http://localhost:3000/endereco';
         const response_msg = ref('');
         axios.post(url_address,{
+            nomeEndereco : nomeEndereco.value,
             cep :cep.value,
             nomeRua : nomeRua.value,
             numeroCasa :numeroCasa.value,
@@ -109,12 +131,14 @@
             bairro :bairro.value,
             cidade : cidade.value,
             estado : estado.value,
-            codigoCliente : props.codigoCliente
+            codigoCliente : props.codigoCliente,
+            codigoEndereco :codigoEndereco.value,
         })
         .then(function(response){
             response_msg.value = response.data.message;
             toast.success(response_msg.value);
-            createAddressCard(cep.value,nomeRua.value,numeroCasa.value,complemento.value,bairro.value,cidade.value,estado.value);
+            createAddressCard(nomeEndereco.value,cep.value,nomeRua.value,numeroCasa.value,
+            complemento.value,bairro.value,cidade.value,estado.value,codigoEndereco.value,);
         })
         .catch(function(error){
         if(error.response){
@@ -124,23 +148,32 @@
         })
 
     }
-    const createAddressCard = (cep,nomeRua,numeroCasa,complemento,bairro,cidade,estado)=>{
+    const createAddressCard = (nomeEndereco,cep,nomeRua,numeroCasa,complemento,bairro,
+    cidade,estado,codigoEndereco,)=>{
             addresses.value.push({
-                id:generateId(),
+                nomeEndereco: nomeEndereco,
                 cep:cep,
                 nomeRua:nomeRua,
                 numeroCasa:numeroCasa,
                 complemento:complemento,
                 bairro:bairro,
                 cidade:cidade,
-                estado:estado
+                estado:estado,
+                codigoEndereco:codigoEndereco
             });
-            console.log(addresses);
     }
     
-    const generateId=() =>{
-            return Math.floor(Math.random()*1000)
-    };
+    const handleRemoveAddress = (codigoEndereco)=>{
+        addresses.value.splice(codigoEndereco,1);
+    }
+
+    const editUser = () =>{
+        isModalOpen.value = true;
+    }
+
+    const handleCloseModal = ()=>{
+        isModalOpen.value = false;
+    }
 </script>
 
 <style scoped>
@@ -194,5 +227,9 @@
     }
     h2{
         color: #7F57F1;
+    }
+    h4{
+        color: #7F57F1;
+        margin: 0px; 
     }
 </style>
