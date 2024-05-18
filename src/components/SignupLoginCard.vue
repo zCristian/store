@@ -1,12 +1,8 @@
 <template>
-    <div v-if="showCard==true">
         <div class="card-container">
             <div class="register-card">
                 <div class="card-function">
                     <span :class="{selected:loginSelected}" @click="switchFunction(0) ">Entre </span> ou<span  :class="{selected:!loginSelected}" @click="switchFunction(1)"> cadastre-se</span>
-                </div>
-                <div class="close-div">
-                    <CircleX class="close-btn" @click="closeCard()" />
                 </div>
                 <hr class="head-hr">
                 <div class="card-content">
@@ -35,22 +31,13 @@
                 </div>
             </div>
         </div>
-</div>
 </template>
 
 <script setup>
 import BaseButton from '../components/BaseButton.vue';
-import {ref,defineProps,defineEmits} from 'vue';
-import { CircleX } from 'lucide-vue-next';
+import {ref,defineEmits} from 'vue';
 import { useToast } from 'vue-toastification';
 
-const props = defineProps({
-    showCard :{
-        type : Boolean,
-        required :true
-    }
-});
-console.log(props);
 const cliente = ref({
     codigoCliente : '',    
     cpfCliente : '',
@@ -148,27 +135,9 @@ const onLogin = () =>{
 
 <style scoped>
 
-.card-container{ 
-    background-color: rgba(0,0,0,0.4);
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-}
-.register-card{
-    position:absolute;
-    top: 150px;
-    width: 350px;
-    border-radius: 20px;
-    padding: 20px 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    background-color: white;
-}
+
+
+
 .close-div{
     display: flex;
     justify-content: flex-end;

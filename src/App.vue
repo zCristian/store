@@ -8,12 +8,20 @@
           <button class="searchbtn"><Search/>Buscar</button>
       </div>
     <div class="icondiv">
-      <router-link v-if="isLoged==false" id="userbtn" to="" class="userlink" @click="popCard()"><User/><p>{{ userName }}</p></router-link>
-      <router-link v-if="isLoged" id="userbtn" :to="{name:'user', params: {codigoCliente:codigoCliente}}" class="userlink" ><User/><p>{{ userName }}</p></router-link>
+
+     <!-- <router-link v-if="isLoged" id="userbtn" :to="{name:'user', params: {codigoCliente:codigoCliente}}" 
+      class="userlink" ><User/><p>{{ userName }}</p></router-link>-->
       <router-link to="/favorites" class="favlink"><Heart/><p>Favoritos</p></router-link>
       <router-link to="/cart" class="cartlink"><ShoppingBag/><p>Itens</p></router-link>
-     
+      <div class="usericon-div">
+        <router-link v-if="isLoged==false" id="userbtn" to="" class="userlink" @click="isModalOpen=true"><User/><p>{{ userName }}</p></router-link>
+        <BaseDropDown v-if="isLoged" :options="options" @logout="handlelLogOut()" >
+            <template #icon><CircleUserRound class="userlink"/></template>
+            <template #header><p class="dropmenu-username">{{ userName }}</p></template>
+        </BaseDropDown>
+      </div>
     </div>
+
     <div class="brandsdiv">
       <div class="brandspan">
         <router-link v-for="brand in brands" :key="brand" to="/products"><span >{{brand}}</span></router-link>
@@ -23,19 +31,40 @@
   </nav>
 
   <router-view></router-view>
-  <SignupLoginCard v-if="showCard"  :showCard="showCard" @closeCard="handleCloseCard"  class="login-card" 
-  @succes_signup="handleSuccesSU" @succes_login="handleSuccesLogin"/>
+
+  <BaseModal :isModalOpen="isModalOpen" @close-modal="isModalOpen=false">
+    <template #main>
+      <SignupLoginCard  class="login-card" @succes_signup="handleSuccesSU" @succes_login="handleSuccesLogin"/>
+    </template>
+  </BaseModal>
   <PageFooter/>
 </template>
 
 
 <script setup>
-  import SignupLoginCard from '../src/components/SignupLoginCard.vue'
-  import PageFooter from '../src/components/PageFooter.vue'
-  import { ShoppingBag,Heart,User,BadgePercent} from 'lucide-vue-next';
+  import SignupLoginCard from '../src/components/SignupLoginCard.vue';
+  import PageFooter from '../src/components/PageFooter.vue';
+  import BaseModal from './components/BaseModal.vue';
+  import BaseDropDown from './components/BaseDropDown.vue';
+  import { ShoppingBag,Heart,User,BadgePercent, CircleUserRound} from 'lucide-vue-next';
   import {ref, watch} from 'vue';
   import { Search } from 'lucide-vue-next';
   
+  const options = ref([
+    { 
+      id: 1,
+      name:'Usuário',
+      src:'user',
+      params:' '
+    },
+    {
+      id:2,
+      name:'Logout',
+      src:'home',
+      params:' '
+    }
+  ]);
+
   const cliente = ref({
     codigoCliente:" ",
     cpfCliente:" ",
@@ -48,7 +77,7 @@
   const isLoged = ref(false);
   const userName = ref('Login');
   const brands = ['Apple', 'Xiaomi','Samsumg','Motorola','Asus'];
-  const showCard = ref(false);
+  const isModalOpen = ref(false);
 
 
   const storageIsLoged = window.localStorage.getItem('isUserLoged');
@@ -59,37 +88,36 @@
     cliente.value = JSON.parse(storageCliente );
     isLoged.value = JSON.parse(storageIsLoged);
     codigoCliente.value = cliente.value.codigoCliente;
+    options.value.find(option => option.id ===1).params = codigoCliente.value;
     userName.value = cliente.value.nomeCliente.split(" ")[0];
-    console.log("codido do cliente no storage",codigoCliente.value);
-    console.log("codigo do cliente no obj ", cliente.value.codigoCliente);
   }
+
   watch(isLoged, (val)=>{
-    window.localStorage.setItem('isUserLoged',JSON.stringify(val));
-    
+    if(val==true){
+      window.localStorage.setItem('isUserLoged',JSON.stringify(val));
+    }
   });
-  
-  const popCard = ()=>{
-    showCard.value = true;
-  }
-  const handleCloseCard =()=>{
-    showCard.value = false;
-    
-  }
+
   const handleSuccesSU =()=>{
     
   }
   const handleSuccesLogin = (cliente) =>{
-
-      userName.value = cliente.value.nomeCliente.split(" ")[0];
-      window.localStorage.setItem('cliente',JSON.stringify(cliente.value));
-      codigoCliente.value = cliente.value.codigoCliente;
-      console.log("codido do cliente no handleLogin",codigoCliente.value); 
       isLoged.value = true;
+      userName.value = cliente.value.nomeCliente.split(" ")[0];
+      window.localStorage.setItem('cliente',JSON.stringify(cliente.value));   
+      codigoCliente.value = cliente.value.codigoCliente;
+      options.value.find(option => option.id === 1).params = codigoCliente.value;
+      isModalOpen.value = false;
   }
 
- /*const saveStorage = function(key, data) {
-    localStorage.setItem(key, JSON.stringify(data));
-};*/
+  const handlelLogOut = ()=>{
+    isLoged.value=false;
+    window.localStorage.removeItem('isUserLoged');
+    window.localStorage.removeItem('cliente');
+    codigoCliente.value = " ";
+    userName.value = "Login";
+  }
+
 
 </script>
 
@@ -134,21 +162,32 @@ p{
 .icondiv{
   margin: 0px 0px 15px 30px;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  justify-content: flex-end;
   height: 45px;
   gap: 30px;
-  width: 220px;
+  width: 450px;
   font-size: 15px;
 }
-.userlink{
-  width: 41px;
+.usericon-div{
+  width: 150px;
+  z-index: 1000;
 }
+.userlink{
+  width: 33px;
+  height: 33px;
+  
+}
+
 .favlink{
   width: 66px;
 }
 .cartlink{
   width: 48px;
+}
+.dropmenu-username{
+  text-align: left;
+  margin: 0px;
+  color: #7F57F1;
 }
 .searchdiv{
   flex-basis: 40%;

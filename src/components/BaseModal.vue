@@ -14,7 +14,7 @@
                         <slot name="main"></slot>
                     </main>
                     
-                    <ActionButton :btntext="btntext" @click="actionModal()" @keyup.enter="actionModal"/>
+                    <ActionButton v-if="props.showActionButton" :btntext="btntext" @click="actionModal()" @keyup.enter="actionModal"/>
                 </div>
             </div>
         </Transition>
@@ -32,6 +32,10 @@
         isModalOpen : {
             Type:Boolean,
             required:true
+        },
+        showActionButton : {
+            Type:Boolean,
+            required:false
         }
     });
     console.log(props.isModalOpen);

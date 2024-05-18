@@ -16,7 +16,10 @@
             </form>
         </div>
         <div class="address container">
-            <h2>Cadastrar Endereço</h2>
+            <div class="addressform-head">
+                <h2>Cadastrar Endereço</h2>
+            </div>
+            
             <form class="addressform">
              <input   class="adress-name field" type="text" placeholder="Nome do Endereço" v-model="nomeEndereco">
              <input   class="zip field" type="text" placeholder="CEP" v-model="cep" @blur="checkCep">
@@ -32,8 +35,11 @@
             
         </div>
         <div class="card-container container">
-            <h2>Endereços Cadastrados</h2>
-                <AddressCard  v-for="address in addresses" :key="address.codigoEndereco" :address="address" @remove-address="handleRemoveAddress"/>
+            <div class="cardcontainer-head">
+                <h2>Endereços Cadastrados</h2>
+            </div>
+            <AddressCard  v-for="address in addresses" :key="address.codigoEndereco" :address="address" 
+            @remove-address="handleRemoveAddress"/>
         </div>
         
     </div>
@@ -43,12 +49,12 @@
 <script setup>
     import ActionButton from '@/components/ActionButton.vue';
     import AddressCard from '@/components/AddressCard.vue';
-    import {ref, defineProps} from 'vue';
+    import {ref, defineProps, onBeforeMount} from 'vue';
     import { useToast } from 'vue-toastification';
     import { SquarePen } from 'lucide-vue-next';
     const toast = useToast();
     const axios = require('axios').default;
-    const btntext = ref('Editar Informações');
+    const btntext = ref('Alterar Informações');
     const AddresBtnTXT = ref('Adicionar Novo Endereço');
     const isEditUserOn = ref(false);
     const props = defineProps({
@@ -67,32 +73,37 @@
     const bairro = ref('');
     const cidade = ref('');
     const estado = ref('');
-    const codigoEndereco = ref('');
 
-    const url_login = 'http://localhost:3000/cliente/'+props.codigoCliente;
-    axios.get(url_login)
-    .then(function(response){
-        cliente.value = response.data.result;
+    onBeforeMount(() =>{
+        loadClient();
+        loadAddresses();
+    });
+
+    const loadClient = () =>{
+        const url_login = 'http://localhost:3000/cliente/'+props.codigoCliente;
+        axios.get(url_login)
+        .then(function(response){
+            cliente.value = response.data.result;
         
-    });
-
-    const url_endereco = 'http://localhost:3000/enderecos/'+props.codigoCliente;
-    axios.get(url_endereco)
-    .then(function(response){
-        const retornos = response.data.result;
-        for(let i=0;i<retornos.length;i++){
-            createAddressCard(retornos[i].nomeEndereco,retornos[i].cep, retornos[i].nomeRua,retornos[i].numeroCasa, retornos[i].complemento,
-            retornos[i].bairro,retornos[i].cidade,retornos[i].estado,retornos[i].codigoEndereco
-            );
-        }
-    })
-    .catch(function(error){
-        if(error.response){
-            
-            toast.error(error.response.data.error);
-        }
-    });
-    
+        });
+    }
+    const loadAddresses = () =>{
+        const url_endereco = 'http://localhost:3000/enderecos/'+props.codigoCliente;
+        axios.get(url_endereco)
+        .then(function(response){
+            const retornos = response.data.result;
+            for(let i=0;i<retornos.length;i++){
+                createAddressCard(retornos[i].nomeEndereco,retornos[i].cep, retornos[i].nomeRua,retornos[i].numeroCasa, retornos[i].complemento,
+                retornos[i].bairro,retornos[i].cidade,retornos[i].estado,retornos[i].codigoEndereco);
+            }
+        })
+        .catch(function(error){
+            if(error.response){
+                
+                toast.error(error.response.data.error);
+            }
+        });
+    }
     const checkCep =()=>{
         cep.value = cep.value.replace(/\D/g, '');
         
@@ -122,13 +133,12 @@
             cidade : cidade.value,
             estado : estado.value,
             codigoCliente : props.codigoCliente,
-            codigoEndereco :codigoEndereco.value,
         })
         .then(function(response){
             response_msg.value = response.data.message;
             toast.success(response_msg.value);
             createAddressCard(nomeEndereco.value,cep.value,nomeRua.value,numeroCasa.value,
-            complemento.value,bairro.value,cidade.value,estado.value,codigoEndereco.value,);
+            complemento.value,bairro.value,cidade.value,estado.value,response.data.codigoEndereco);
         })
         .catch(function(error){
         if(error.response){
@@ -139,7 +149,7 @@
 
     }
     const createAddressCard = (nomeEndereco,cep,nomeRua,numeroCasa,complemento,bairro,
-    cidade,estado,codigoEndereco,)=>{
+    cidade,estado,codigoEndereco)=>{
             addresses.value.push({
                 nomeEndereco: nomeEndereco,
                 cep:cep,
@@ -154,9 +164,12 @@
     }
     
     const handleRemoveAddress = (codigoEndereco)=>{
-        addresses.value.splice(codigoEndereco,1);
+        for(let i=0;i<addresses.value.length;i++){
+            if(addresses.value[i].codigoEndereco === codigoEndereco){
+                addresses.value.splice(i,1);
+            }
+        }
     }
-
     const editUserSwitch= () =>{
         isEditUserOn.value = !isEditUserOn.value;
     }
@@ -189,18 +202,32 @@
     .main{
         display: flex;
         justify-content: space-around;
+        align-items: flex-start;
 
     }
-    .clientform-head{
+    .clientform-head,.addressform-head{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        .edit-btn{
+        margin-bottom: 20px;
+        h2{
+            margin: 0px;
+        }
+    }
+    .cardcontainer-head{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+        h2{
+            margin: 0px;
+        }
+    }
+    .edit-btn{
             color: #7F57F1;
             border: none;
             cursor: pointer;
    
-        }
     }
     .clientform{
         margin: 10px 0px;
@@ -246,5 +273,10 @@
     h4{
         color: #7F57F1;
         margin: 0px; 
+    }
+
+    .cardlist-enter-active,
+    .cardlist-leave-active{
+        transition: all 0.5s ease;
     }
 </style>

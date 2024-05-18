@@ -4,7 +4,7 @@
             <h4>{{ address.nomeEndereco }}</h4>
             <div class="btns">
                 <SquarePen class="edit-btn" @click="editAddress()"/>
-                <CircleX class="close-btn" @click="removeAddress(address.codigoEndereco)"/>
+                <CircleX class="close-btn" @click="removeAddress()"/>
             </div>           
         </div> 
         <hr>
@@ -16,7 +16,7 @@
             <p>{{ address.complemento }}</p>      
         </div>
     </div>
-    <BaseModal :isModalOpen="isModalOpen" @close-modal="handleCloseModal()" @action-modal="handleEditAddress()">
+    <BaseModal :showActionButton="true" :isModalOpen="isModalOpen" @close-modal="handleCloseModal()" @action-modal="handleEditAddress()">
             <template #header>
 
                 <h4>Alterar Endereço</h4>
@@ -50,24 +50,6 @@
                 required: true
         }
     })
-    const emit = defineEmits(['remove-address']);
-    const removeAddress = (codigoEndereco) =>{
-       const url_delete  = 'http://localhost:3000/endereco/'+props.address.codigoEndereco;
-       axios.delete(url_delete, {
-            
-       })
-       .then(function(response){
-            toast.success(response.data.message);
-            emit('remove-address',codigoEndereco);
-       })
-       .catch(function(error){
-            toast.error(error);
-       });
-    }
-
-    const editAddress = () =>{
-        isModalOpen.value = true;  
-    }
     const address = ref({
         codigoEndereco : props.address.codigoEndereco,
         nomeEndereco : props.address.nomeEndereco,
@@ -79,6 +61,26 @@
         cidade : props.address.cidade,
         estado : props.address.estado
     });
+    const emit = defineEmits(['remove-address']);
+    const removeAddress = () =>{
+            const url_delete  = 'http://localhost:3000/endereco/'+props.address.codigoEndereco;
+            axios.delete(url_delete, {
+                    
+            })
+            .then(function(response){
+                    toast.success(response.data.message);
+                    emit('remove-address',props.address.codigoEndereco);
+            })
+            .catch(function(error){
+                    toast.error(error);
+            });
+    }
+       
+    
+
+    const editAddress = () =>{
+        isModalOpen.value = true;  
+    }
 
     const handleCloseModal = ()=>{
         isModalOpen.value = false;
