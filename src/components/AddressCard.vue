@@ -23,14 +23,13 @@
             </template>
             <template #main>
                 <form class="addressform">
-                    <input   class="adress-name field" type="text" placeholder="Nome do Endereço" v-model="address.nomeEndereco">
-                    <input   class="zip field" type="text" placeholder="CEP" v-model="address.cep" @blur="checkCepCard">
-                    <input   class="street field" type="text" placeholder="Rua" v-model="address.nomeRua" >
-                    <input   class="number sm-field" type="text" placeholder="Numero" v-model="address.numeroCasa">
-                    <input   class="complement sm-field" type="text" placeholder="Complemento" v-model="address.complemento" >
-                    <input   class="neighborhood field" type="text" placeholder="Bairro" v-model="address.bairro" >
-                    <input   class="city field" type="text" placeholder="Cidade" v-model="address.cidade" >
-                    <input   class="state sm-field" type="text" placeholder="Estado" v-model="address.estado">
+                    <BaseInput class="adress-name" :placeholder="'Nome do Endereço'" v-model="address.nomeEndereco"/>
+                    <BaseInput class="zip " :placeholder="'CEP'" v-model="address.cep" :verifyBlur="true" @blur-event="checkCepCard"/>
+                    <BaseInput class="street" :placeholder="'Rua'" v-model="address.nomeRua" />
+                    <BaseInput class="number" :placeholder="'Numero'" v-model="address.numeroCasa" :isFieldSmall="true"/>
+                    <BaseInput class="complement"  :placeholder="'Complemento'" v-model="address.complemento" :isFieldSmall="true"/>
+                    <BaseInput class="city" :placeholder="'Cidade'" v-model="address.cidade"/>
+                    <BaseInput class="state" :placeholder="'Estado'" v-model="address.estado" :isFieldSmall="true"/>
                 </form>
             </template>
     </BaseModal>
@@ -38,9 +37,11 @@
 
 <script setup>
     import BaseModal from '@/components/BaseModal.vue';
+    import BaseInput from './BaseInput.vue';
     import { CircleX,SquarePen } from 'lucide-vue-next';
     import { ref,defineProps,defineEmits} from 'vue';
     import { useToast } from 'vue-toastification';
+    
     const toast = useToast();
     const axios = require('axios').default;
     const isModalOpen = ref(false);

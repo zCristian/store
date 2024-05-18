@@ -9,9 +9,10 @@
             </div>
         
             <form class="clientform">
-                <input   class="name field" type="text" placeholder="Nome" v-model="cliente.nomeCliente" :disabled="!isEditUserOn">
-                <input   class="phone field" type="text" placeholder="Celular" v-model="cliente.celularCliente" :disabled="!isEditUserOn">
-                <input   class="email field" type="text" placeholder="E-mail" v-model="cliente.emailCliente" :disabled="!isEditUserOn">
+                <BaseInput class="name" :placeholder="'Nome'" v-model="cliente.nomeCliente" :isDisabled="!isEditUserOn"/>
+                <BaseInput class="phone" :placeholder="'Celular'" v-model="cliente.celularCliente" :isDisabled="!isEditUserOn"/>
+                <BaseInput class="email"  :placeholder="'E-mail'" v-model="cliente.emailCliente" :isDisabled="!isEditUserOn"/>
+    
                 <ActionButton v-if="isEditUserOn" :btntext="btntext" @click="editUser()"/>
             </form>
         </div>
@@ -21,15 +22,14 @@
             </div>
             
             <form class="addressform">
-             <input   class="adress-name field" type="text" placeholder="Nome do Endereço" v-model="nomeEndereco">
-             <input   class="zip field" type="text" placeholder="CEP" v-model="cep" @blur="checkCep">
-             <input   class="street field" type="text" placeholder="Rua" v-model="nomeRua" >
-             <input   class="number sm-field" type="text" placeholder="Numero" v-model="numeroCasa">
-             <input   class="complement sm-field" type="text" placeholder="Complemento" v-model="complemento" >
-             <input   class="neighborhood field" type="text" placeholder="Bairro" v-model="bairro" >
-             <input   class="city field" type="text" placeholder="Cidade" v-model="cidade" >
-             <input   class="state sm-field" type="text" placeholder="Estado" v-model="estado">
-
+             <BaseInput class="address-name" :placeholder="'Nome do Endereço'" v-model="nomeEndereco"/>
+             <BaseInput class="zip" :placeholder="'CEP'"  v-model="cep" :verify-blur="true" @blur-event="handleBlur"/>
+             <BaseInput class="street" :placeholder="'Rua'" v-model="nomeRua"/>
+             <BaseInput class="number " :placeholder="'Numero'" v-model="numeroCasa" :isFieldSmall="true"/>
+             <BaseInput class="complement " :placeholder="'Complemento'" v-model="complemento" :isFieldSmall="true"/>
+             <BaseInput class="neighborhood"  :placeholder="'Bairro'" v-model="bairro"/>
+             <BaseInput class="city" :placeholder="'Cidade'" v-model="cidade"/>
+             <BaseInput class="state" :placeholder="'Estado'" v-model="estado" :isFieldSmall="true"/>
              <ActionButton :btntext="AddresBtnTXT" @click="addAddress"/>
             </form>
             
@@ -49,9 +49,12 @@
 <script setup>
     import ActionButton from '@/components/ActionButton.vue';
     import AddressCard from '@/components/AddressCard.vue';
+    import BaseInput from '@/components/BaseInput.vue';
     import {ref, defineProps, onBeforeMount} from 'vue';
     import { useToast } from 'vue-toastification';
     import { SquarePen } from 'lucide-vue-next';
+
+
     const toast = useToast();
     const axios = require('axios').default;
     const btntext = ref('Alterar Informações');
@@ -74,11 +77,15 @@
     const cidade = ref('');
     const estado = ref('');
 
+
+
     onBeforeMount(() =>{
         loadClient();
         loadAddresses();
     });
-
+    const handleBlur = ()=>{
+        checkCep();
+    }
     const loadClient = () =>{
         const url_login = 'http://localhost:3000/cliente/'+props.codigoCliente;
         axios.get(url_login)
@@ -249,24 +256,7 @@
         flex-direction: column;
         gap: 15px;
     }
-    .sm-field{
-        width: 128px;
-        height: 39px;
-        font-size: 16px;
-        border: 2px solid #7F57F1;
-        border-radius: 10px;
-        padding: 0px 10px;
-        background-color: #F1EFF8;
-    }
-    .field{
-        height: 39px;
-        font-size: 16px;
-        border: 2px solid #7F57F1;
-        border-radius: 10px;
-        width: 296px;
-        padding: 0px 10px;
-        background-color: #F1EFF8;
-    }
+
     h2{
         color: #7F57F1;
     }

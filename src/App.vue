@@ -8,9 +8,6 @@
           <button class="searchbtn"><Search/>Buscar</button>
       </div>
     <div class="icondiv">
-
-     <!-- <router-link v-if="isLoged" id="userbtn" :to="{name:'user', params: {codigoCliente:codigoCliente}}" 
-      class="userlink" ><User/><p>{{ userName }}</p></router-link>-->
       <router-link to="/favorites" class="favlink"><Heart/><p>Favoritos</p></router-link>
       <router-link to="/cart" class="cartlink"><ShoppingBag/><p>Itens</p></router-link>
       <div class="usericon-div">

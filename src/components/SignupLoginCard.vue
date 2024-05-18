@@ -8,17 +8,16 @@
                 <div class="card-content">
                     <h2>Bem vindo a Celulou</h2>
                         <form v-if="isSignUp" class="register-form cardform"  @submit.prevent="onSignUp()" >
-                            <input   class="cpf field" type="text" placeholder="CPF" v-model="cpfCliente">
-                            <input   class="name field" type="text" placeholder="Nome" v-model="nomeCliente">
-                            <input   class="phone field" type="text" placeholder="Celular" v-model="celularCliente" >
-                            <input   class="email field" type="text" placeholder="E-mail" v-model="emailCliente">
-                            <input  v-if="false" class="password field" type="password" placeholder="Senha">
-                            
+                            <BaseInput class="cpf" :placeholder="'CPF'" v-model="cpfCliente"/>
+                            <BaseInput class="name" :placeholder="'Nome'" v-model="nomeCliente"/>
+                            <BaseInput class="phone"  :placeholder="'Celular'" v-model="celularCliente"/>
+                            <BaseInput class="email" :placeholder="'E-mail'" v-model="emailCliente"/>
+                            <BaseInput v-if="false" class="password"  :placeholder="'Senha'"/>
                             <BaseButton :btntext="btntext" @click="onSignUp()" @keyup.enter="onSignUp()" />
                        
                         </form>
                         <form v-if="!isSignUp" class="login-form cardform" @submit.prevent="onLogin()">
-                            <input   class="email field" type="text" placeholder="E-mail" v-model="emailCliente">
+                            <BaseInput class="email" :placeholder="'E-mail'" v-model="emailCliente"/>
                             <BaseButton :btntext="btntext" @click="onLogin()" @keyup.enter="onLogin()" />
                         </form>
                 </div>
@@ -35,6 +34,7 @@
 
 <script setup>
 import BaseButton from '../components/BaseButton.vue';
+import BaseInput from './BaseInput.vue';
 import {ref,defineEmits} from 'vue';
 import { useToast } from 'vue-toastification';
 
@@ -170,16 +170,7 @@ const onLogin = () =>{
     flex-direction: column;
     gap: 15px;
 }
-.field{
-    height: 39px;
-    font-size: 16px;
-    border: 2px solid #7F57F1;
-    border-radius: 10px;
-    width: 296px;
-    padding: 0px 10px;
-    background-color: #F1EFF8;
-    
-}
+
 span{
     font-weight: bold;
     cursor: pointer;
