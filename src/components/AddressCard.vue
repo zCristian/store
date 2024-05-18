@@ -63,6 +63,7 @@
         estado : props.address.estado
     });
     const emit = defineEmits(['remove-address']);
+
     const removeAddress = () =>{
             const url_delete  = 'http://localhost:3000/endereco/'+props.address.codigoEndereco;
             axios.delete(url_delete, {
@@ -77,8 +78,6 @@
             });
     }
        
-    
-
     const editAddress = () =>{
         isModalOpen.value = true;  
     }
@@ -125,6 +124,7 @@
 </script>
 
 <style scoped>
+
 .card{
     background-color: #F1EFF8;
     padding: 15px;
@@ -168,7 +168,7 @@
 hr{
     width: 300px;
     height: 0px;
-    border: 1px solid black;
+    border: 1px solid #7F57F1;
     margin: 0px;
 }
 .head{
@@ -182,24 +182,7 @@ hr{
         width: 318px;
         gap: 15px;
 }
-.sm-field{
-    width: 128px;
-    height: 39px;
-    font-size: 16px;
-    border: 2px solid #7F57F1;
-    border-radius: 10px;
-    padding: 0px 10px;
-    background-color: #F1EFF8;
-}
-.field{
-    height: 39px;
-    font-size: 16px;
-    border: 2px solid #7F57F1;
-    border-radius: 10px;
-    width: 296px;
-    padding: 0px 10px;
-    background-color: #F1EFF8;
-}
+
 h4{
     margin: 0px;
     color: #7F57F1;
