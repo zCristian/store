@@ -22,14 +22,14 @@
             </div>
             
             <form class="addressform">
-             <BaseInput class="address-name" :placeholder="'Nome do Endereço'" v-model="nomeEndereco"/>
-             <BaseInput class="zip" :placeholder="'CEP'"  v-model="cep" :verify-blur="true" @blur-event="handleBlur"/>
-             <BaseInput class="street" :placeholder="'Rua'" v-model="nomeRua"/>
-             <BaseInput class="number " :placeholder="'Numero'" v-model="numeroCasa" :isFieldSmall="true"/>
-             <BaseInput class="complement " :placeholder="'Complemento'" v-model="complemento" :isFieldSmall="true"/>
-             <BaseInput class="neighborhood"  :placeholder="'Bairro'" v-model="bairro"/>
-             <BaseInput class="city" :placeholder="'Cidade'" v-model="cidade"/>
-             <BaseInput class="state" :placeholder="'Estado'" v-model="estado" :isFieldSmall="true"/>
+             <BaseInput class="address-name" :placeholder="'Nome do Endereço'" v-model="address.nomeEndereco"/>
+             <BaseInput class="zip" :placeholder="'CEP'"  v-model="address.cep" :verify-blur="true" @blur-event="handleBlur"/>
+             <BaseInput class="street" :placeholder="'Rua'" v-model="address.nomeRua"/>
+             <BaseInput class="number " :placeholder="'Numero'" v-model="address.numeroCasa" :isFieldSmall="true"/>
+             <BaseInput class="complement " :placeholder="'Complemento'" v-model="address.complemento" :isFieldSmall="true"/>
+             <BaseInput class="neighborhood"  :placeholder="'Bairro'" v-model="address.bairro"/>
+             <BaseInput class="city" :placeholder="'Cidade'" v-model="address.cidade"/>
+             <BaseInput class="state" :placeholder="'Estado'" v-model="address.estado" :isFieldSmall="true"/>
              <ActionButton :btntext="AddresBtnTXT" @click="addAddress"/>
             </form>
             
@@ -38,7 +38,7 @@
             <div class="cardcontainer-head">
                 <h2>Endereços Cadastrados</h2>
             </div>
-            <AddressCard  v-for="address in addresses" :key="address.codigoEndereco" :address="address" 
+            <AddressCard  v-for="addr in addresses" :key="addr.codigoEndereco" :address="addr" 
             @remove-address="handleRemoveAddress"/>
         </div>
         
@@ -51,6 +51,8 @@
     import AddressCard from '@/components/AddressCard.vue';
     import BaseInput from '@/components/BaseInput.vue';
     import {ref, defineProps, onBeforeMount} from 'vue';
+    //import useVuelidate from '@vuelidate/core';
+    //import {required} from '@vuelidate/validators';
     import { useToast } from 'vue-toastification';
     import { SquarePen } from 'lucide-vue-next';
 
@@ -68,14 +70,19 @@
     });
     const cliente = ref({
     });
-    const nomeEndereco =  ref('');
-    const cep = ref('');
-    const nomeRua = ref('');
-    const numeroCasa = ref('');
-    const complemento = ref('');
-    const bairro = ref('');
-    const cidade = ref('');
-    const estado = ref('');
+
+    const addresses = ref([]);
+    const address = ref({
+        nomeEndereco:'',
+        cep:'',
+        nomeRua:'',
+        numeroCasa:'',
+        complemento:'',
+        bairro:'',
+        cidade:'',
+        estado:'',
+        codigoEndereco:''
+    });
 
 
 
@@ -100,8 +107,19 @@
         .then(function(response){
             const retornos = response.data.result;
             for(let i=0;i<retornos.length;i++){
-                createAddressCard(retornos[i].nomeEndereco,retornos[i].cep, retornos[i].nomeRua,retornos[i].numeroCasa, retornos[i].complemento,
-                retornos[i].bairro,retornos[i].cidade,retornos[i].estado,retornos[i].codigoEndereco);
+
+                const obj = {
+                    nomeEndereco:retornos[i].nomeEndereco,
+                    cep:retornos[i].cep,
+                    nomeRua:retornos[i].nomeRua,
+                    numeroCasa:retornos[i].numeroCasa,
+                    complemento:retornos[i].complemento,
+                    bairro:retornos[i].bairro,
+                    cidade:retornos[i].cidade,
+                    estado:retornos[i].estado,
+                    codigoEndereco:retornos[i].codigoEndereco
+                }
+                createAddressCard(obj);
             }
         })
         .catch(function(error){
@@ -112,40 +130,39 @@
         });
     }
     const checkCep =()=>{
-        cep.value = cep.value.replace(/\D/g, '');
-        
-        if(cep.value!='' && cep.value.length == 8 ){
-            fetch(`https://viacep.com.br/ws/${cep.value}/json/`).then(res =>res.json()).then(data=>{
-                nomeRua.value = data.logradouro;
-                complemento.value = data.complemento;
-                bairro.value = data.bairro;
-                cidade.value = data.localidade;
-                estado.value = data.uf;
+        address.value.cep = address.value.cep.replace(/\D/, '');
+        if(address.value.cep!='' && address.value.cep.length == 8 ){
+            fetch(`https://viacep.com.br/ws/${address.value.cep}/json/`).then(res =>res.json()).then(data=>{
+                address.value.nomeRua = data.logradouro;
+                address.value.complemento = data.complemento;
+                address.value.bairro = data.bairro;
+                address.value.cidade = data.localidade;
+                address.value.estado = data.uf;
         
             });
         }
         
     }
-    const addresses = ref([]);
+    
     const addAddress = () =>{
         const url_address = 'http://localhost:3000/endereco';
         const response_msg = ref('');
         axios.post(url_address,{
-            nomeEndereco : nomeEndereco.value,
-            cep :cep.value,
-            nomeRua : nomeRua.value,
-            numeroCasa :numeroCasa.value,
-            complemento: complemento.value,
-            bairro :bairro.value,
-            cidade : cidade.value,
-            estado : estado.value,
+            nomeEndereco : address.value.nomeEndereco,
+            cep :address.value.cep,
+            nomeRua : address.value.nomeRua,
+            numeroCasa :address.value.numeroCasa,
+            complemento: address.value.complemento,
+            bairro : address.value.bairro,
+            cidade : address.value.cidade,
+            estado : address.value.estado,
             codigoCliente : props.codigoCliente,
         })
         .then(function(response){
+            address.value.codigoEndereco = response.data.codigoEndereco;
             response_msg.value = response.data.message;
             toast.success(response_msg.value);
-            createAddressCard(nomeEndereco.value,cep.value,nomeRua.value,numeroCasa.value,
-            complemento.value,bairro.value,cidade.value,estado.value,response.data.codigoEndereco);
+            createAddressCard(address.value);
         })
         .catch(function(error){
         if(error.response){
@@ -155,18 +172,17 @@
         })
 
     }
-    const createAddressCard = (nomeEndereco,cep,nomeRua,numeroCasa,complemento,bairro,
-    cidade,estado,codigoEndereco)=>{
+    const createAddressCard = (address)=>{
             addresses.value.push({
-                nomeEndereco: nomeEndereco,
-                cep:cep,
-                nomeRua:nomeRua,
-                numeroCasa:numeroCasa,
-                complemento:complemento,
-                bairro:bairro,
-                cidade:cidade,
-                estado:estado,
-                codigoEndereco:codigoEndereco
+                nomeEndereco: address.nomeEndereco,
+                cep:address.cep,
+                nomeRua:address.nomeRua,
+                numeroCasa:address.numeroCasa,
+                complemento:address.complemento,
+                bairro:address.bairro,
+                cidade:address.cidade,
+                estado:address.estado,
+                codigoEndereco:address.codigoEndereco
             });
     }
     
@@ -182,7 +198,7 @@
     }
 
     const editUser = () =>{
-        const url_editaddress  = 'http://localhost:3000/cliente/'+cliente.value.codigoCliente;
+       const url_editaddress  = 'http://localhost:3000/cliente/'+cliente.value.codigoCliente;
        axios.put(url_editaddress, {
             nomeCliente : cliente.value.nomeCliente,
             cpfCliente : cliente.value.cpfCliente,

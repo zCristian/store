@@ -20,14 +20,14 @@
 
     const dropDown  = ref(null);
     const emit  = defineEmits(['logout']);
-    const props = defineProps({
+    defineProps({
         options:{
             Type:Array,
             required: true
         }
     });
     
-    console.log(props.options);
+    
     const isDropDownVisible = ref(false);
     const selectOption = (option)=>{
         if(option.src ==='home'){

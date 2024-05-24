@@ -15,7 +15,7 @@
             required:true
         }
     });
-    console.log(props);
+    
 
     const btnMessage = computed(()=>{
         return props.pricerange >2999 ? 'Acima de' : 'Até'

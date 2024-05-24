@@ -35,14 +35,12 @@
         }
     });
     
-    console.log(props);
+    
     const savedProducts = ref([]);
 
     const emit = defineEmits('productLiked');
     const productLiked = () =>{
-        console.log("Prod Id", props.product.id);
         savedProducts.value.push(props.product.id)
-        console.log(savedProducts.value);
         emit('productLiked',savedProducts.value);
     }
 

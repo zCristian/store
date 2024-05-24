@@ -8,14 +8,13 @@
 import { defineProps} from 'vue';
     const btnsrc = "/";
 
-    const props = defineProps({
+    defineProps({
         btntext:{
             type : String,
             required : true
         },
     });
    
-    console.log(props.btntext);
 </script>
 
 <style scoped>

@@ -38,7 +38,7 @@
             required:false
         }
     });
-    console.log(props.isModalOpen);
+
 
     const closeModal = ()=>{
         emit('close-modal');

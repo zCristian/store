@@ -166,7 +166,7 @@
     
 }
 hr{
-    width: 300px;
+    width: 350px;
     height: 0px;
     border: 1px solid #7F57F1;
     margin: 0px;
