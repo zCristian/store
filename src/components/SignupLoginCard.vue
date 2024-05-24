@@ -7,17 +7,36 @@
                 <hr class="head-hr">
                 <div class="card-content">
                     <h2>Bem vindo a Celulou</h2>
-                        <form v-if="isSignUp" class="register-form cardform"  @submit.prevent="onSignUp()" >
-                            <BaseInput class="cpf" :placeholder="'CPF'" v-model="cpfCliente"/>
-                            <BaseInput class="name" :placeholder="'Nome'" v-model="nomeCliente"/>
-                            <BaseInput class="phone"  :placeholder="'Celular'" v-model="celularCliente"/>
-                            <BaseInput class="email" :placeholder="'E-mail'" v-model="emailCliente"/>
+                        <form v-if="isSignUp" class="register-form cardform" >
+                            <div class="cpf-wrapper">
+                                <BaseInput class="cpf" :placeholder="'CPF'" v-model="cliente.cpfCliente"/>
+                                <span class="input-gap" v-if="!v$_user.cpfCliente.$error"></span>
+                                <span class="field-error" v-for="error in v$_user.cpfCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
+                            </div>
+                            <div class="name-wrapper">
+                                <BaseInput class="name" :placeholder="'Nome'" v-model="cliente.nomeCliente"/>
+                                <span class="input-gap" v-if="!v$_user.nomeCliente.$error"></span>
+                                <span class="field-error" v-for="error in v$_user.nomeCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
+                            </div>
+                            
+                            <div class="phone-wapper">
+                                <BaseInput class="phone"  :placeholder="'Celular'" v-model="cliente.celularCliente"/>
+                                <span class="input-gap" v-if="!v$_user.celularCliente.$error"></span>
+                                <span class="field-error" v-for="error in v$_user.celularCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
+                            </div>
+                            
+                            <div class="email-wrapper">
+                                <BaseInput class="email" :placeholder="'E-mail'" v-model="cliente.emailCliente"/>
+                                <span class="input-gap" v-if="!v$_user.emailCliente.$error"></span>
+                                <span class="field-error" v-for="error in v$_user.emailCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
+                            </div>
+                           
                             <BaseInput v-if="false" class="password"  :placeholder="'Senha'"/>
-                            <BaseButton :btntext="btntext" @click="onSignUp()" @keyup.enter="onSignUp()" />
+                            <ActionButton :btntext="btntext" @click="submitSignUpForm" @keyup.enter="submitSignUpForm" />
                        
                         </form>
                         <form v-if="!isSignUp" class="login-form cardform" @submit.prevent="onLogin()">
-                            <BaseInput class="email" :placeholder="'E-mail'" v-model="emailCliente"/>
+                            <BaseInput class="email" :placeholder="'E-mail'" v-model="cliente.emailCliente"/>
                             <BaseButton :btntext="btntext" @click="onLogin()" @keyup.enter="onLogin()" />
                         </form>
                 </div>
@@ -37,6 +56,9 @@ import BaseButton from '../components/BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import {ref,defineEmits} from 'vue';
 import { useToast } from 'vue-toastification';
+import useVuelidate from '@vuelidate/core';
+import {required, minLength,helpers,maxLength,email} from '@vuelidate/validators';
+import ActionButton from './ActionButton.vue';
 
 const cliente = ref({
     codigoCliente : '',    
@@ -46,13 +68,46 @@ const cliente = ref({
     emailCliente : '',
     createdAt :''
 });
+const required_msg = 'Esse campo deve ser preenchido';
+const userMinLength_msg = "O campo deve ter ao menos 5 caracteres";
+const isCPF_msg = "Insira um CPF válido"
+const isEmail_msg = "Insira um email válido";
+const isPhone_msg = "Insira um número de celular válido";
+// User Form Validation
+const user_rules = {
+    cpfCliente:{
+        required: helpers.withMessage(required_msg,required),
+        minLength:helpers.withMessage(isCPF_msg,minLength(11)),
+        maxLength:helpers.withMessage(isCPF_msg,maxLength(11))
+    },
+    nomeCliente : {
+        required: helpers.withMessage(required_msg,required),
+        minLength:helpers.withMessage(userMinLength_msg,minLength(5))
+    },
+    celularCliente: {
+        required: helpers.withMessage(required_msg,required),
+        minLength:helpers.withMessage(isPhone_msg,minLength(11)),
+        maxLength:helpers.withMessage(isPhone_msg,maxLength(11))
+    },
+    emailCliente: {
+        required: helpers.withMessage(required_msg,required),
+        minLength:helpers.withMessage(userMinLength_msg,minLength(5)),
+        email: helpers.withMessage(isEmail_msg,email)
+    },
+}
+
+const v$_user = useVuelidate(user_rules,cliente);
+
+const submitSignUpForm = async () => {
+    const result =await v$_user.value.$validate();
+    if(result){
+        onSignUp();
+    }
+}
+
 const toast = useToast();
 const response_msg = ref('');
 const axios = require('axios').default;
-const cpfCliente = ref('');
-const nomeCliente = ref('');
-const celularCliente = ref('');
-const emailCliente = ref('');
 
 const isSignUp = ref(false);
 const loginSelected= ref(true);
@@ -73,10 +128,10 @@ let switchFunction = (index) =>{
 const emit = defineEmits(['closeCard','succes_signup','error_signup','succes_login','error_login']);
 
 let resetFields = () =>{
-    cpfCliente.value='';
-    emailCliente.value='';
-    nomeCliente.value='';
-    celularCliente.value='';
+    cliente.value.cpfCliente='';
+    cliente.value.emailCliente='';
+    cliente.value.nomeCliente='';
+    cliente.value.celularCliente='';
 }
 let closeCard = () =>{
     emit('closeCard');
@@ -85,10 +140,10 @@ let closeCard = () =>{
 const onSignUp =()=>{
    const url_cliente = 'http://localhost:3000/cliente';
    axios.post(url_cliente,{
-        nomeCliente :nomeCliente.value,
-        cpfCliente: cpfCliente.value,
-        celularCliente : celularCliente.value,
-        emailCliente : emailCliente.value
+        nomeCliente :cliente.value.nomeCliente,
+        cpfCliente: cliente.value.cpfCliente,
+        celularCliente : cliente.value.celularCliente,
+        emailCliente : cliente.value.emailCliente
     })
     .then(function(response){
         response_msg.value = response.data.message;
@@ -112,15 +167,15 @@ const onSignUp =()=>{
 const onLogin = () =>{
     const url_login = 'http://localhost:3000/login';
     axios.post(url_login,{
-        email :emailCliente.value
+        email :cliente.value.emailCliente
     })
     .then(function(response){
         response_msg.value = "Bem Vindo";
         toast.success(response_msg.value);
-        cliente.value = response.data.result;
+        cliente.value.codigoCliente = response.data.result.codigoCliente;
         resetFields();
         closeCard();
-        emit('succes_login',cliente);
+        emit('succes_login',cliente.value.codigoCliente);
     })
     .catch(function(error){
         if(error.response){
@@ -168,13 +223,31 @@ const onLogin = () =>{
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
+}
+.input-wrap{
+        display: flex;
+}
+.input-gap{
+    height: 18px;
+    width: 300px;
+    display: inline-block;
+}
+.field-error{
+    margin-bottom:5px;
+    padding-left: 7px;
+    height: 13px;
+    font-size: 13px;
+    color: red;
+    display: inline-block;
+    font-weight: 400;
+}
+.login-form{
     gap: 15px;
 }
-
 span{
     font-weight: bold;
     cursor: pointer;
-
+    margin: 0px;
 }
 h2{ 
     border: none;

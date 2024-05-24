@@ -9,11 +9,22 @@
             </div>
         
             <form class="clientform">
-                <BaseInput class="name" :placeholder="'Nome'" v-model="cliente.nomeCliente" :isDisabled="!isEditUserOn"/>
-                <BaseInput class="phone" :placeholder="'Celular'" v-model="cliente.celularCliente" :isDisabled="!isEditUserOn"/>
-                <BaseInput class="email"  :placeholder="'E-mail'" v-model="cliente.emailCliente" :isDisabled="!isEditUserOn"/>
-    
-                <ActionButton v-if="isEditUserOn" :btntext="btntext" @click="editUser()"/>
+                <div class="name-wrapper inputdiv">
+                    <BaseInput class="name" :placeholder="'Nome'" v-model="cliente.nomeCliente" :isDisabled="!isEditUserOn"/>
+                    <span class="input-gap" v-if="!v$_user.nomeCliente.$error"></span>
+             <span class="field-error" v-for="error in v$_user.nomeCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
+                </div>
+                <div class="phone-wrapper inputdiv">
+                    <BaseInput class="phone" :placeholder="'Celular'" v-model="cliente.celularCliente" :isDisabled="!isEditUserOn"/>
+                    <span class="input-gap" v-if="!v$_user.celularCliente.$error"></span>
+                    <span class="field-error" v-for="error in v$_user.celularCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
+                </div>
+                <div class="email-wrapper inputdiv">
+                    <BaseInput class="email"  :placeholder="'E-mail'" v-model="cliente.emailCliente" :isDisabled="!isEditUserOn"/>
+                    <span class="input-gap" v-if="!v$_user.emailCliente.$error"></span>
+                    <span class="field-error" v-for="error in v$_user.emailCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
+                </div>
+                <ActionButton v-if="isEditUserOn" :btntext="btntext" @click="submitUserForm()"/>
             </form>
         </div>
         <div class="address container">
@@ -22,15 +33,52 @@
             </div>
             
             <form class="addressform">
+            
+            <div class="address-name-wrapper inputdiv">
              <BaseInput class="address-name" :placeholder="'Nome do Endereço'" v-model="address.nomeEndereco"/>
+             <span class="input-gap" v-if="!v$_address.nomeEndereco.$error"></span>
+             <span class="field-error" v-for="error in v$_address.nomeEndereco.$errors" :key="error.$uid">{{ error.$message }}</span>
+            </div>
+
+            <div class="zip-wrapper inputdiv">
              <BaseInput class="zip" :placeholder="'CEP'"  v-model="address.cep" :verify-blur="true" @blur-event="handleBlur"/>
+             <span class="input-gap" v-if="!v$_address.cep.$error"></span>
+             <span class="field-error" v-for="error in v$_address.cep.$errors" :key="error.$uid">{{ error.$message }}</span>
+            </div>
+
+            <div class="street-wrapper inputdiv">
              <BaseInput class="street" :placeholder="'Rua'" v-model="address.nomeRua"/>
-             <BaseInput class="number " :placeholder="'Numero'" v-model="address.numeroCasa" :isFieldSmall="true"/>
-             <BaseInput class="complement " :placeholder="'Complemento'" v-model="address.complemento" :isFieldSmall="true"/>
+             <span class="input-gap" v-if="!v$_address.nomeRua.$error"></span>
+             <span class="field-error" v-for="error in v$_address.nomeRua.$errors" :key="error.$uid">{{ error.$message }}</span>
+            </div>
+
+            <div class="sm-fields-wrapper">
+                <BaseInput class="number " :placeholder="'Numero'" v-model="address.numeroCasa" :isFieldSmall="true"/>
+                <BaseInput class="complement " :placeholder="'Complemento'" v-model="address.complemento" :isFieldSmall="true"/>
+             
+                <span class="input-gap" v-if="!v$_address.numeroCasa.$error"></span>
+                <span class="field-error" v-for="error in v$_address.numeroCasa.$errors" :key="error.$uid">{{ error.$message }}</span>
+            </div>
+             
+
+            <div class="neighbourhood-wrapper inputdiv">
              <BaseInput class="neighborhood"  :placeholder="'Bairro'" v-model="address.bairro"/>
-             <BaseInput class="city" :placeholder="'Cidade'" v-model="address.cidade"/>
-             <BaseInput class="state" :placeholder="'Estado'" v-model="address.estado" :isFieldSmall="true"/>
-             <ActionButton :btntext="AddresBtnTXT" @click="addAddress"/>
+             <span class="input-gap" v-if="!v$_address.bairro.$error"></span>
+             <span class="field-error" v-for="error in v$_address.bairro.$errors" :key="error.$uid">{{ error.$message }}</span>
+            </div>
+
+            <div class="city-wrapper inputdiv">
+             <BaseInput class="city" :placeholder="'Cidade'" v-model="address.cidade" :isDisabled="true"/>
+             <span class="input-gap" v-if="!v$_address.cidade.$error"></span>
+             <span class="field-error" v-for="error in v$_address.cidade.$errors" :key="error.$uid">{{ error.$message }}</span>
+            </div>
+
+            <div class="state-wrapper inputdiv">
+             <BaseInput class="state" :placeholder="'Estado'" v-model="address.estado" :isFieldSmall="true" :isDisabled="true"/>
+             <span class="input-gap" v-if="!v$_address.estado.$error"></span>
+             <span class="field-error" v-for="error in v$_address.estado.$errors" :key="error.$uid">{{error.$message }}</span>
+            </div>
+             <ActionButton :btntext="AddresBtnTXT" @click.prevent="submitAddressForm"  />
             </form>
             
         </div>
@@ -51,8 +99,8 @@
     import AddressCard from '@/components/AddressCard.vue';
     import BaseInput from '@/components/BaseInput.vue';
     import {ref, defineProps, onBeforeMount} from 'vue';
-    //import useVuelidate from '@vuelidate/core';
-    //import {required} from '@vuelidate/validators';
+    import useVuelidate from '@vuelidate/core';
+    import {required, minLength,helpers,maxLength,email} from '@vuelidate/validators';
     import { useToast } from 'vue-toastification';
     import { SquarePen } from 'lucide-vue-next';
 
@@ -68,8 +116,8 @@
             required : false
         }
     });
-    const cliente = ref({
-    });
+    
+    const cliente = ref({});
 
     const addresses = ref([]);
     const address = ref({
@@ -84,15 +132,74 @@
         codigoEndereco:''
     });
 
+    //Address Form Validation
+    const required_msg = 'Esse campo deve ser preenchido';
+    const cepLength_msg = 'O CEP deve ter 8 dígitos';
+    const textLength_msg = '*';
+    const address_rules = {
+        nomeEndereco: {
+            required:helpers.withMessage(required_msg, required),
+            minLength:helpers.withMessage(textLength_msg,minLength(2))
+        },
+        cep: {
+            required:helpers.withMessage(required_msg, required),
+            minLength:helpers.withMessage(cepLength_msg,minLength(8)),
+            maxLength: helpers.withMessage(cepLength_msg,maxLength(8))
+        },
+        nomeRua: {required:helpers.withMessage(required_msg, required)},
+        numeroCasa: {required:helpers.withMessage(required_msg, required)},
+        bairro:{required:helpers.withMessage(required_msg, required)},
+        cidade:{required:helpers.withMessage(required_msg, required)},
+        estado:{required:helpers.withMessage(required_msg, required)},
+    }
 
+    const v$_address = useVuelidate(address_rules,address);
+    const submitAddressForm = async () => {
+        const result =await v$_address.value.$validate();
+        if(result){
+            addAddress();
+        } 
+    }
+
+    const userMinLength_msg = "O campo deve ter ao menos 5 caracteres";
+    const isEmail_msg = "Insira um email válido";
+    const isPhone_msg = "Insira um número de celular válido";
+    // User Form Validation
+    const user_rules = {
+        nomeCliente : {
+            required: helpers.withMessage(required_msg,required),
+            minLength:helpers.withMessage(userMinLength_msg,minLength(5))
+        },
+        celularCliente: {
+            required: helpers.withMessage(required_msg,required),
+            minLength:helpers.withMessage(isPhone_msg,minLength(11)),
+            maxLength:helpers.withMessage(isPhone_msg,maxLength(11))
+        },
+        emailCliente: {
+            required: helpers.withMessage(required_msg,required),
+            minLength:helpers.withMessage(userMinLength_msg,minLength(5)),
+            email: helpers.withMessage(isEmail_msg,email)
+        },
+    }
+
+    const v$_user = useVuelidate(user_rules,cliente);
+
+    const submitUserForm = async () => {
+        const result =await v$_user.value.$validate();
+        if(result){
+            editUser();
+        }
+    }
 
     onBeforeMount(() =>{
         loadClient();
         loadAddresses();
     });
+
     const handleBlur = ()=>{
         checkCep();
     }
+
     const loadClient = () =>{
         const url_login = 'http://localhost:3000/cliente/'+props.codigoCliente;
         axios.get(url_login)
@@ -101,6 +208,7 @@
         
         });
     }
+
     const loadAddresses = () =>{
         const url_endereco = 'http://localhost:3000/enderecos/'+props.codigoCliente;
         axios.get(url_endereco)
@@ -129,17 +237,23 @@
             }
         });
     }
+
     const checkCep =()=>{
         address.value.cep = address.value.cep.replace(/\D/, '');
         if(address.value.cep!='' && address.value.cep.length == 8 ){
             fetch(`https://viacep.com.br/ws/${address.value.cep}/json/`).then(res =>res.json()).then(data=>{
-                address.value.nomeRua = data.logradouro;
-                address.value.complemento = data.complemento;
-                address.value.bairro = data.bairro;
-                address.value.cidade = data.localidade;
-                address.value.estado = data.uf;
+                if(data.erro){
+                    toast.error('CEP inválido');
+                }else{
+                    address.value.nomeRua = data.logradouro;
+                    address.value.complemento = data.complemento;
+                    address.value.bairro = data.bairro;
+                    address.value.cidade = data.localidade;
+                    address.value.estado = data.uf;
+                }
+                
         
-            });
+            })
         }
         
     }
@@ -149,9 +263,9 @@
         const response_msg = ref('');
         axios.post(url_address,{
             nomeEndereco : address.value.nomeEndereco,
-            cep :address.value.cep,
+            cep : address.value.cep,
             nomeRua : address.value.nomeRua,
-            numeroCasa :address.value.numeroCasa,
+            numeroCasa : address.value.numeroCasa,
             complemento: address.value.complemento,
             bairro : address.value.bairro,
             cidade : address.value.cidade,
@@ -172,6 +286,7 @@
         })
 
     }
+
     const createAddressCard = (address)=>{
             addresses.value.push({
                 nomeEndereco: address.nomeEndereco,
@@ -193,6 +308,7 @@
             }
         }
     }
+
     const editUserSwitch= () =>{
         isEditUserOn.value = !isEditUserOn.value;
     }
@@ -257,15 +373,37 @@
         display: flex;
         justify-content: flex-start;
         flex-direction: column;
-        gap: 15px;
+        width: 320px;
     }
     .addressform{
         margin: 10px 0px;
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
-        width: 350px;
-        gap: 15px;
+        width: 320px;
+      
+    }
+    .sm-fields-wrapper{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        flex-basis: 100%;
+    }
+    .input-wrap{
+        display: flex;
+    }
+    .input-gap{
+        height: 25px;
+        width: 300px;
+        display: inline-block;
+    }
+    .field-error{
+        margin-bottom:5px;
+        padding-left: 7px;
+        height: 20px;
+        font-size: 13px;
+        color: red;
+        display: inline-block;
     }
     .card-container{
         display: flex;

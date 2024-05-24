@@ -1,7 +1,7 @@
 <template>
     <div class="input-wrap">
         <label v-if="label">{{ label }}</label>
-        <input :class="[{'sm-field':isFieldSmall},'field']" type="text" 
+        <input :class="[{'sm-field':isFieldSmall},{'field':!isFieldSmall}]" type="text" 
         :value="modelValue" :placeholder="placeholder" :disabled="isDisabled" 
         @input="$emit('update:modelValue',$event.target.value)" @blur="blurEvent()">
     </div>
@@ -63,7 +63,7 @@ const blurEvent =()=>{
     width: 296px;
     padding: 0px 10px;
     background-color: #F1EFF8;
-    
+    flex-basis: 100%;
 }
 .sm-field{
         width: 128px;

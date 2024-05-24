@@ -8,9 +8,11 @@ import "vue-toastification/dist/index.css";
 axios.defaults.baseURL = 'http://localhost:3000';
 
 const app = createApp(App)
-// Only works if using in-browser compilation.
-// If using build tools, see config examples below.
-app.config.compilerOptions.isCustomElement = (tag) => tag.includes('-')
+app.config.compilerOptions.isCustomElement = (tag) => tag.includes('-');
+
+
+
+
 app.use(router);
 app.use(Toast);
 app.mount('#app')

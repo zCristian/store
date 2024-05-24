@@ -31,7 +31,7 @@
 
   <BaseModal :isModalOpen="isModalOpen" @close-modal="isModalOpen=false">
     <template #main>
-      <SignupLoginCard  class="login-card" @succes_signup="handleSuccesSU" @succes_login="handleSuccesLogin"/>
+      <SignupLoginCard  class="login-card"  @succes_login="handleSuccesLogin"/>
     </template>
   </BaseModal>
   <PageFooter/>
@@ -46,6 +46,7 @@
   import { ShoppingBag,Heart,User,BadgePercent, CircleUserRound} from 'lucide-vue-next';
   import {ref, watch} from 'vue';
   import { Search } from 'lucide-vue-next';
+  import axios from 'axios';
   
   const options = ref([
     { 
@@ -63,14 +64,14 @@
   ]);
 
   const cliente = ref({
-    codigoCliente:" ",
-    cpfCliente:" ",
-    nomeCliente:" ",
-    celularCliente:" ",
-    emailCliente:" ",
-    createdAt:" "
+    codigoCliente : "",
+    cpfCliente: "",
+    nomeCliente: "",
+    emailCliente: "",
+    celularCliente: "",
+    createdAt: "",
   });
-  const codigoCliente = ref(" ");
+
   const isLoged = ref(false);
   const userName = ref('Login');
   const brands = ['Apple', 'Xiaomi','Samsumg','Motorola','Asus'];
@@ -84,8 +85,7 @@
   if(storageIsLoged){
     cliente.value = JSON.parse(storageCliente );
     isLoged.value = JSON.parse(storageIsLoged);
-    codigoCliente.value = cliente.value.codigoCliente;
-    options.value.find(option => option.id ===1).params = codigoCliente.value;
+    options.value.find(option => option.id ==1).params = cliente.value.codigoCliente;
     userName.value = cliente.value.nomeCliente.split(" ")[0];
   }
 
@@ -95,23 +95,38 @@
     }
   });
 
-  const handleSuccesSU =()=>{
-    
-  }
-  const handleSuccesLogin = (cliente) =>{
+  
+  const handleSuccesLogin = async (codigoCliente) =>{
+      cliente.value = await loadClient(codigoCliente);
       isLoged.value = true;
-      userName.value = cliente.value.nomeCliente.split(" ")[0];
-      window.localStorage.setItem('cliente',JSON.stringify(cliente.value));   
-      codigoCliente.value = cliente.value.codigoCliente;
-      options.value.find(option => option.id === 1).params = codigoCliente.value;
       isModalOpen.value = false;
+      userName.value = cliente.value.nomeCliente.split(' ')[0];
+      window.localStorage.setItem('cliente',JSON.stringify(cliente.value));   
+      options.value.find(option => option.id == 1).params = codigoCliente;
+      
   }
+
+  const loadClient = async (codigoCliente) =>{
+        const url_login = 'http://localhost:3000/cliente/'+codigoCliente;
+        const response_cliente={};
+        await axios.get(url_login)
+        .then(function(response){
+            response_cliente.codigoCliente = response.data.result.codigoCliente;
+            response_cliente.cpfCliente = response.data.result.cpfCliente;
+            response_cliente.nomeCliente = response.data.result.nomeCliente;
+            response_cliente.celularCliente = response.data.result.celularCliente;
+            response_cliente.emailCliente = response.data.result.emailCliente;
+            response_cliente.createdAt = response.data.result.createdAt;
+
+        });
+        return response_cliente;
+    }
 
   const handlelLogOut = ()=>{
     isLoged.value=false;
     window.localStorage.removeItem('isUserLoged');
     window.localStorage.removeItem('cliente');
-    codigoCliente.value = " ";
+    cliente.value.codigoCliente = " ";
     userName.value = "Login";
   }
 
