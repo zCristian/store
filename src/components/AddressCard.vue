@@ -65,7 +65,7 @@
     const emit = defineEmits(['remove-address']);
 
     const removeAddress = () =>{
-            const url_delete  = 'http://localhost:3000/endereco/'+props.address.codigoEndereco;
+            const url_delete  = 'http://localhost:3000/enderecos/'+props.address.codigoEndereco;
             axios.delete(url_delete, {
                     
             })
@@ -101,7 +101,7 @@
     }
 
     const handleEditAddress = () =>{
-       const url_editaddress  = 'http://localhost:3000/endereco/'+props.address.codigoEndereco;
+       const url_editaddress  = 'http://localhost:3000/enderecos/'+props.address.codigoEndereco;
        axios.put(url_editaddress, {
             codigoEndereco : address.value.codigoEndereco,
             nomeEndereco : address.value.nomeEndereco,

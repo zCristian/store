@@ -1,6 +1,9 @@
 <template>
     <div class="head">  
     </div>
+    <div class="manager-div">
+            <BaseButton :btnsrc="'manager'" :btntext="'Manager'" class="manager-btn" />
+    </div>
     <div class="main">
         <div class="client container">
             <div class="clientform-head">
@@ -15,7 +18,7 @@
              <span class="field-error" v-for="error in v$_user.nomeCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                 </div>
                 <div class="phone-wrapper inputdiv">
-                    <BaseInput class="phone" :placeholder="'Celular'" v-model="cliente.celularCliente" :isDisabled="!isEditUserOn"/>
+                    <CellInput class="phone" v-model="cliente.celularCliente" :isDisabled="!isEditUserOn"/>
                     <span class="input-gap" v-if="!v$_user.celularCliente.$error"></span>
                     <span class="field-error" v-for="error in v$_user.celularCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                 </div>
@@ -35,7 +38,7 @@
             <form class="addressform">
             
             <div class="address-name-wrapper inputdiv">
-             <BaseInput class="address-name" :placeholder="'Nome do Endereço'" v-model="address.nomeEndereco"/>
+             <BaseInput class="address-name" :placeholder="'Nome do Endereço'" v-model="address.nomeEndereco" :verify-blur="true" />
              <span class="input-gap" v-if="!v$_address.nomeEndereco.$error"></span>
              <span class="field-error" v-for="error in v$_address.nomeEndereco.$errors" :key="error.$uid">{{ error.$message }}</span>
             </div>
@@ -96,8 +99,10 @@
 
 <script setup>
     import ActionButton from '@/components/ActionButton.vue';
+    import BaseButton from '@/components/BaseButton.vue';
     import AddressCard from '@/components/AddressCard.vue';
     import BaseInput from '@/components/BaseInput.vue';
+    import CellInput from '@/components/CellInput.vue';
     import {ref, defineProps, onBeforeMount} from 'vue';
     import useVuelidate from '@vuelidate/core';
     import {required, minLength,helpers,maxLength,email} from '@vuelidate/validators';
@@ -154,16 +159,20 @@
     }
 
     const v$_address = useVuelidate(address_rules,address);
-    const submitAddressForm = async () => {
+    const validateAddressForm = async () => {
+        await v$_address.value.$validate();
+    }
+    const submitAddressForm = async ()=>{
         const result =await v$_address.value.$validate();
         if(result){
             addAddress();
         } 
     }
-
+    
     const userMinLength_msg = "O campo deve ter ao menos 5 caracteres";
     const isEmail_msg = "Insira um email válido";
     const isPhone_msg = "Insira um número de celular válido";
+    
     // User Form Validation
     const user_rules = {
         nomeCliente : {
@@ -198,10 +207,11 @@
 
     const handleBlur = ()=>{
         checkCep();
+        validateAddressForm();
     }
 
     const loadClient = () =>{
-        const url_login = 'http://localhost:3000/cliente/'+props.codigoCliente;
+        const url_login = 'http://localhost:3000/clientes/'+props.codigoCliente;
         axios.get(url_login)
         .then(function(response){
             cliente.value = response.data.result;
@@ -210,7 +220,7 @@
     }
 
     const loadAddresses = () =>{
-        const url_endereco = 'http://localhost:3000/enderecos/'+props.codigoCliente;
+        const url_endereco = 'http://localhost:3000/clientes/'+props.codigoCliente+'/enderecos/';
         axios.get(url_endereco)
         .then(function(response){
             const retornos = response.data.result;
@@ -232,8 +242,7 @@
         })
         .catch(function(error){
             if(error.response){
-                
-                toast.error(error.response.data.error);
+                console.log("Cliente sem endereço");
             }
         });
     }
@@ -259,7 +268,7 @@
     }
     
     const addAddress = () =>{
-        const url_address = 'http://localhost:3000/endereco';
+        const url_address = 'http://localhost:3000/clientes/'+props.codigoCliente+'/enderecos/';
         const response_msg = ref('');
         axios.post(url_address,{
             nomeEndereco : address.value.nomeEndereco,
@@ -314,7 +323,7 @@
     }
 
     const editUser = () =>{
-       const url_editaddress  = 'http://localhost:3000/cliente/'+cliente.value.codigoCliente;
+       const url_editaddress  = 'http://localhost:3000/clientes/'+cliente.value.codigoCliente;
        axios.put(url_editaddress, {
             nomeCliente : cliente.value.nomeCliente,
             cpfCliente : cliente.value.cpfCliente,
@@ -334,9 +343,18 @@
 
 <style scoped>
     .head{
-        margin-top: 80px;
+        margin-top: 30px;
         display: flex;
         justify-content: center;
+    }
+    .manager-div{
+        display: flex;
+        justify-content: left;
+        margin-bottom: 20px;
+    }
+    .manager-btn{
+        margin-left: 65px;
+        width: 100px;
     }
     .main{
         display: flex;

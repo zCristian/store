@@ -1,9 +1,9 @@
 <template>
     <div class="input-wrap">
         <label v-if="label">{{ label }}</label>
-        <input :class="[{'sm-field':isFieldSmall},{'field':!isFieldSmall}]" type="text" 
+        <input class="field" type="text" 
         :value="getValueToDisplay" :placeholder="placeholder" :disabled="isDisabled"
-        @input="handleInput($event.target.value)" @blur="blurEvent()">
+        @input="handleInput($event.target.value)">
     </div>
 
 </template>
@@ -25,36 +25,38 @@ const props = defineProps({
         type: String,
         default:""
     },
-    verifyBlur:{
-        type: Boolean,
-        default: false
-    },
-    isFieldSmall:{
-        type:Boolean,
-        default:false
-    },
     isDisabled:{
         type:Boolean,
         default:false
     }
 });
-const emit = defineEmits(['blur-event','update:modelValue']);
 
-const blurEvent =()=>{
-    if(props.verifyBlur==true){
-        emit('blur-event');
-    }
-}
-const updatedValue = ref(props.modelValue);
+const emit = defineEmits('update:modelValue');
+const formattedValue = ref(props.modelValue);
 
 function handleInput(value) {
-        updatedValue.value = value;
-        emit('update:modelValue', value);
+    const cleaned = value.replace(/\D/g, '');
+    formattedValue.value = formatCPF(cleaned);
+    emit('update:modelValue', cleaned);
+}
+
+function formatCPF(value) {
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length <= 3) {
+        return cleaned;
+    } else if (cleaned.length <= 6) {
+        return `${cleaned.slice(0, 3)}.${cleaned.slice(3)}`;
+    } else if (cleaned.length <= 9) {
+        return `${cleaned.slice(0, 3)}.${cleaned.slice(3, 6)}.${cleaned.slice(6)}`;
+    } else {
+        return `${cleaned.slice(0, 3)}.${cleaned.slice(3, 6)}.${cleaned.slice(6, 9)}-${cleaned.slice(9, 11)}`;
+    }
 }
 
 const getValueToDisplay = computed(() => {
-    return props.modelValue;
+    return formattedValue.value;
 });
+
 
 </script>
 
@@ -77,16 +79,5 @@ const getValueToDisplay = computed(() => {
     background-color: #F1EFF8;
     flex-basis: 100%;
 }
-.sm-field{
-        width: 128px;
-        height: 39px;
-        font-size: 16px;
-        border: 2px solid #7F57F1;
-        border-radius: 10px;
-        padding: 0px 10px;
-        background-color: #F1EFF8;
-}
-label{
-    margin-right: 10px;
-}
+
 </style>

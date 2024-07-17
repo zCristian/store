@@ -7,7 +7,7 @@ import UserView from '@/views/UserView.vue'
 import ProductsView from '@/views/ProductsView.vue'
 import ProductPageView from '@/views/ProductPageView.vue'
 import FavoritesView from '@/views/FavoritesView.vue'
-
+import ManagerView from '@/views/ManagerView.vue'
 const routes = [
   {
     path: '/',
@@ -53,6 +53,11 @@ const routes = [
     path: '/favorites',
     name: 'favorites',
     component: FavoritesView
+  },
+  {
+    path: '/manager',
+    name: 'manager',
+    component: ManagerView
   }
   
 ]

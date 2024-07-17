@@ -7,9 +7,9 @@
                 <hr class="head-hr">
                 <div class="card-content">
                     <h2>Bem vindo a Celulou</h2>
-                        <form v-if="isSignUp" class="register-form cardform" >
+                        <form v-if="isSignUp" class="register-form cardform" @click="verifyForm">
                             <div class="cpf-wrapper">
-                                <BaseInput class="cpf" :placeholder="'CPF'" v-model="cliente.cpfCliente"/>
+                                <CPFInput class="cpf" :placeholder="'CPF'" v-model="cliente.cpfCliente"/>
                                 <span class="input-gap" v-if="!v$_user.cpfCliente.$error"></span>
                                 <span class="field-error" v-for="error in v$_user.cpfCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                             </div>
@@ -20,7 +20,7 @@
                             </div>
                             
                             <div class="phone-wapper">
-                                <BaseInput class="phone"  :placeholder="'Celular'" v-model="cliente.celularCliente"/>
+                                <CellInput class="phone"  :placeholder="'Celular'" v-model="cliente.celularCliente"/>
                                 <span class="input-gap" v-if="!v$_user.celularCliente.$error"></span>
                                 <span class="field-error" v-for="error in v$_user.celularCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                             </div>
@@ -54,6 +54,8 @@
 <script setup>
 import BaseButton from '../components/BaseButton.vue';
 import BaseInput from './BaseInput.vue';
+import CellInput from './CellInput.vue';
+import CPFInput from './CPFInput.vue';
 import {ref,defineEmits} from 'vue';
 import { useToast } from 'vue-toastification';
 import useVuelidate from '@vuelidate/core';
@@ -68,7 +70,7 @@ const cliente = ref({
     emailCliente : '',
     createdAt :''
 });
-const required_msg = 'Esse campo deve ser preenchido';
+const required_msg = "Esse campo deve ser preenchido";
 const userMinLength_msg = "O campo deve ter ao menos 5 caracteres";
 const isCPF_msg = "Insira um CPF válido"
 const isEmail_msg = "Insira um email válido";
@@ -78,7 +80,6 @@ const user_rules = {
     cpfCliente:{
         required: helpers.withMessage(required_msg,required),
         minLength:helpers.withMessage(isCPF_msg,minLength(11)),
-        maxLength:helpers.withMessage(isCPF_msg,maxLength(11))
     },
     nomeCliente : {
         required: helpers.withMessage(required_msg,required),
@@ -87,16 +88,20 @@ const user_rules = {
     celularCliente: {
         required: helpers.withMessage(required_msg,required),
         minLength:helpers.withMessage(isPhone_msg,minLength(11)),
-        maxLength:helpers.withMessage(isPhone_msg,maxLength(11))
+        maxLength:helpers.withMessage(isPhone_msg,maxLength(14))
     },
     emailCliente: {
         required: helpers.withMessage(required_msg,required),
-        minLength:helpers.withMessage(userMinLength_msg,minLength(5)),
         email: helpers.withMessage(isEmail_msg,email)
     },
 }
 
 const v$_user = useVuelidate(user_rules,cliente);
+
+const verifyForm = async () => {
+    await v$_user.value.$validate();
+}
+
 
 const submitSignUpForm = async () => {
     const result =await v$_user.value.$validate();
@@ -138,7 +143,7 @@ let closeCard = () =>{
 }
 
 const onSignUp =()=>{
-   const url_cliente = 'http://localhost:3000/cliente';
+   const url_cliente = 'http://localhost:3000/clientes';
    axios.post(url_cliente,{
         nomeCliente :cliente.value.nomeCliente,
         cpfCliente: cliente.value.cpfCliente,
@@ -148,7 +153,6 @@ const onSignUp =()=>{
     .then(function(response){
         response_msg.value = response.data.message;
         toast.success(response_msg.value);
-        emit('succes_login');
         switchFunction(0);
         resetFields();
         

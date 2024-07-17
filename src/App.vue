@@ -107,7 +107,7 @@
   }
 
   const loadClient = async (codigoCliente) =>{
-        const url_login = 'http://localhost:3000/cliente/'+codigoCliente;
+        const url_login = 'http://localhost:3000/clientes/'+codigoCliente;
         const response_cliente={};
         await axios.get(url_login)
         .then(function(response){
