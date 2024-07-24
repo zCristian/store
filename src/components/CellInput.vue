@@ -77,11 +77,11 @@ const getValueToDisplay = computed(() => {
 .field{
     height: 39px;
     font-size: 16px;
-    border: 2px solid #7F57F1;
+    border: 1px solid #7F57F1;
     border-radius: 10px;
     width: 296px;
     padding: 0px 10px;
-    background-color: #F1EFF8;
+    background-color: rgba(var(--primary--100), 0.3);
     flex-basis: 100%;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <btn :class="[btnclass,isMarked? lighHeart :darkHeart]" @click="isMarked=!isMarked"> <Heart :class="[isMarked? lighHeart:darkHeart]" /></btn>
+    <button :class="[btnclass,isMarked? lighHeart :darkHeart]" @click="isMarked=!isMarked"> <Heart :class="[isMarked? lighHeart:darkHeart]" /></button>
    
     <!--<btn class="bmbutton"><i :class="[isMarked? lighHeart :darkHeart]"> </btn><i class="fa-solid fa-heart"></i>-->
    

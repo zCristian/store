@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      <BaseCarousel :navigation="true" :pagination="true" :start-auto-play="false" class="carousel" v-slot="{currentSlide}">
+      <BaseCarousel :navigation="true" :pagination="true" :start-auto-play="false"  v-slot="{currentSlide}">
           <BaseSlide v-for="(slide,index) in carouselSlides" :key="index">
             <div v-show="currentSlide==index+1" class="slide-info">
               <img :src="require(`../assets/${slide}.svg`)" alt="banner" class="bannerimg">
@@ -17,7 +17,6 @@
         </div>
       </div>
       
-
       <div class="pricerange">
         <h2>Compre por Faixa de Preço</h2>
         <PriceRangeBtn v-for="i in 4" :key="i" :pricerange="+pricerange[i-1]"/>
@@ -81,7 +80,7 @@ import BaseSlide from '@/components/BaseSlide.vue';
   }
   .fretecomp{
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     width: 204px;
     height: 54px;

@@ -1,5 +1,6 @@
 <template>
-    <button :disabled="!isEnabled">
+    <button :disabled="!isEnabled" :class="[isEnabled? 'enabled-btn':'disabled-btn',
+    isDark? 'dark-btn':'light-btn']">
         <slot name="icon">
         </slot>
     </button>
@@ -11,6 +12,10 @@ defineProps({
     isEnabled:{
         type : Boolean,
         default : false
+    },
+    isDark:{
+        type:Boolean,
+        default:true
     }
 });
 
@@ -18,18 +23,47 @@ defineProps({
 
 <style scoped>
 button{
-    color: white;
-    border: none;
-    border-radius: 2px;
-    background-color: #7F57F1;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    cursor: pointer;
+    height: 38px;
+    width: 38px;
+    border-style: none;
 }
 
 a{
 text-decoration: none;
 }
+
+.dark-btn{
+    background-color: rgb(var(--primary--500));
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.22);
+}
+
+.dark-btn:hover{
+    transition: all 0.3s ease-in-out;
+    background-color: rgb(var(--primary--600));
+}
+
+.light-btn{
+    color: #7F57F1;
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+    background: transparent;
+    &:hover{
+        background:rgba(127, 87, 241, 0.2) ;
+    }
+}
+.disabled-btn{
+    opacity: 35%;
+    transition: none;
+    &:hover{
+        background-color: white;
+    }
+}
+
 </style>

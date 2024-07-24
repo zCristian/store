@@ -16,7 +16,7 @@
             <p>{{ address.complemento }}</p>      
         </div>
     </div>
-    <BaseModal :showActionButton="true" :isModalOpen="isModalOpen" @close-modal="handleCloseModal()" @action-modal="handleEditAddress()">
+    <BaseModal :btntext="'Editar Endereço'" :showActionButton="true" :isModalOpen="isModalOpen" @close-modal="handleCloseModal()" @action-modal="handleEditAddress()">
             <template #header>
 
                 <h4>Alterar Endereço</h4>
@@ -24,7 +24,7 @@
             <template #main>
                 <form class="addressform">
                     <BaseInput class="adress-name" :placeholder="'Nome do Endereço'" v-model="address.nomeEndereco"/>
-                    <BaseInput class="zip " :placeholder="'CEP'" v-model="address.cep" :verifyBlur="true" @blur-event="checkCepCard"/>
+                    <BaseInput class="zip" :placeholder="'CEP'" v-model="address.cep" :verifyBlur="true" @blur-event="checkCepCard"/>
                     <BaseInput class="street" :placeholder="'Rua'" v-model="address.nomeRua" />
                     <BaseInput class="number" :placeholder="'Numero'" v-model="address.numeroCasa" :isFieldSmall="true"/>
                     <BaseInput class="complement"  :placeholder="'Complemento'" v-model="address.complemento" :isFieldSmall="true"/>
@@ -175,7 +175,7 @@ hr{
     width: 300px;
 }
 .addressform{
-        margin: 10px 0px;
+        margin: 20px 0px;
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;

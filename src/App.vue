@@ -18,17 +18,14 @@
         </BaseDropDown>
       </div>
     </div>
-
-    <div class="brandsdiv">
+  </nav>
+  <div class="brandsdiv">
       <div class="brandspan">
         <router-link v-for="brand in brands" :key="brand" to="/products"><span >{{brand}}</span></router-link>
         <span class="offers"><BadgePercent/>Ofertas</span>
       </div>
     </div>
-  </nav>
-
   <router-view></router-view>
-
   <BaseModal :isModalOpen="isModalOpen" @close-modal="isModalOpen=false">
     <template #main>
       <SignupLoginCard  class="login-card"  @succes_login="handleSuccesLogin"/>
@@ -147,17 +144,15 @@ a{
   
 }
 .navbar {
-  margin: 30px 0px 0px 0px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items:inherit;
-  color:none;
+  align-items:center;
   background-color: white;
+  height: 60px;
 }
 
 .logodiv{
-  margin: 0px 0px 15px 0px;
   font-weight: bold;
   flex-basis: 10%;
   display: flex;
@@ -172,7 +167,6 @@ p{
 }
 
 .icondiv{
-  margin: 0px 0px 15px 30px;
   display: flex;
   justify-content: flex-end;
   height: 45px;
@@ -203,7 +197,6 @@ p{
 }
 .searchdiv{
   flex-basis: 40%;
-  margin-bottom: 15px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -229,8 +222,7 @@ p{
   font-size: 16px;
 }
 .brandsdiv{
-  width: 1220px;
-  height: 34px;
+  height: 25px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -248,7 +240,7 @@ p{
   height: 34px;
 }
 span{
-  height: 34px;
+  height: 25px;
   display: flex;
   align-items: center;
   flex-basis: 10%;

@@ -142,7 +142,7 @@ h2{
     height: 30px;
     top: -60px;
     justify-content: center;
-    align-items: end;
+    align-items: flex-end;
     gap: 20px;
     width: 1220px;
     flex-shrink: 0;

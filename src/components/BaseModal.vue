@@ -3,18 +3,17 @@
         <Transition name="modal">
             <div class="modal-bg" v-if="isModalOpen">
                 <div class="modal">
-                    <div class="head">
-                            <CircleX @click="closeModal()" class="close-btn"></CircleX>
-                    
-                    </div>
                     <header class="title">
+                        <CircleX @click="closeModal()" class="close-btn"></CircleX>
                         <slot name="header"></slot>
                     </header>
                     <main>
                         <slot name="main"></slot>
                     </main>
-                    
                     <ActionButton v-if="props.showActionButton" :btntext="btntext" @click="actionModal()" @keyup.enter="actionModal"/>
+                    <div class="foot">
+                        <slot name="foot"></slot>
+                    </div>
                 </div>
             </div>
         </Transition>
@@ -26,7 +25,6 @@
     import {defineProps,defineEmits} from 'vue';
     import ActionButton from'./ActionButton.vue'; 
     import { CircleX} from 'lucide-vue-next';
-    const btntext = "Editar";
     const emit = defineEmits(['close-modal','action-modal'])
     const props = defineProps({
         isModalOpen : {
@@ -35,7 +33,11 @@
         },
         showActionButton : {
             Type:Boolean,
-            required:false
+            default: false,
+        },
+        btntext: {
+            Type:[String,Boolean],
+            default: false
         }
     });
 
@@ -66,9 +68,10 @@
     flex-direction: column;
     justify-content: center;
     position: relative;
-    background-color: #F1EFF8;
+    background-color: white;
     padding: 15px 20px;
-    border-radius: 20px;
+    border-radius: 8px;
+    gap: 15px;
     box-shadow: 0px 10px 5px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -76,10 +79,12 @@
 .modal-leave-active{
     transition: all 0.25s ease;
 }
-.head{
-    display: flex;
-    justify-content:flex-end;
-    width: 318px;
+.close-btn{
+    position: absolute;
+    top: 13px;
+    right: 20px;
+    width: 24px;
+    height: 24px;
 }
 .modal-enter-from,
 .modal-leave-to{

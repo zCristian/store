@@ -1,15 +1,11 @@
 <template>
-    <div class="header">
-        <h1>Manager Area</h1>
-    </div>
     <div class="content">
+        <h1>MANAGER AREA</h1>
         <div class="addCategory">
             <h2>Nova Categoria</h2>
             <section class="wrapper-category">
-
-            
-                <BaseInput :label="'Nome da Categoria'" :placeholder="''" v-model="nomeCategoria" :verify-blur="true" @blurEvent="handleBlur"/>
-                <IconButton @click="addCategory" :isEnabled="isButtonEnabled" :class="isButtonEnabled ? 'enabled-btn':'disabled-btn'">
+                <BaseInput @keydown.enter="addCategory" :label="'Nome da Categoria'" :placeholder="''" v-model="nomeCategoria"/>
+                <IconButton :isDark="false" @click="addCategory" :is-enabled="isButtonEnabled">
                     <span v-if="vuelidate.nomeCategoria.$invalid">{{ required_msg }}</span>
                     <template #icon>
                         <BadgePlus class="badge" />
@@ -17,18 +13,28 @@
                 </IconButton>   
             </section>  
         </div>
+        <div class="registered-categories">
+            <h2>Categorias Cadastradas</h2>
+            <BaseAccordion :categories="categories" />
+        </div>
+        <div class="addProduct">
+            <h2>Novo Produto</h2>
+            <ProductRegister/>
+        </div>
     </div>
    
 </template>
 
 <script setup>
-import BaseInput from '@/components/BaseInput.vue'
-import IconButton from '@/components/IconButton.vue'
+import BaseInput from '@/components/BaseInput.vue';
+import IconButton from '@/components/IconButton.vue';
+import ProductRegister from '@/components/ProductRegister.vue';
+import BaseAccordion from '@/components/BaseAccordion.vue';
 import { BadgePlus } from 'lucide-vue-next';
 import { useToast } from 'vue-toastification';
 import useVuelidate from '@vuelidate/core';
 import {required,helpers} from '@vuelidate/validators';
-import {ref,computed} from 'vue';
+import {ref,onBeforeMount,watch,computed} from 'vue';
 
 const toast = useToast();
 const axios = require('axios').default;
@@ -43,7 +49,24 @@ const category_rules = {
 
 const vuelidate = useVuelidate(category_rules, { nomeCategoria });
 
-const isButtonEnabled = computed(() => !vuelidate.value.nomeCategoria.$invalid);
+const isButtonEnabled = computed(()=>!vuelidate.value.nomeCategoria.$invalid);
+console.log(isButtonEnabled.value);
+const categories = ref();
+
+onBeforeMount(()=>{
+    loadCaegories();
+})
+const loadCaegories = ()=>{
+   const url_categories = 'http://localhost:3000/categorias/';
+    axios.get(url_categories).then(function(response){
+        categories.value = response.data.result;
+    })
+    .catch(function(error){
+        if(error.response){
+            categories.value =[];
+        }
+    }); 
+}
 
 const addCategory = () =>{
     const url_category = 'http://localhost:3000/categorias/';
@@ -51,6 +74,7 @@ const addCategory = () =>{
     axios.post(url_category,{nomeCategoria:nomeCategoria.value})
     .then(function(response){
         response_msg.value = response.data.message;
+        categories.value.push({'codigoCategoria':'','nomeCategoria':nomeCategoria.value})
         toast.success(response_msg.value);
 
     })
@@ -61,67 +85,56 @@ const addCategory = () =>{
         }
     })
 }
+
+watch(categories,()=>{
+    loadCaegories();
+})
 </script>
 
 <style scoped>
-.header{
-    display: flex;
-    margin-left: 100px;
+
+h1{
+    font-size: 25px;
+    grid-column-start: second;
+    grid-row-start: first;
+
 }
 h2{
     color: #7F57F1;
 }
 .content{
-    width: 320px;
-    display: flex;
-    margin: 0 100px;
-    justify-content: space-between;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: [first] auto [second] 450px [third] 220px [fourth] 450px [fifth] auto;
+    grid-template-rows: [first]60px [second] 150px [third] 700px;
 }
 .wrapper-category{
     display:flex;
     flex-direction:row;
-    justify-content: start;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-end;
     gap: 0.25rem;
 }
 .addCategory{
-    width: 320px;
+    grid-column-start: second;
+    grid-row-start: second;
+    width: fit-content;
     display: flex;
     flex-direction: column;
 }
-.enabled-btn{
-    margin-top: 20px;
-    height: 44px;
-    aspect-ratio: 1;
-    border-radius: 10px;
-    background: transparent;
 
-    &{
-        color: #7F57F1;
-        transition: all 0.3s ease-in-out;
-        &:hover{
-            background:rgba(127, 87, 241, 0.2) ;
-        }
-    }
-}
-.disabled-btn{
-    margin-top: 20px;
-    height: 44px;
-    aspect-ratio: 1;
-    border-radius: 10px;
-    background: transparent;
-
-    &{
-        color: #d3c6ec;
-        transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out;
-        &:hover{
-            background:rgba(210, 199, 242, 0.2) ;
-        }
-    }
-}
 .badge{
     height: 30px;
     width: 30px;
+}
+.addProduct{
+    grid-row-start: third;
+    grid-column-start: second;
+}
+
+.registered-categories{
+    grid-column-start: fourth;
+    grid-row-start: second;
+    width: fit-content;
 }
 </style>

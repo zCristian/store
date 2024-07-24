@@ -349,11 +349,12 @@
     }
     .manager-div{
         display: flex;
-        justify-content: left;
+        justify-content: flex-start;
+        margin-left: -20px;
         margin-bottom: 20px;
     }
     .manager-btn{
-        margin-left: 65px;
+        margin-left: 87px;
         width: 100px;
     }
     .main{

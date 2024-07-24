@@ -217,6 +217,7 @@ const onLogin = () =>{
 }
 .head-hr{
     width: 320px;
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .card-content{
@@ -270,7 +271,7 @@ h2{
     gap: 5px;
     hr{
         width: 150px;
-        background-color: black;
+        color: rgba(0, 0, 0, 0.5);
         height: 0px;
         margin: 0px;
     }
@@ -299,7 +300,7 @@ h2{
     align-items: center;
     cursor: pointer;
     background-color: #E6E6E6;
-    border: 2px solid #7F57F1;
+    border: 1px solid #7F57F1;
 }
 .selected{
     color: #7F57F1;

@@ -1,92 +1,87 @@
 <template>
-    <div class="input-wrap">
+    <div :class="[label ? 'input-wrap-wlabel': 'input-wrap']">
         <label v-if="label">{{ label }}</label>
         <input :class="[{'sm-field':isFieldSmall},{'field':!isFieldSmall}]" type="text" 
-        :value="getValueToDisplay" :placeholder="placeholder" :disabled="isDisabled"
-        @input="handleInput($event.target.value)" @blur="blurEvent()">
+        :value="modelValue" :placeholder="placeholder" :disabled="isDisabled"
+        @input="handleInput" @blur="handleBlur">
     </div>
 
 </template>
 
 <script setup>
-import { defineProps, defineEmits,ref,computed} from 'vue';
-
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
-    label:{
-        type: [String,Boolean],
+    label: {
+        type: [String, Boolean],
         default: false
     },
-    placeholder:{
-        type:[String,Boolean],
-        default: false
+    placeholder: {
+        type: [String],
+        default: ""
     },
-    modelValue:{
-        type: String,
-        default:""
+    modelValue: {
+        type: [String],
+        default: ""
     },
-    verifyBlur:{
+    verifyBlur: {
         type: Boolean,
         default: false
     },
-    isFieldSmall:{
-        type:Boolean,
-        default:false
+    isFieldSmall: {
+        type: Boolean,
+        default: false
     },
-    isDisabled:{
-        type:Boolean,
-        default:false
+    isDisabled: {
+        type: Boolean,
+        default: false
     }
 });
-const emit = defineEmits(['blur-event','update:modelValue']);
 
-const blurEvent =()=>{
-    if(props.verifyBlur==true){
+const emit = defineEmits(['blur-event', 'update:modelValue']);
+
+const handleBlur = () => {
+    if (props.verifyBlur) {
         emit('blur-event');
     }
-}
-const updatedValue = ref(props.modelValue);
+};
 
-function handleInput(value) {
-        updatedValue.value = value;
-        emit('update:modelValue', value);
-}
+const handleInput = (event) => {
+    emit('update:modelValue', event.target.value);
+};
 
-const getValueToDisplay = computed(() => {
-    return props.modelValue;
-});
 
 </script>
 
 
 <style scoped>
-.cardform{
-    margin: 10px 0px;
+.input-wrap-wlabel{
     display: flex;
-    justify-content: flex-start;
     flex-direction: column;
-    gap: 15px;
+    height: 55.2px;
 }
+.input-wrap{
+    height: 42px;
+}
+
 .field{
-    height: 39px;
     font-size: 16px;
-    border: 2px solid #7F57F1;
+    border: 1px solid #7F57F1;
     border-radius: 10px;
     width: 296px;
     padding: 0px 10px;
-    background-color: #F1EFF8;
+    background-color: rgba(var(--primary--100), 0.3);
+    height: 100%;
     flex-basis: 100%;
 }
 .sm-field{
-        width: 128px;
-        height: 39px;
-        font-size: 16px;
-        border: 2px solid #7F57F1;
-        border-radius: 10px;
-        padding: 0px 10px;
-        background-color: #F1EFF8;
+    width: 128px;
+    height: 39px;
+    font-size: 16px;
+    border: 1px solid #7F57F1;
+    border-radius: 10px;
+    padding: 0px 10px;
+    background-color: rgba(var(--primary--100), 0.3);
 }
-label{
-    margin-right: 10px;
-}
+
 </style>
