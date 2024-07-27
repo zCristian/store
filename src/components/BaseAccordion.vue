@@ -33,7 +33,7 @@
                     <div class="alert-content">
                         <span>Tem certeza? Essa ação não pode ser desfeita</span>
                         <div class="option-wrap">
-                            <BaseButton :is-small="true" :isExclude="true" :btntext="'Excluir'" @click=handleDeleteCategory />
+                            <BaseButton :is-small="true" :isExclude="true" :btntext="'Excluir'" @click=deleteCategory />
                             <BaseButton :is-small="true" :btntext="'Cancelar'"  @click="isDialogOpen=false"/>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
 </div>
 </template>
 <script setup>
-import {defineProps,ref} from 'vue';
+import {defineEmits,defineProps,ref} from 'vue';
 import { ChevronDown,SquarePen } from 'lucide-vue-next';
 import BaseModal from './BaseModal.vue';
 import BaseInput from './BaseInput.vue';
@@ -52,7 +52,8 @@ import BaseButton from './BaseButton.vue';
 import { useToast } from 'vue-toastification';
     
 const toast = useToast();
-const props = defineProps({
+const emit = defineEmits(['delete-category']);
+defineProps({
     categories :{
         type:[Array,Boolean],
         default: false
@@ -99,25 +100,28 @@ const openDialog = ()=>{
     isDialogOpen.value = true;
 }
 
-const handleDeleteCategory = ()=>{
+const deleteCategory = ()=>{
     const url_deletecategory='http://localhost:3000/categorias/'+updatedCategory.value.codigoCategoria;
     axios.delete(url_deletecategory)
     .then(function(response){
         toast.success(response.data.message);
         isDialogOpen.value = false;
+        emit('delete-category');
         handleCloseModal();
+
     })
     .catch(function(error){
         toast.error(error);
         isDialogOpen.value = false;
         handleCloseModal();
     });
+
 }
-console.log(props.categories);
 </script>
 <style scoped>
 
 .accordion-wraper{
+    background-color: white;
     width: 450px;
     display: flex;
     flex-direction: column;
@@ -137,7 +141,7 @@ console.log(props.categories);
     }
 }
 .accordion-itens{
-    border: 1px solid rgb(var(--primary--500));
+    border: 1px solid rgba(var(--primary--500), 0.3);
     padding: 0px 15px;
     cursor: pointer;
     display: flex;
@@ -149,7 +153,7 @@ console.log(props.categories);
 }
 .accordion-itens:last-child{
     border-radius: 0px 0px 8px 8px;
-    box-shadow: 0px 4px 0px rgba(0,0,0,0.22);
+    box-shadow: 0px 2px 3px rgba(0,0,0,0.18);
 }
 .chevron-icon{
     width: 28px;

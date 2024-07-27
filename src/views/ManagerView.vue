@@ -3,7 +3,7 @@
         <h1>MANAGER AREA</h1>
         <div class="addCategory">
             <h2>Nova Categoria</h2>
-            <section class="wrapper-category">
+            <section class="addcategory-wraper">
                 <BaseInput @keydown.enter="addCategory" :label="'Nome da Categoria'" :placeholder="''" v-model="nomeCategoria"/>
                 <IconButton :isDark="false" @click="addCategory" :is-enabled="isButtonEnabled">
                     <span v-if="vuelidate.nomeCategoria.$invalid">{{ required_msg }}</span>
@@ -15,14 +15,13 @@
         </div>
         <div class="registered-categories">
             <h2>Categorias Cadastradas</h2>
-            <BaseAccordion :categories="categories" />
+            <BaseAccordion :categories="categories" @delete-category="handleDeleteCategory" />
         </div>
         <div class="addProduct">
             <h2>Novo Produto</h2>
             <ProductRegister/>
         </div>
-    </div>
-   
+    </div>  
 </template>
 
 <script setup>
@@ -34,7 +33,7 @@ import { BadgePlus } from 'lucide-vue-next';
 import { useToast } from 'vue-toastification';
 import useVuelidate from '@vuelidate/core';
 import {required,helpers} from '@vuelidate/validators';
-import {ref,onBeforeMount,watch,computed} from 'vue';
+import {ref,onBeforeMount,computed,provide} from 'vue';
 
 const toast = useToast();
 const axios = require('axios').default;
@@ -50,13 +49,13 @@ const category_rules = {
 const vuelidate = useVuelidate(category_rules, { nomeCategoria });
 
 const isButtonEnabled = computed(()=>!vuelidate.value.nomeCategoria.$invalid);
-console.log(isButtonEnabled.value);
 const categories = ref();
+provide('allcategories',categories);
 
 onBeforeMount(()=>{
-    loadCaegories();
+    loadCategories();
 })
-const loadCaegories = ()=>{
+const loadCategories = ()=>{
    const url_categories = 'http://localhost:3000/categorias/';
     axios.get(url_categories).then(function(response){
         categories.value = response.data.result;
@@ -74,7 +73,8 @@ const addCategory = () =>{
     axios.post(url_category,{nomeCategoria:nomeCategoria.value})
     .then(function(response){
         response_msg.value = response.data.message;
-        categories.value.push({'codigoCategoria':'','nomeCategoria':nomeCategoria.value})
+        categories.value.push({'codigoCategoria':'','nomeCategoria':nomeCategoria.value});
+        loadCategories();
         toast.success(response_msg.value);
 
     })
@@ -86,9 +86,10 @@ const addCategory = () =>{
     })
 }
 
-watch(categories,()=>{
-    loadCaegories();
-})
+const handleDeleteCategory=()=>{
+    loadCategories();
+}
+
 </script>
 
 <style scoped>
@@ -108,11 +109,18 @@ h2{
     grid-template-columns: [first] auto [second] 450px [third] 220px [fourth] 450px [fifth] auto;
     grid-template-rows: [first]60px [second] 150px [third] 700px;
 }
-.wrapper-category{
+.addcategory-wraper{
+    background-color: white;
+    border-radius: 8px;
+    width: 500px;
+    height: 70px;
+    border: 1px solid rgba(var(--primary--500),0.3);
+    box-shadow: 0px 2px 3px  rgba(0,0,0,0.18);
     display:flex;
     flex-direction:row;
     justify-content: flex-start;
-    align-items: flex-end;
+    align-items:flex-end;
+    padding: 10px 20px;
     gap: 0.25rem;
 }
 .addCategory{

@@ -133,7 +133,6 @@
 
 
 <style scoped>
-
 a{
   display: flex;
   align-items: center;

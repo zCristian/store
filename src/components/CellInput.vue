@@ -77,8 +77,8 @@ const getValueToDisplay = computed(() => {
 .field{
     height: 39px;
     font-size: 16px;
-    border: 1px solid #7F57F1;
-    border-radius: 10px;
+    border: 1px solid rgba(var(--primary--500), 0.5);
+    border-radius: 8px;
     width: 296px;
     padding: 0px 10px;
     background-color: rgba(var(--primary--100), 0.3);
