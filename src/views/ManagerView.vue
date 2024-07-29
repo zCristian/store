@@ -86,6 +86,7 @@ const addCategory = () =>{
     })
 }
 
+
 const handleDeleteCategory=()=>{
     loadCategories();
 }

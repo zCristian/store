@@ -64,9 +64,9 @@ import { defineProps} from 'vue';
     transition: all 0.3s ease-in-out;
     box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
     color: white;
-    background-color: hsl(0, 90%, 44%);
+    background-color: hsl(11, 85%, 43%);
     &:hover{
-        background-color: hsl(0, 92%, 38%);
+        background-color: hsl(11, 87%, 38%);
     }
 }
 .normal-btn{

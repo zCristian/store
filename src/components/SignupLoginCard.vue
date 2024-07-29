@@ -7,37 +7,43 @@
                 <hr class="head-hr">
                 <div class="card-content">
                     <h2>Bem vindo a Celulou</h2>
-                        <form v-if="isSignUp" class="register-form cardform" @click="verifyForm">
+                        <form v-if="isSignUp" class="register-form cardform">
                             <div class="cpf-wrapper">
-                                <CPFInput class="cpf" :placeholder="'CPF'" v-model="cliente.cpfCliente"/>
+                                <CPFInput class="cpf" :placeholder="'CPF'" v-model="cliente.cpfCliente" :verify-blur="true"
+                                @blur-event="v$_user.cpfCliente.$touch"/>
                                 <span class="input-gap" v-if="!v$_user.cpfCliente.$error"></span>
                                 <span class="field-error" v-for="error in v$_user.cpfCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                             </div>
                             <div class="name-wrapper">
-                                <BaseInput class="name" :placeholder="'Nome'" v-model="cliente.nomeCliente"/>
+                                <BaseInput class="name" :placeholder="'Nome'" v-model="cliente.nomeCliente" :verify-blur="true"
+                                @blur-event="v$_user.nomeCliente.$touch"/>
                                 <span class="input-gap" v-if="!v$_user.nomeCliente.$error"></span>
                                 <span class="field-error" v-for="error in v$_user.nomeCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                             </div>
                             
                             <div class="phone-wapper">
-                                <CellInput class="phone"  :placeholder="'Celular'" v-model="cliente.celularCliente"/>
+                                <CellInput class="phone"  :placeholder="'Celular'" v-model="cliente.celularCliente" :verify-blur="true"
+                                @blur-event="v$_user.celularCliente.$touch"/>
                                 <span class="input-gap" v-if="!v$_user.celularCliente.$error"></span>
                                 <span class="field-error" v-for="error in v$_user.celularCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                             </div>
                             
                             <div class="email-wrapper">
-                                <BaseInput class="email" :placeholder="'E-mail'" v-model="cliente.emailCliente"/>
+                                <BaseInput class="email" :placeholder="'E-mail'" v-model="cliente.emailCliente" :verify-blur="true"
+                                @blur-event="v$_user.emailCliente.$touch"/>
                                 <span class="input-gap" v-if="!v$_user.emailCliente.$error"></span>
                                 <span class="field-error" v-for="error in v$_user.emailCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                             </div>
                            
                             <BaseInput v-if="false" class="password"  :placeholder="'Senha'"/>
-                            <ActionButton :btntext="btntext" @click="submitSignUpForm" @keyup.enter="submitSignUpForm" />
+                            <ActionButton :btntext="btntext" @click.prevent="submitSignUpForm" @keyup.enter="submitSignUpForm"/>
                        
                         </form>
                         <form v-if="!isSignUp" class="login-form cardform" @submit.prevent="onLogin()">
-                            <BaseInput class="email" :placeholder="'E-mail'" v-model="cliente.emailCliente"/>
-                            <BaseButton :btntext="btntext" @click="onLogin()" @keyup.enter="onLogin()" />
+                            <BaseInput class="email" :placeholder="'E-mail'" v-model="cliente.emailCliente" :verify-blur="true"
+                            @blur-event="v$_user.emailCliente.$touch"/>
+                            <span class="field-error" v-for="error in v$_user.emailCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
+                            <BaseButton :btntext="btntext" @click.prevent="onLogin()" @keyup.enter="onLogin()" />
                         </form>
                 </div>
                 <div class="separation">
@@ -97,10 +103,6 @@ const user_rules = {
 }
 
 const v$_user = useVuelidate(user_rules,cliente);
-
-const verifyForm = async () => {
-    await v$_user.value.$validate();
-}
 
 
 const submitSignUpForm = async () => {
@@ -242,7 +244,7 @@ const onLogin = () =>{
     padding-left: 7px;
     height: 13px;
     font-size: 13px;
-    color: red;
+    color: hsl(12, 85%, 43%);
     display: inline-block;
     font-weight: 400;
 }

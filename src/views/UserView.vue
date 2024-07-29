@@ -13,21 +13,24 @@
         
             <form class="clientform">
                 <div class="name-wrapper inputdiv">
-                    <BaseInput class="name" :placeholder="'Nome'" v-model="cliente.nomeCliente" :isDisabled="!isEditUserOn"/>
+                    <BaseInput class="name" :placeholder="'Nome'" v-model="cliente.nomeCliente" 
+                    :isDisabled="!isEditUserOn" :verify-blur="true" @blur-event="v$_user.nomeCliente.$touch"/>
                     <span class="input-gap" v-if="!v$_user.nomeCliente.$error"></span>
              <span class="field-error" v-for="error in v$_user.nomeCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                 </div>
                 <div class="phone-wrapper inputdiv">
-                    <CellInput class="phone" v-model="cliente.celularCliente" :isDisabled="!isEditUserOn"/>
+                    <CellInput class="phone" v-model="cliente.celularCliente" :isDisabled="!isEditUserOn" 
+                    :verify-blur="true" @blur-event="v$_user.celularCliente.$touch"/>
                     <span class="input-gap" v-if="!v$_user.celularCliente.$error"></span>
                     <span class="field-error" v-for="error in v$_user.celularCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                 </div>
                 <div class="email-wrapper inputdiv">
-                    <BaseInput class="email"  :placeholder="'E-mail'" v-model="cliente.emailCliente" :isDisabled="!isEditUserOn"/>
+                    <BaseInput class="email"  :placeholder="'E-mail'" v-model="cliente.emailCliente" :isDisabled="!isEditUserOn"
+                    :verify-blur="true" @blur-event="v$_user.emailCliente.$touch"/>
                     <span class="input-gap" v-if="!v$_user.emailCliente.$error"></span>
                     <span class="field-error" v-for="error in v$_user.emailCliente.$errors" :key="error.$uid">{{ error.$message }}</span>
                 </div>
-                <ActionButton v-if="isEditUserOn" :btntext="btntext" @click="submitUserForm()"/>
+                <ActionButton v-if="isEditUserOn" :btntext="btntext" @click.prevent="submitUserForm()"/>
             </form>
         </div>
         <div class="address container">
@@ -38,25 +41,27 @@
             <form class="addressform">
             
             <div class="address-name-wrapper inputdiv">
-             <BaseInput class="address-name" :placeholder="'Nome do Endereço'" v-model="address.nomeEndereco" :verify-blur="true" />
+             <BaseInput class="address-name" :placeholder="'Nome do Endereço'" v-model="address.nomeEndereco" :verify-blur="true"
+              @blur-event="v$_address.nomeEndereco.$touch" />
              <span class="input-gap" v-if="!v$_address.nomeEndereco.$error"></span>
              <span class="field-error" v-for="error in v$_address.nomeEndereco.$errors" :key="error.$uid">{{ error.$message }}</span>
             </div>
 
             <div class="zip-wrapper inputdiv">
-             <BaseInput class="zip" :placeholder="'CEP'"  v-model="address.cep" :verify-blur="true" @blur-event="handleBlur"/>
+             <BaseInput class="zip" :placeholder="'CEP'"  v-model="address.cep" :verify-blur="true" @blur-event="v$_address.cep.$touch();handleBlur()"/>
              <span class="input-gap" v-if="!v$_address.cep.$error"></span>
              <span class="field-error" v-for="error in v$_address.cep.$errors" :key="error.$uid">{{ error.$message }}</span>
             </div>
 
             <div class="street-wrapper inputdiv">
-             <BaseInput class="street" :placeholder="'Rua'" v-model="address.nomeRua"/>
+             <BaseInput class="street" :placeholder="'Rua'" v-model="address.nomeRua" :verify-blur="true" @blur-event="v$_address.nomeRua.$touch"/>
              <span class="input-gap" v-if="!v$_address.nomeRua.$error"></span>
              <span class="field-error" v-for="error in v$_address.nomeRua.$errors" :key="error.$uid">{{ error.$message }}</span>
             </div>
 
             <div class="sm-fields-wrapper">
-                <BaseInput class="number " :placeholder="'Numero'" v-model="address.numeroCasa" :isFieldSmall="true"/>
+                <BaseInput class="number " :placeholder="'Numero'" v-model="address.numeroCasa" 
+                :isFieldSmall="true" :verify-blur="true" @blur-event="v$_address.numeroCasa.$touch"/>
                 <BaseInput class="complement " :placeholder="'Complemento'" v-model="address.complemento" :isFieldSmall="true"/>
              
                 <span class="input-gap" v-if="!v$_address.numeroCasa.$error"></span>
@@ -65,19 +70,22 @@
              
 
             <div class="neighbourhood-wrapper inputdiv">
-             <BaseInput class="neighborhood"  :placeholder="'Bairro'" v-model="address.bairro"/>
+             <BaseInput class="neighborhood"  :placeholder="'Bairro'" v-model="address.bairro" :verify-blur="true"
+             @blur-event="v$_address.bairro.$touch"/>
              <span class="input-gap" v-if="!v$_address.bairro.$error"></span>
              <span class="field-error" v-for="error in v$_address.bairro.$errors" :key="error.$uid">{{ error.$message }}</span>
             </div>
 
             <div class="city-wrapper inputdiv">
-             <BaseInput class="city" :placeholder="'Cidade'" v-model="address.cidade" :isDisabled="true"/>
+             <BaseInput class="city" :placeholder="'Cidade'" v-model="address.cidade" :isDisabled="true" :verify-blur="true"
+             @blur-event="v$_address.cidade.$touch"/>
              <span class="input-gap" v-if="!v$_address.cidade.$error"></span>
              <span class="field-error" v-for="error in v$_address.cidade.$errors" :key="error.$uid">{{ error.$message }}</span>
             </div>
 
             <div class="state-wrapper inputdiv">
-             <BaseInput class="state" :placeholder="'Estado'" v-model="address.estado" :isFieldSmall="true" :isDisabled="true"/>
+             <BaseInput class="state" :placeholder="'Estado'" v-model="address.estado" :isFieldSmall="true" :isDisabled="true"
+             :verify-blur="true" @blur-event="v$_address.estado.$touch"/>
              <span class="input-gap" v-if="!v$_address.estado.$error"></span>
              <span class="field-error" v-for="error in v$_address.estado.$errors" :key="error.$uid">{{error.$message }}</span>
             </div>
@@ -159,9 +167,6 @@
     }
 
     const v$_address = useVuelidate(address_rules,address);
-    const validateAddressForm = async () => {
-        await v$_address.value.$validate();
-    }
     const submitAddressForm = async ()=>{
         const result =await v$_address.value.$validate();
         if(result){
@@ -207,7 +212,6 @@
 
     const handleBlur = ()=>{
         checkCep();
-        validateAddressForm();
     }
 
     const loadClient = () =>{
@@ -421,7 +425,7 @@
         padding-left: 7px;
         height: 20px;
         font-size: 13px;
-        color: red;
+        color: hsl(12, 85%, 43%);
         display: inline-block;
     }
     .card-container{

@@ -1,7 +1,9 @@
 <template>
 <div class="accordion-wraper">
-    <div class="accordion-itens" v-for="category in categories" :key="category.codigoCategoria">
-        <div @mouseover="handleCategoryHover(category.codigoCategoria)" @mouseleave="hoveredCategory=null" class="title-edit-div">
+    <div class="accordion-itens" v-for="category in categories" :key="category.codigoCategoria" 
+    @click="dropItens(category.codigoCategoria)">
+        <div @mouseover="handleCategoryHover(category.codigoCategoria)" @mouseleave="hoveredCategory=null" 
+        class="title-edit-div" >
            <h3>{{ category.nomeCategoria}}</h3> 
             <SquarePen v-if="category.codigoCategoria===hoveredCategory" class="squarepen-icon" @click="editCategoryModal(category)"/> 
         </div>
@@ -116,6 +118,10 @@ const deleteCategory = ()=>{
         handleCloseModal();
     });
 
+}
+
+const dropItens = (codigoCategoria) =>{
+    console.log(codigoCategoria);
 }
 </script>
 <style scoped>

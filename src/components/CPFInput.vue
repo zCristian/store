@@ -2,7 +2,7 @@
     <div class="input-wrap">
         <label v-if="label">{{ label }}</label>
         <input class="field" type="text" 
-        :value="getValueToDisplay" :placeholder="placeholder" :disabled="isDisabled"
+        :value="getValueToDisplay" :placeholder="placeholder" :disabled="isDisabled" @blur="handleBlur"
         @input="handleInput($event.target.value)">
     </div>
 
@@ -26,6 +26,10 @@ const props = defineProps({
         default:""
     },
     isDisabled:{
+        type:Boolean,
+        default:false
+    },
+    verifyBlur:{
         type:Boolean,
         default:false
     }
@@ -57,7 +61,11 @@ const getValueToDisplay = computed(() => {
     return formattedValue.value;
 });
 
-
+const handleBlur = () => {
+    if (props.verifyBlur) {
+        emit('blur-event');
+    }
+};
 </script>
 
 

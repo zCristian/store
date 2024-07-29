@@ -1,7 +1,7 @@
 <template>
     <div class="input-wrap">
         <input class="field" type="text" 
-        :value="getValueToDisplay" placeholder="Celular" :disabled="isDisabled"
+        :value="getValueToDisplay" placeholder="Celular" :disabled="isDisabled" @blur="handleBlur"
         @input="handleInput($event.target.value)">
     </div>
 
@@ -23,9 +23,13 @@ const props = defineProps({
     isDisabled:{
         type:Boolean,
         default:false
+    },
+    verifyBlur:{
+        type:Boolean,
+        default:false
     }
 });
-const emit = defineEmits('update:modelValue');
+const emit = defineEmits(['update:modelValue','blur-event']);
 const formattedValue = ref(props.modelValue);
 
 function handleInput(value) {
@@ -62,7 +66,11 @@ const getValueToDisplay = computed(() => {
     return formattedValue.value;
 });
 
-
+const handleBlur = () => {
+    if (props.verifyBlur) {
+        emit('blur-event');
+    }
+};
 </script>
 
 
