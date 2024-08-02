@@ -1,13 +1,16 @@
 <template>
 <div class="accordion-wraper">
     <div class="accordion-itens" v-for="category in categories" :key="category.codigoCategoria" 
-    @click="dropItens(category.codigoCategoria)">
-        <div @mouseover="handleCategoryHover(category.codigoCategoria)" @mouseleave="hoveredCategory=null" 
-        class="title-edit-div" >
-           <h3>{{ category.nomeCategoria}}</h3> 
-            <SquarePen v-if="category.codigoCategoria===hoveredCategory" class="squarepen-icon" @click="editCategoryModal(category)"/> 
+    @click="showTable(category.codigoCategoria)">
+        <div class="iten-wraper"> 
+            <div @mouseover="handleCategoryHover(category.codigoCategoria)" @mouseleave="hoveredCategory=null" 
+            class="title-edit-div" >
+            <h3>{{ category.nomeCategoria}}</h3> 
+                <SquarePen v-if="category.codigoCategoria===hoveredCategory" class="squarepen-icon" @click="editCategoryModal(category)"/> 
+            </div>
+            <ChevronDown class="chevron-icon"/>
         </div>
-        <ChevronDown class="chevron-icon"/>
+        <ProductTable v-if="isTableExhibitted(category.codigoCategoria)" :codigo-categoria="[category.codigoCategoria]" :table-size="5"></ProductTable>
     </div>
 </div>
 <div class="editcategory-modal">
@@ -51,6 +54,7 @@ import { ChevronDown,SquarePen } from 'lucide-vue-next';
 import BaseModal from './BaseModal.vue';
 import BaseInput from './BaseInput.vue';
 import BaseButton from './BaseButton.vue';
+import ProductTable from './ProductTable.vue'
 import { useToast } from 'vue-toastification';
     
 const toast = useToast();
@@ -65,6 +69,8 @@ const isModalOpen = ref(false);
 const isDialogOpen = ref(false);
 const succesMessage = ref(false);
 const errorMessage = ref(false);
+const exhibitedTable = ref([]);
+
 const responseText = ref('');
 const updatedCategory = ref({
     codigoCategoria:'',
@@ -120,8 +126,19 @@ const deleteCategory = ()=>{
 
 }
 
-const dropItens = (codigoCategoria) =>{
-    console.log(codigoCategoria);
+const isTableExhibitted = (codigoCategoria)=>{
+    if(exhibitedTable.value.includes(codigoCategoria)){
+        return true;
+    }else{
+        return false;
+    }
+}
+const showTable= (codigoCategoria) =>{
+    if(exhibitedTable.value.includes(codigoCategoria)){
+        exhibitedTable.value=exhibitedTable.value.filter(item=>item !==codigoCategoria);
+    }else{
+        exhibitedTable.value.push(codigoCategoria);
+    }
 }
 </script>
 <style scoped>
@@ -150,9 +167,7 @@ const dropItens = (codigoCategoria) =>{
     border: 1px solid rgba(var(--primary--500), 0.3);
     padding: 0px 15px;
     cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center
+    
 }
 .accordion-itens:first-child{
     border-radius: 8px 8px 0px 0px;
@@ -160,6 +175,18 @@ const dropItens = (codigoCategoria) =>{
 .accordion-itens:last-child{
     border-radius: 0px 0px 8px 8px;
     box-shadow: 0px 2px 3px rgba(0,0,0,0.18);
+}
+.iten-wraper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drop-div{
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 .chevron-icon{
     width: 28px;

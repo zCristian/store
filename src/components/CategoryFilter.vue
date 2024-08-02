@@ -56,7 +56,7 @@ const isSelected =(category)=>{
 .filter-head{
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
 }
 .filter-content{
