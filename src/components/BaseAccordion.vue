@@ -1,17 +1,22 @@
 <template>
 <div class="accordion-wraper">
-    <div class="accordion-itens" v-for="category in categories" :key="category.codigoCategoria" 
-    @click="showTable(category.codigoCategoria)">
-        <div class="iten-wraper"> 
-            <div @mouseover="handleCategoryHover(category.codigoCategoria)" @mouseleave="hoveredCategory=null" 
-            class="title-edit-div" >
-            <h3>{{ category.nomeCategoria}}</h3> 
-                <SquarePen v-if="category.codigoCategoria===hoveredCategory" class="squarepen-icon" @click="editCategoryModal(category)"/> 
+    <TransitionGroup name="card-slide">
+        <div class="accordion-itens" v-for="category in categories" :key="category.codigoCategoria" 
+        @click="showTable(category.codigoCategoria)">
+            <div class="iten-wraper"> 
+                <div @mouseover="handleCategoryHover(category.codigoCategoria)" @mouseleave="hoveredCategory=null" 
+                class="title-edit-div" >
+                <h3>{{ category.nomeCategoria}}</h3> 
+                    <SquarePen v-if="category.codigoCategoria===hoveredCategory" class="squarepen-icon" @click="editCategoryModal(category)"/> 
+                </div>
+                <ChevronDown class="chevron-icon"/>
             </div>
-            <ChevronDown class="chevron-icon"/>
+            <TransitionGroup name="table-drop">
+                <ProductTable v-if="isTableExhibitted(category.codigoCategoria)" 
+                :codigo-categoria="[category.codigoCategoria]" :table-size="5"/>
+            </TransitionGroup>
         </div>
-        <ProductTable v-if="isTableExhibitted(category.codigoCategoria)" :codigo-categoria="[category.codigoCategoria]" :table-size="5"></ProductTable>
-    </div>
+    </TransitionGroup>
 </div>
 <div class="editcategory-modal">
     <BaseModal :btntext="'Editar'" :showActionButton="true" :isModalOpen="isModalOpen" 
@@ -229,6 +234,35 @@ hr{
         display: flex;
         justify-content: space-between;
     }
+}
+
+.card-slide-enter-active{
+  transition: all 0.3s ease-out;
+}
+.card-slide-leave-active{
+    transition: all 0.4s cubic-bezier(1,0.5,0.8,1);
+}
+.card-slide-enter-from{
+    opacity: 0;
+    transform: translate(-20px);
+}
+
+.card-slide-leave-to {
+  opacity: 0;
+  transform:translate(20px);
+}
+
+.table-drop-enter-active{
+    transition: all 0.3s ease-in-out;
+}
+.table-drop-leave-active{
+    transition: all 0.3s ease-in-out;
+    transform: translateY(-15px);
+    opacity: 0;
+}
+.table-drop-enter-from{
+    transform: translateY(-15px);
+    opacity: 0;
 }
 
 </style>

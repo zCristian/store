@@ -63,9 +63,6 @@ text-decoration: none;
     opacity: 35%;
     transition: none;
     box-shadow: none;
-    &:hover{
-        background-color: white;
-    }
 }
 
 </style>

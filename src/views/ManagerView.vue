@@ -4,13 +4,16 @@
         <div class="addCategory">
             <h2>Nova Categoria</h2>
             <section class="addcategory-wraper">
-                <BaseInput @keydown.enter="addCategory" :label="'Nome da Categoria'" :placeholder="''" v-model="nomeCategoria"/>
-                <IconButton :isDark="false" @click="addCategory" :is-enabled="isButtonEnabled">
-                    <span v-if="vuelidate.nomeCategoria.$invalid">{{ required_msg }}</span>
-                    <template #icon>
-                        <BadgePlus class="badge" />
-                    </template>
-                </IconButton>   
+                <div class="categoryinput-wraper">
+                   <BaseInput  @keydown.enter="addCategory" :label="'Nome da Categoria'" v-model="nomeCategoria"/>
+                    <IconButton :isDark="true" @click="addCategory" :is-enabled="isButtonEnabled" >
+                        <span v-if="vuelidate.nomeCategoria.$invalid">{{ required_msg }}</span>
+                        <template #icon>
+                            <BadgePlus class="badge" />
+                        </template>
+                    </IconButton>   
+                </div>
+                <span v-if="showRegisterErrorMessage" class="error-span">{{ response_msg }}</span> 
             </section>  
         </div>
         <div class="registered-categories">
@@ -38,8 +41,8 @@ import {ref,onBeforeMount,computed,provide} from 'vue';
 const toast = useToast();
 const axios = require('axios').default;
 const nomeCategoria = ref('');
+const response_msg = ref('');
 const required_msg = 'Esse campo deve ser preenchido';
-
 const category_rules = {
   nomeCategoria: {
     required: helpers.withMessage(required_msg, required)
@@ -69,27 +72,28 @@ const loadCategories = ()=>{
 
 const addCategory = () =>{
     const url_category = 'http://localhost:3000/categorias/';
-    const response_msg = ref('');
     axios.post(url_category,{nomeCategoria:nomeCategoria.value})
     .then(function(response){
         response_msg.value = response.data.message;
-        categories.value.push({'codigoCategoria':'','nomeCategoria':nomeCategoria.value});
         loadCategories();
         toast.success(response_msg.value);
-
+        response_msg.value = '';
     })
     .catch(function(error){
         if(error.response){
             response_msg.value = error.response.data.error;
-            toast.error(response_msg.value);
         }
     })
 }
 
+const showRegisterErrorMessage = ()=>{
+    return true
+}
 
 const handleDeleteCategory=()=>{
     loadCategories();
 }
+
 
 </script>
 
@@ -118,10 +122,15 @@ h2{
     border: 1px solid rgba(var(--primary--500),0.3);
     box-shadow: 0px 2px 3px  rgba(0,0,0,0.18);
     display:flex;
-    flex-direction:row;
-    justify-content: flex-start;
-    align-items:flex-end;
+    flex-direction:column;
     padding: 10px 20px;
+    gap: 3px;
+}
+.categoryinput-wraper{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
     gap: 0.25rem;
 }
 .addCategory{
@@ -145,5 +154,10 @@ h2{
     grid-column-start: fourth;
     grid-row-start: second;
     width: fit-content;
+}
+.error-span{
+    font-size: 12px;
+    color: hsl(12, 85%, 43%);
+    margin: 0px;
 }
 </style>
