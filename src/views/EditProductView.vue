@@ -221,14 +221,21 @@ const selectedImage = ()=>{
 const createFormData = () =>{
     const formData = new FormData();
     dropZoneImages.value.forEach((image,index)=>{
-        formData.append(`image_${index}`, image);
+        formData.append(`foto-${index+1}`, image);
     });
     uploadImages(formData);
 }
 
-const uploadImages = () =>{
+const uploadImages = (formData) =>{
     const uploadimages_url = 'http://localhost:3000/produtos/'+product.value.codigoProduto+'/upload';
-    axios.post(uploadimages_url)
+    console.log(formData);
+    axios.post(uploadimages_url,formData,{
+        headers:{
+            "Content-Type": 'multipart/form-data'
+        }
+    }).then(function(response){
+        console.log(response.data.message);
+    });
 }
 
 const handleSelectCategory = (category)=>{
