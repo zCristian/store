@@ -13,11 +13,12 @@
 </template>
 <script setup>
 
-import { ref,inject,defineProps,defineEmits} from 'vue';
+import { ref,defineProps,defineEmits, onBeforeMount} from 'vue';
 import BaseSearchBar from '@/components/BaseSearchBar.vue';
-const categories = inject('allcategories');
+const categories = ref([]);
 const emit = defineEmits(['select-category','unselect-category']);
 const selectedCategories = ref([])
+const axios = require('axios').default;
 const props = defineProps({
     productCategories:{
         type:Array,
@@ -43,6 +44,18 @@ const handleExhibitedCategories = (exhibitedCategories)=>{
 const isSelected =(category)=>{
     return props.productCategories.some((productCategory)=>productCategory.codigoCategoria===category.codigoCategoria);
 }
+
+onBeforeMount(()=>{
+   loadCategories(); 
+});
+
+const loadCategories = (()=>{
+  const loadcategories_url = 'http://localhost:3000/categorias';
+    axios.get(loadcategories_url).then(function(response){
+        categories.value = response.data.result;
+    })  
+})
+
 </script>
 
 <style scoped>

@@ -71,8 +71,7 @@ const handleInput = (event) => {
     width: 296px;
     padding: 0px 10px;
     background-color: rgba(var(--primary--100), 0.3);
-    height: 100%;
-    flex-basis: 100%;
+    height: 39px;
 }
 .sm-field{
     width: 128px;

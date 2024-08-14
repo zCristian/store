@@ -131,7 +131,7 @@ h2{
     flex-direction: row;
     align-items: flex-end;
     justify-content: flex-start;
-    gap: 0.25rem;
+    gap: 5px;
 }
 .addCategory{
     grid-column-start: second;

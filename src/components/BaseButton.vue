@@ -2,7 +2,11 @@
     <div >
         <router-link :to="btnsrc" v-slot="navigate">
             <button @click="navigate" 
-            :class="[isExclude?'exclude-btn':'default-btn',isSmall?'small-btn':'normal-btn']">
+            :class="[isLight?'light-btn':'dark-btn',{'exclude-btn':isExclude},
+            isSmall?'small-btn':'normal-btn']">
+                <slot name="icon">
+
+                </slot>
                 {{btntext}}
             </button>
         </router-link>
@@ -27,28 +31,49 @@ import { defineProps} from 'vue';
         isExclude:{
             type:Boolean,
             default:false
+        },
+        isLight:{
+            type:Boolean,
+            default:false
         }
     });
    
 </script>
 
 <style scoped>
-.default-btn{
+.dark-btn{
     border: none;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 8px 16px;
-    font-size: 18px;
     height: 42px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     color: white;
-    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.22);
     background-color: rgb(var(--primary--500));
     &:hover{
-        background-color: rgb(var(--primary--600));
+        background-color: rgba(var(--primary--600));
+    }
+}
+.light-btn{
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    height: 42px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    color: rgba(var(--primary--black),0.8);
+    font-weight: 400;
+    border: 1px solid rgba(var(--primary--500),0.25);
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.18);
+    background-color: white;
+    &:hover{
+        background-color: rgba(var(--primary--100),0.5);
     }
 }
 .exclude-btn{
@@ -70,11 +95,13 @@ import { defineProps} from 'vue';
     }
 }
 .normal-btn{
-
+    font-size: 20px;
     width: 320px;
  }
  .small-btn{
-    width: 150px;
+    font-size: 20px;
+    gap: 10px;
+    width: 140px;
  }
  a{
     text-decoration: none;

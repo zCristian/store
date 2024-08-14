@@ -6,6 +6,7 @@ import CartView from '@/views/CartView.vue'
 import UserView from '@/views/UserView.vue'
 import ProductsView from '@/views/ProductsView.vue'
 import ProductPageView from '@/views/ProductPageView.vue'
+import EditProductView from '@/views/EditProductView.vue'
 import FavoritesView from '@/views/FavoritesView.vue'
 import ManagerView from '@/views/ManagerView.vue'
 const routes = [
@@ -45,9 +46,14 @@ const routes = [
     component: ProductsView
   },
   {
-    path: '/productpage',
+    path: '/productpage/:productid',
     name: 'productpage',
     component: ProductPageView
+  },
+  {
+    path: '/editproduct/:productid',
+    name: 'editproduct',
+    component: EditProductView
   },
   {
     path: '/favorites',

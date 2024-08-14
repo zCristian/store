@@ -2,7 +2,7 @@
     <div class="head">  
     </div>
     <div class="manager-div">
-            <BaseButton :btnsrc="'manager'" :btntext="'Manager'" class="manager-btn" />
+            <BaseButton :btnsrc="'manager'" :btntext="'Manager'" class="manager-btn" :is-small="true"/>
     </div>
     <div class="main">
         <div class="client container">

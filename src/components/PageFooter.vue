@@ -110,7 +110,7 @@ p{
 }
 .copyright{
     margin-top: 20px;
-    background-color: #f3f3f3;
+    background-color: rgb(var(--primary--100));
     margin-bottom: 0px;
     text-align: center;
     padding: 5px 5px 5px 0px;

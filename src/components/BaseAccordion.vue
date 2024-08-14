@@ -1,9 +1,8 @@
 <template>
 <div class="accordion-wraper">
     <TransitionGroup name="card-slide">
-        <div class="accordion-itens" v-for="category in categories" :key="category.codigoCategoria" 
-        @click="showTable(category.codigoCategoria)">
-            <div class="iten-wraper"> 
+        <div class="accordion-itens" v-for="category in categories" :key="category.codigoCategoria">
+            <div class="iten-wraper" @click="showTable(category.codigoCategoria)"> 
                 <div @mouseover="handleCategoryHover(category.codigoCategoria)" @mouseleave="hoveredCategory=null" 
                 class="title-edit-div" >
                 <h3>{{ category.nomeCategoria}}</h3> 
@@ -171,7 +170,6 @@ const showTable= (codigoCategoria) =>{
 .accordion-itens{
     border: 1px solid rgba(var(--primary--500), 0.3);
     padding: 0px 15px;
-    cursor: pointer;
     
 }
 .accordion-itens:first-child{
@@ -185,6 +183,7 @@ const showTable= (codigoCategoria) =>{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
 }
 
 .drop-div{

@@ -70,6 +70,7 @@
                 </IconButton>
             </div>
         </div>
+        <span v-if="register_message" :class="[isErrorMsg?'error-span':'succes-span','register-msg']">{{ register_message }}</span>
     </div>
 
 </template>
@@ -87,7 +88,8 @@ import {required,helpers,decimal,integer} from '@vuelidate/validators';
 
 const idTab = ref(0);
 const axios = require('axios').default;
-
+const register_message=ref(null);
+const isErrorMsg = ref(false);
 const product = ref({
     valor :"",
     nomeProduto: "",
@@ -175,10 +177,12 @@ const addProduct = () =>{
        quantidadeEstoque: product.value.initialStock
     })
     .then(function(response){
-        console.log(response.data.message);
+        register_message.value = response.data.message;
+        isErrorMsg.value = false;
     })
     .catch(function (error) {
-        console.log(error);
+        register_message.value = error.response.data;
+        isErrorMsg.value =true;
     })
 }
 
@@ -311,8 +315,16 @@ const handleUnselectCategory = (category)=>{
 }
 .error-span{
     font-size: 12px;
-    color: hsl(12, 85%, 43%);
+    color: rgba(var(--primary--red),0.8);
     margin: 0px;
+}
+.succes-span{
+    font-size: 12px;
+    margin: 0px;
+    color: rgb(var(--primary--green));
+}
+.register-message{
+    padding: 0px 20px;
 }
 </style>
 
