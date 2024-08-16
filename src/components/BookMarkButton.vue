@@ -1,42 +1,51 @@
 <template>
-    <button :class="[btnclass,isMarked? lighHeart :darkHeart]" @click="isMarked=!isMarked"> <Heart :class="[isMarked? lighHeart:darkHeart]" /></button>
-   
-    <!--<btn class="bmbutton"><i :class="[isMarked? lighHeart :darkHeart]"> </btn><i class="fa-solid fa-heart"></i>-->
-   
+    <div class="bookmark-wrap">
+        <button :class="['bookmark-btn',isMarked? 'dark-btn' :'light-btn']" 
+        @click="isMarked=!isMarked"> <Heart :stroke-width="1" 
+        :class="[isMarked? 'dark-heart':'light-heart']" /></button>    
+    </div>   
 </template>
 
 <script setup >
     import {ref} from 'vue';
     import {Heart } from 'lucide-vue-next';
-
-    const btnclass= 'bmbutton';
     const isMarked = ref(false);
-    const lighHeart = 'darkheart';
-    const darkHeart = 'lightheart';
-
-   
-
-   
 </script>
 
 <style scoped>
-    .bmbutton{
-        color: #E2D9FB;
+    .bookmark-wrap{
         display: flex;
-        border-radius: 100%;
-        border:2px solid #E2D9FB;
-        align-items: center;
         justify-content: center;
-        padding: 2px 2px 0px 2px;
-        margin-left: 5px;
+        align-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 100%;
+        :hover{
+            transition: all ease-in-out 0.3s;
+            background-color: rgb(var(--primary--100));
+        }
     }
-    .darkheart{
-        color:#7F57F1;
-        fill: #7F57F1;
-        border-color: #7F57F1;
+    .bookmark-btn{
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        border-radius: 100%;
+        background-color:transparent;
     }
-    .bmbutton:hover{
-        color: #AA8EF6;
-        border:2px solid #AA8EF6;
+    .light-btn{
+        border: 1px solid rgb(var(--primary--500));
+        .light-heart{
+            color: rgb(var(--primary--500));
+        }
+    }
+
+    .dark-btn{
+        border: 2px solid rgb(var(--primary--600));
+        .dark-heart{
+            fill: rgb(var(--primary--600));
+            color: rgb(var(--primary--600)) ;
+        }
     }
 </style>

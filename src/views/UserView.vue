@@ -354,7 +354,7 @@
     .manager-div{
         display: flex;
         justify-content: flex-start;
-        margin-left: -20px;
+        padding: 0px 35px;
         margin-bottom: 20px;
     }
     .manager-btn{

@@ -36,7 +36,7 @@ import { BadgePlus } from 'lucide-vue-next';
 import { useToast } from 'vue-toastification';
 import useVuelidate from '@vuelidate/core';
 import {required,helpers} from '@vuelidate/validators';
-import {ref,onBeforeMount,computed,provide} from 'vue';
+import {ref,onBeforeMount,computed} from 'vue';
 
 const toast = useToast();
 const axios = require('axios').default;
@@ -53,7 +53,7 @@ const vuelidate = useVuelidate(category_rules, { nomeCategoria });
 
 const isButtonEnabled = computed(()=>!vuelidate.value.nomeCategoria.$invalid);
 const categories = ref();
-provide('allcategories',categories);
+
 
 onBeforeMount(()=>{
     loadCategories();

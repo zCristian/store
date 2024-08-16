@@ -285,7 +285,6 @@ const handleUnselectCategory = (category)=>{
     display: flex;
     flex-direction: column;
     margin-top: 10px;
-    font-family: sans-serif;
     textarea{
         width: 296px;
         border: 1px solid rgba(var(--primary--500), 0.5);

@@ -2,19 +2,25 @@
     <div class="switch-wrap">
         <slot name="switchtext">
         </slot>
-        <div :class="['switch-path',isActive? 'active-switch':'unactive-switch']" @click="toggleSwitch">
-            <div :class="['switch-ball',isActive? 'active-ball':'unactive-ball']"></div>
+        <div :class="['switch-path',switchValue? 'active-switch':'unactive-switch']" @click="toggleSwitch">
+            <div :class="['switch-ball',switchValue? 'active-ball':'unactive-ball']"></div>
         </div>
     </div>
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {defineProps,defineEmits} from 'vue';
 
-const isActive = ref(false);
+const props = defineProps({
+    switchValue : {
+        type:Boolean,
+        required:true
+    }
+})
 
+const emit =defineEmits(['switch-event'])
 const toggleSwitch=()=>{
-    isActive.value = !isActive.value;
+    emit('switch-event',props.switchValue);
 }
 </script>
 

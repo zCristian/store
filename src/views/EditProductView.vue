@@ -6,22 +6,23 @@
                     <h1>Editar Produto</h1>
                 </div>
                 <div class="buttons-div">
-                    <BaseSwitch>
+                    <BaseSwitch :switch-value="product.isDisponivelCompra" 
+                    @switch-event="toggleAvailability">
                         <template #switchtext>
                             <span>Ativar Anúncio</span>
                         </template>
                     </BaseSwitch>
-                    <BaseButton :is-light="true" :is-small="true" :btntext="'Deletar'">
+                    <BaseButton :is-light="true" :is-small="true" :btntext="'Deletar'" @click="turnOffProduct">
                         <template #icon>
                             <Trash :size="22"/>
                         </template>
                     </BaseButton>
-                    <BaseButton  :is-light="true" :is-small="true" :btntext="'Cancelar'">
+                    <BaseButton  :is-light="true" :is-small="true" :btntext="'Cancelar'" @click="isCancelModalOpen=true">
                        <template #icon>
                             <X class="cancel-icon" :size="25"/>
                        </template> 
                     </BaseButton>    
-                    <BaseButton :is-small="true" :btntext="'Salvar'">
+                    <BaseButton :is-small="true" :btntext="'Salvar'" @click="verifyChanges">
                         <template #icon>
                             <Check/>
                         </template>
@@ -114,48 +115,61 @@
                 </div>
                 <div class="cardPreview">
                     <div class="cardpreview-header">
+                        <Eye></Eye>
                         <h2>PRÉVIA DO CARD</h2>
+                    </div>
+                    <div class="cardpreview-content">
+                        <BaseCard :product="product"/>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <BaseModal :is-modal-open="isCancelModalOpen"  @close-modal="isCancelModalOpen=false">
+        <template #header>
+            <h2>Cancelar Alterações </h2>
+            <hr>
+        </template>
+        <template #main>As alterações não serão salvas</template> 
+        <template #foot>
+            <div class="modal-buttons">
+                <BaseButton :is-exclude="true" :btntext="'Cancelar'" :is-small="true" :btnsrc="'/manager'"/>
+                <BaseButton :btntext="'Voltar'" :is-small="true" @click="isCancelModalOpen=false"></BaseButton>  
+            </div>
+        </template>
+    </BaseModal>
 </template>
 
 <script setup>
 import {useRoute} from 'vue-router';
 import {onBeforeMount,ref} from 'vue';
-import { Check,X,Trash,Circle,Upload} from 'lucide-vue-next';
+import { Check,X,Trash,Circle,Upload,Eye} from 'lucide-vue-next';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseInput from '@/components/BaseInput.vue';
 import NumberInput from '@/components/NumberInput.vue';
 import CategoryFilter from '@/components/CategoryFilter.vue';
 import DragAndDrop from '@/components/DragAndDrop.vue';
 import BaseSwitch from '@/components/BaseSwitch.vue';
+import BaseModal from '@/components/BaseModal.vue';
+import BaseCard from '@/components/BaseCard.vue';
 import useVuelidate from '@vuelidate/core';
 import {required,helpers,decimal,integer} from '@vuelidate/validators';
+import { useToast } from 'vue-toastification';
 const route = useRoute();
+const toast = useToast();
 const tabs = [{tabId:0, tabName:'Fotos'},{tabId:1, tabName:'Descrição'},{tabId:2, tabName:'Categorias'}];
 const activeTab = ref(0);
 const axios = require('axios').default;
-
+const isCancelModalOpen = ref(false);
+//const isDeleteModalOpen = ref(false);
 const dropZoneImages = ref([]);
-const product = ref({
-    valor :"",
-    nomeProduto: "",
-    marca:"",
-    descricaoProduto:"",
-    pesoGramas:"",
-    alturaCM:"",
-    larguraCM:"",
-    comprimentoCM:"",
-    categorias:[],
-    quantidadeEstoque:"",
-    
-})
+const product = ref({});
+
+//Validação das infos do produto
 const required_msg = 'O campo deve ser preenchido';
 const decimal_msg = 'Apenas valores decimais';
 const integer_msg = 'Apenas valores inteiros';
+
 const product_rules = {
         valor:{
             decimal: helpers.withMessage(decimal_msg,decimal),
@@ -192,11 +206,11 @@ const product_rules = {
 }
 const v$_product = useVuelidate(product_rules,product);
 
-
-
+//Carregar o Produto na view
 onBeforeMount(()=>{
     loadProduct(route.params.productid)
 })
+
 const loadProduct =(codigoProduto)=>{
     const loadproduct_url = 'http://localhost:3000/produtos/'+codigoProduto;
     axios.get(loadproduct_url).then(function(response){
@@ -206,6 +220,7 @@ const loadProduct =(codigoProduto)=>{
     })
 }
 
+//Seletor de Imagens
 const dropImage = (e) =>{
     dropZoneImages.value.push(e.dataTransfer.files[0]);
 }
@@ -238,6 +253,7 @@ const uploadImages = (formData) =>{
     });
 }
 
+//Filtro de Categorias
 const handleSelectCategory = (category)=>{
     product.value.categorias.push(category);
 }
@@ -245,6 +261,58 @@ const handleUnselectCategory = (category)=>{
     product.value.categorias.pop(category);
 }
 
+//Remover Anuncio / Alterar Disponibiliadade
+const turnOffProduct = ()=>{
+    const changevisibility_url = 'http://localhost:3000/produtos/'+product.value.codigoProduto+'/visibilidade';
+    axios.patch(changevisibility_url,{
+        isVisible : false
+    }).then(function(response){
+        console.log(response.data.message);
+    })
+}
+
+const toggleAvailability = (isDisponivelCompra)=>{
+    product.value.isDisponivelCompra = !isDisponivelCompra;
+}
+const handleChangeAvailability = ()=>{
+    const changeavailability_url = 'http://localhost:3000/produtos/'+product.value.codigoProduto+'/disponibilidade/';
+    axios.patch(changeavailability_url,{
+        isDisponivelCompra : product.value.isDisponivelCompra
+    }).then(function(response){
+        console.log(response.data.message);
+    })
+}
+//Validar e Salvar Alterações
+
+const verifyChanges = async ()=>{
+    const result =await v$_product.value.$validate();
+    console.log(result);
+    if(result){
+        editProduct();
+    }else{
+        activeTab.value=1;
+    }
+}
+
+const editProduct = () =>{
+    const editproduct_url = 'http://localhost:3000/produtos/'+product.value.codigoProduto;
+    axios.put(editproduct_url,{
+        valor:product.value.valor,
+        nomeProduto : product.value.nomeProduto,
+        marca : product.value.marca,
+        descricaoProduto : product.value.descricaoProduto,
+        pesoGramas :product.value.pesoGramas,
+        alturaCM:product.value.alturaCM,
+        larguraCM:product.value.larguraCM,
+        comprimentoCM:product.value.comprimentoCM,
+        categorias:product.value.categorias,
+    }).then(function(response){
+        handleChangeAvailability();
+        toast.success(response.data.message);
+    }).catch(function(error){
+        toast.error(error.message);
+    });
+}
 </script>
 
 
@@ -254,6 +322,12 @@ const handleUnselectCategory = (category)=>{
     display: flex;
     justify-content: center;
 }
+h2{
+        font-size: 21px;
+        font-weight: 500;
+        color: rgb(var(--primary--black),0.85);
+        margin: 0px;
+}
 .error-span{
     font-size: 12px;
     color: rgba(var(--primary--red),0.8);
@@ -262,7 +336,7 @@ const handleUnselectCategory = (category)=>{
 .edit-wraper{
     width: 1220px;
     margin-top: 60px;
-    height: 755px;
+    height: 775px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0px 3px 3px 0 rgba(0,0,0,0.22);
@@ -332,14 +406,9 @@ hr{
 
 .content{
     display: grid;
+    border-radius: 8px;
     grid-template-columns: [first] 740px [second] auto;
-    grid-template-rows: 562px;
-    h2{
-        font-size: 21px;
-        font-weight: 500;
-        color: rgb(var(--primary--black),0.85);
-        margin: 0px;
-    }
+    grid-template-rows: 610px;
 }
 .categories-wrap{
     display: flex;
@@ -399,7 +468,25 @@ hr{
 
 .cardPreview{
     display: flex;
-    padding: 30px 60px 0px 0px;
+    padding: 30px 60px 0px 30px;
+    border-bottom-right-radius: 8px;
+    border-left: 1px solid rgba(var(--primary--500),0.22);
     flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background-color: rgb(var(--primary--white));
+}
+
+.cardpreview-header{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.modal-buttons{
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 10px;
 }
 </style>

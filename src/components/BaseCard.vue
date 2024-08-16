@@ -1,25 +1,35 @@
 <template>
-    <div class="card">
-        <div class="bookmarkdiv">
+    <div class="card-wrap">
+        <div class="bookmark-div">
             <BookMarkButton @click="productLiked()"/>
         </div>
-        <div class="thumbnail"><img src="../assets/img/iphone.jpg" ></div>
-        <div class="cardcontent">
-            <span class = "category">{{ product.category }}</span>
-            <h3 class="title">{{ product.title}}</h3>
+        <div class="card-image"><img :src="product.imagensFolder+'foto-1.png'" ></div>
+        <div class="card-content">
+            <div class="categories-wrap">
+                <span v-for="category in product.categorias" :key="category.codigoCategoriaa" 
+                class = "category-span">{{ category.nomeCategoria }}</span>
+            </div>
             
-            <span class="ratings">Avaliação:{{ product.rating }}</span>
-            <span class="reviews">(35 reviews)</span> 
-           
-            <span class="pricespan"><s>${{ product.price }}</s></span>
-            <span class="discprice">${{(product.price - ( product.price * product.discountPercentage/100)).toFixed(2)}}</span>
+            <div class="produtc-info">
+                <h3 class="product-name">{{ product.nomeProduto}}</h3> 
+                <span>{{ product.descricaoProduto}}</span>
+            </div>
+            
+            
+            <div class="ratings-wrap">
+              <span class="product-ratings">Avaliação:{{ product.nota }}</span>
+              <span class="product-reviews">(0 reviews)</span>   
+            </div>
+            
+            <div class="prices-wrap">
+              <span class="product-price"><s>${{ product.valor }}</s></span>
+              <span class="product-discountprice">${{ product.valor}}</span>  
+            </div>
+            
 
-            <span class="discount">5% de desconto no PIX</span>
+            <span class="product-discount">5% de desconto no PIX</span>
         </div>
-        <div class="btnsection">
-            <BuyButton/>
-           
-        </div>
+        <BuyButton/>
     </div>
 
 </template>
@@ -46,85 +56,68 @@
 
 </script>
 <style scoped>
-    .card{
-        border-radius: 10px;
+    .card-wrap{
+        border-radius: 8px;
         background: #ffff;
-        box-shadow:  10px 10px 20px #cacaca,
-             -10px -10px 20px #f2f2f2;
-        height: 515px;
+        box-shadow: 0px 3px 2px 0px rgba(var(--primary--black),0.25);
+        border: 1px solid rgba(var(--primary--500),0.22);
+        height: 497px;
         display: flex;
-        
-        flex-wrap: wrap;
-        padding: 5px 5px 5px 5px;
-        width: 255px;
-        
-       
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
+        padding: 12px;
+        width: 270px;
+        gap: 12px;
     }
-    .bookmarkdiv{
-        margin-bottom: 2px;
+    .bookmark-div{
+        position: absolute;
     }
-    .thumbnail{
+    .card-image{
         display: flex;
         justify-content: center;
-        flex-basis: 100%;
+        width: 100%;
     }
     img{
-        width: 180px;
-        height: 240px;
+        width: 245px;
+        height: 245px;
         border-radius: 5px;
        
     }
-    .cardcontent{
+    .card-content{
         display: flex;
-        align-items: baseline;
-        flex-wrap: wrap;
-        margin: 10px 10px 0px 10px;
-        height: 170px;
-        text-align: left;
+        flex-direction: column;
+        gap:12px ;
+        h3{
+            margin:0px;
+            font-size: 20px;
+            color: rgba(var(--primary--black),0.85);
+
+        }
     }
-    .title{
-        flex-basis: 100%;
-        margin-top: 5px;
-        margin-bottom: 10px;
-    }
-    
-    .btnsection{
+    .categories-wrap{
         display: flex;
-        align-self: flex-end;
-        justify-content: center;
-        height: 48px;
-        margin: 5px;
-        flex-basis: 100%;
+        gap: 5px;
     }
-    .category{
-        border-radius: 5px;
+    .category-span{
+        border-radius: 8px;
         background-color: #E5DDFC;
         color: #7F57F1;
-        padding: 4px 8px 4px 8px;
+        padding: 4px 8px;
+        font-size: 14px;
+        width: fit-content;
     }
-    .pricespan{
-        color: grey;
-        font-size: 21px;
-        flex-basis: 35%;
-
-    }
-    .discprice{
-        color: #7F57F1;
-        font-size: 22px;
-        flex-basis: 65%;
-    }
-    .reviews{
-        font-size: 16px;
-        flex-basis: 50%;
-    }
-    .ratings{
-        font-size: 16px;
-        flex-basis: 50%;
-    }
-    .discount{
-        align-self: flex-end;
-        font-size: 16px;
-        flex-basis: 100%;
-       
+    .prices-wrap{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        .product-price{
+            color: rgb(var(--primary--300));
+        }
+        .product-discountprice{
+            font-size: 20px;
+            font-weight: 600;
+            color: rgb(var(--primary--500));
+        }
     }
 </style>
