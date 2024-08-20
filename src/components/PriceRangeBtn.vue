@@ -33,6 +33,7 @@
         align-items: center;
         justify-content: center;
         flex-basis: 22%;
-        font-size: 22px;
+        font-size: 23px;
+        cursor: pointer;
     }
 </style>

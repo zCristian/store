@@ -3,7 +3,7 @@
         <div class="bookmark-div">
             <BookMarkButton @click="productLiked()"/>
         </div>
-        <div class="card-image"><img :src="product.imagensFolder+'foto-1.png'" ></div>
+        <div class="card-image"><img src="../assets/img/default_cover.png" ></div>
         <div class="card-content">
             <div class="categories-wrap">
                 <span v-for="category in product.categorias" :key="category.codigoCategoriaa" 
@@ -59,7 +59,7 @@
     .card-wrap{
         border-radius: 8px;
         background: #ffff;
-        box-shadow: 0px 3px 2px 0px rgba(var(--primary--black),0.25);
+        box-shadow: 0px 3px 3px 0px rgba(var(--primary--black),0.15);
         border: 1px solid rgba(var(--primary--500),0.22);
         height: 497px;
         display: flex;

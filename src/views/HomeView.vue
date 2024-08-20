@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home-wrap">
       <BaseCarousel :navigation="true" :pagination="true" :start-auto-play="false"  v-slot="{currentSlide}">
           <BaseSlide v-for="(slide,index) in carouselSlides" :key="index">
             <div v-show="currentSlide==index+1" class="slide-info">
@@ -7,142 +7,145 @@
             </div>
           </BaseSlide>
       </BaseCarousel>
-      <div class="fretebanner">
-        <div v-for="i in 4 " :key="i" class="fretecomp">
-            <img src="../assets/fretesvg.svg">
-            <div class="fretetext">
-                <h3>Frete Grátis</h3>
-                <p>para compras acima de R$ 999,99</p>
-            </div>  
+      <div class="fretebanner-wrap">
+        <div class="fretebanner-content">
+          <div v-for="i in 3 " :key="i" class="frete-comp">
+              <img src="../assets/fretesvg.svg">
+              <div class="fretetext">
+                  <h3>Frete Grátis</h3>
+                  <p>para compras acima de R$ 999,99</p>
+              </div>  
+          </div>  
         </div>
       </div>
+      <div class="new-showcase">
+        <CategoryShowCase :categoryName="'Novidades'" :rowItens="3" :totalItens="9"/>
+      </div>
       
-      <div class="pricerange">
+      <div class="pricerange-section">
         <h2>Compre por Faixa de Preço</h2>
-        <PriceRangeBtn v-for="i in 4" :key="i" :pricerange="+pricerange[i-1]"/>
+        <div class="ranges-wrap">
+          <PriceRangeBtn v-for="i in 4" :key="i" :pricerange="pricerange[i-1]"/>
+        </div>
+        
       </div>
-      <div class="mosaic">
-        <img :class="'mosaicbanner'+i" v-for="i in 3" :key="i" :src="require(`../assets/mosaicbanner${i}.svg`)">
+      <div class="mosaic-wrap">
+        <div class="mosaic-content">
+          <img :class="'mosaic-banner'+i" v-for="i in 3" :key="i" :src="require(`../assets/mosaicbanner${i}.svg`)">   
+        </div>
       </div>
+      <div class="galaxy-showcase">
+        <CategoryShowCase :categoryName="'Galaxy'" :rowItens="3" :totalItens="9"/>
+      </div>
+      <!--
       <div class="maincontent">
         <ProductsSection />
       </div>
-      <AboutUs/>
+      <div class="aboutus-wrap">
+        <AboutUs/>
+      </div>
+     --> 
   </div>
   
 </template>
 
 <script setup>
-import ProductsSection from '@/components/ProductsSection.vue';
+//import ProductsSection from '@/components/ProductsSection.vue';
 import PriceRangeBtn from '@/components/PriceRangeBtn.vue';
-import AboutUs from '@/components/AboutUs.vue';
+//import AboutUs from '@/components/AboutUs.vue';
 import BaseCarousel from '@/components/BaseCarousel.vue';
 import BaseSlide from '@/components/BaseSlide.vue';
-    
-    //const products= ref([]);
-    const carouselSlides = ["bannerSlide","bimg2","bannerSlide","bimg2"];
-    
-    const pricerange = [999,1999,2999,3000];
-
+import CategoryShowCase from '@/components/CategoryShowCase.vue';
+  //const products= ref([]);
+const carouselSlides = ["bannerSlide","bimg2","bannerSlide","bimg2"];    
+const pricerange = [999,1999,2999,3000];
 </script>
 
 <style scoped>
-  .home{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .carousel{
-    position: relative;
-    height: 450px;
-  
-  }
-  .bannerimg{
-      width: 100%;
-      height: 450px;
-      object-fit: cover;
+  .home-wrap{
+    display: grid;
+    grid-template-columns: [first]  250px  [second] auto [third] 250px;
+    grid-template-rows: [first] 430px [second] 86px [third] 700px [fourth] 181px [fifth] 724px 
+    [sixth] 700px [seventh];
+    h2{
+        text-align: center;
+        margin: 0px;
+        color: rgb(var(--primary--500));
+        font-weight: 700;
+        font-size: 24px;
     }
-  .slide-info{
-      position: absolute;
-      width: 100%;
-      height: 450px;
-    }
-  .fretebanner{
-    background-color: #F3F3F3;
-    width: 100%;
-    height: 86px;
-    margin-top: 450px;
+  }
+ 
+ .fretebanner-wrap{
+  display: grid;
+  grid-column-end: span 3;
+  grid-row: second;
+  background-color: rgb(var(--neutral--100));
+  grid-template-rows: [frete-first] auto;
+  grid-template-columns: [frete-first] 250px  [frete-second] auto [frete-third] 250px; ;
+ }
+ .fretebanner-content{
+    grid-column: frete-second / span 1 ;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 134px;
-    
-  }
-  .fretecomp{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 204px;
-    height: 54px;
-   
-    img{
-      height: 54px;
-      width: 54px;
-      margin: 0px;
-    
-    }
-    
-  }
+ }
+ .frete-comp{
+  width: 204px;
+  height: 54px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
   .fretetext{
     display: flex;
     flex-direction: column;
-
+    width: 146px;
     h3{
-      color: #7F57F1;
-      margin: 0px 0px 0px 10px;
+      color: rgb(var(--primary--500));
       font-size: 16px;
-      font-style: bold;
+      font-weight: 700;
+      margin: 0px;
     }
     p{
-      margin: 0px 0px 0px 10px ;
-      font-size: 13px;
+      margin: 0px;
+      font-size: 14px;
+      margin:0px;
     }
   }
-  .maincontent{
+ }
+ .new-showcase{
+    grid-row: third;
+    grid-column: second / span 1;
+    margin-top: 50px;
+ }
+ .galaxy-showcase{
+    grid-row: sixth;
+    grid-column: second / span 1;
+    margin-top: 50px;
+ }
+ .pricerange-section{
+    grid-row: fourth;
+    grid-column: second; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 27px;
+    .ranges-wrap{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+ }
+ .mosaic-wrap{
+  grid-row: fifth;
+  grid-column: second;
+  display: flex;
+  align-items: flex-end;
+  .mosaic-content{
     display: flex;
     flex-wrap: wrap;
-    height:700px;
-    width: 1220px;
-    justify-content: center;
-    
+    justify-content: space-between;  
+    row-gap: 15px; 
   }
-  
-
-  .pricerange{
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 1220px;
-    
-    
-  }
-  .mosaic{
-    display: flex;
-    width: 1220px;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 100px;
-
-  }
-  h2{
-    margin: 50px 0px 25px 0px;
-    text-align: center;
-    color: #7F57F1;
-    font-size: 30px;
-    display: flex;
-    justify-content: center;
-    flex-basis: 100%;
-  }
+ }
 </style>

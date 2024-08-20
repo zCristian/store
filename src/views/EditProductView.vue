@@ -41,7 +41,7 @@
             </div>
             <hr>
             <div class="content">
-                <div v-if="activeTab===0" class="images-wrap">
+                <div v-if="activeTab===2" class="images-wrap">
                     <DragAndDrop @drop.prevent="dropImage" @change="selectedImage"/>
                     <div class="image-info">
                         <span>Imagens Selecionadas: </span>
@@ -53,7 +53,7 @@
                         <template #icon><Upload :size="21" /></template>
                     </BaseButton>
                 </div>
-                <div v-if="activeTab===1" class="description-wrap">
+                <div v-if="activeTab===0" class="description-wrap">
                     <div class="description-header">
                         <h2>DESCRIÇÃO</h2>
                     </div>
@@ -106,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="activeTab===2" class="categories-wrap">
+                <div v-if="activeTab===1" class="categories-wrap">
                     <div class="categories-header">
                         <h2>CATEGORIAS</h2>
                     </div>
@@ -157,7 +157,7 @@ import {required,helpers,decimal,integer} from '@vuelidate/validators';
 import { useToast } from 'vue-toastification';
 const route = useRoute();
 const toast = useToast();
-const tabs = [{tabId:0, tabName:'Fotos'},{tabId:1, tabName:'Descrição'},{tabId:2, tabName:'Categorias'}];
+const tabs = [{tabId:0, tabName:'Descrição'},{tabId:1, tabName:'Categorias'},{tabId:2, tabName:'Fotos'}];
 const activeTab = ref(0);
 const axios = require('axios').default;
 const isCancelModalOpen = ref(false);
@@ -265,7 +265,7 @@ const handleUnselectCategory = (category)=>{
 const turnOffProduct = ()=>{
     const changevisibility_url = 'http://localhost:3000/produtos/'+product.value.codigoProduto+'/visibilidade';
     axios.patch(changevisibility_url,{
-        isVisible : false
+        isVisivel : false
     }).then(function(response){
         console.log(response.data.message);
     })
